@@ -1,0 +1,106 @@
+model divisa {
+  id                Int               @id @default(autoincrement())
+  codigo            String            @unique
+  nombre            String
+  esMonedaBase      Boolean?          @default(false) 
+  tasasOrigen       tasaCambio[]      @relation("DivisaOrigen")
+  tasasDestino      tasaCambio[]      @relation("DivisaDestino")
+  transaccionesPago transaccionPago[]
+  cuentasDestino    cuentaDestino[]
+}
+
+model tasaCambio {
+  id              Int       @id @default(autoincrement())
+  divisaOrigenId  Int       
+  divisaDestinoId Int       
+  tasa            Decimal
+  origenTasa      String?
+  fechaVigencia   DateTime? @default(now()) 
+
+  divisaOrigen  divisa @relation("DivisaOrigen", fields: [divisaOrigenId], references: [id])
+  divisaDestino divisa @relation("DivisaDestino", fields: [divisaDestinoId], references: [id])
+}
+
+model metodoPago {
+  id                 Int               @id @default(autoincrement())
+  codigo             String            @unique
+  descripcion        String
+  requiereReferencia Boolean?          @default(true) 
+  transaccionesPago  transaccionPago[]
+}
+
+enum EstadoDocumentoDeuda {
+  PENDIENTE
+  PAGADO_PARCIAL
+  PAGADO_TOTAL
+  ANULADO
+}
+
+enum TipoDocumentoDeuda {
+  FACTURA
+  NOTA_CREDITO
+}
+
+model documentoDeuda {
+  id                   Int               @id @default(autoincrement())
+  sistemaOrigen        String
+  referenciaOrigen     String
+  identificadorCliente String
+  montoTotalBase       Decimal
+  saldoPendienteBase   Decimal
+  estado               EstadoDocumentoDeuda? @default(PENDIENTE)
+  tipoDocumento        TipoDocumentoDeuda? @default(FACTURA)
+  fechaEmision         DateTime?         @default(now()) 
+  transaccionesPago    transaccionPago[]
+
+  @@unique([sistemaOrigen, referenciaOrigen])
+}
+
+enum EstadoTransaccionPago {
+  APROBADO
+  ANULADO
+  RECHAZADO
+}
+
+enum TipoCuentaDestino {
+  CAJA_FISICA
+  BANCO
+  BILLETERA_DIGITAL
+}
+
+model cuentaDestino {
+  id                Int               @id @default(autoincrement())
+  nombre            String
+  divisaId          Int
+  tipo              TipoCuentaDestino
+
+  divisa            divisa            @relation(fields: [divisaId], references: [id])
+  transaccionesPago transaccionPago[]
+}
+
+enum TipoOperacionPago {
+  INGRESO
+  EGRESO
+}
+
+model transaccionPago {
+  id                   Int            @id @default(autoincrement())
+  documentoId          Int            
+  metodoPagoId         Int            
+  divisaPagoId         Int            
+  montoOrigen          Decimal
+  tasaAplicada         Decimal
+  montoEquivalenteBase Decimal
+  numeroReferencia     String?
+  estado               EstadoTransaccionPago? @default(APROBADO)
+  tipoOperacion        TipoOperacionPago? @default(INGRESO)
+  fechaPago            DateTime?      @default(now()) 
+  cuentaDestinoId      Int?
+  usuarioId            Int            
+
+  documento     documentoDeuda @relation(fields: [documentoId], references: [id], onDelete: Restrict)
+  metodoPago    metodoPago     @relation(fields: [metodoPagoId], references: [id])
+  divisa        divisa         @relation(fields: [divisaPagoId], references: [id])
+  cuentaDestino cuentaDestino? @relation(fields: [cuentaDestinoId], references: [id], onDelete: Restrict)
+  usuario       usuario        @relation(fields: [usuarioId], references: [id])
+}

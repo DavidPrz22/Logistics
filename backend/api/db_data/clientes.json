@@ -1,0 +1,52 @@
+[
+  {
+    "nombre": "Distribuidora Boliviana S.A.",
+    "telefono": "+591-4-4567890",
+    "direccion": "Av. Heroínas #456, Cochabamba"
+  },
+  {
+    "nombre": "Supermercados Fidalga",
+    "telefono": "+591-4-4123456",
+    "direccion": "Calle Junín #789, Cochabamba"
+  },
+  {
+    "nombre": "Comercial El Trigal",
+    "telefono": "+591-2-2345678",
+    "direccion": "Av. 6 de Agosto #123, La Paz"
+  },
+  {
+    "nombre": "Minimarket Don Bosco",
+    "telefono": "+591-70711223",
+    "direccion": "Calle Bolívar #234, Santa Cruz"
+  },
+  {
+    "nombre": "Importadora Los Andes",
+    "telefono": "+591-2-2789012",
+    "direccion": "Zona Sopocachi #567, La Paz"
+  },
+  {
+    "nombre": "Ferretería Industrial",
+    "telefono": null,
+    "direccion": "Av. Banzer #890, Santa Cruz"
+  },
+  {
+    "nombre": "Farmacia Chávez",
+    "telefono": "+591-4-4987654",
+    "direccion": "Plaza Principal #12, Quillacollo"
+  },
+  {
+    "nombre": "Abarrotes San Martín",
+    "telefono": "+591-70733445",
+    "direccion": "Calle Mercado #345, Oruro"
+  },
+  {
+    "nombre": "Droguería Central",
+    "telefono": "+591-4-4321098",
+    "direccion": "Av. Blanco Galindo #678, Cochabamba"
+  },
+  {
+    "nombre": "Electrohogar Sucre",
+    "telefono": null,
+    "direccion": "Calle Dalence #901, Sucre"
+  }
+]

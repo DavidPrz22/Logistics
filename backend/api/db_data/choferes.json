@@ -1,0 +1,52 @@
+[
+  {
+    "nombre": "Carlos Mendoza",
+    "licenciaConducir": "LIC-001-2024",
+    "telefono": "+591-70712345"
+  },
+  {
+    "nombre": "Maria Fernandez",
+    "licenciaConducir": "LIC-002-2024",
+    "telefono": "+591-70723456"
+  },
+  {
+    "nombre": "Jose Ramirez",
+    "licenciaConducir": "LIC-003-2024",
+    "telefono": "+591-70734567"
+  },
+  {
+    "nombre": "Ana Gutierrez",
+    "licenciaConducir": "LIC-004-2024",
+    "telefono": "+591-70745678"
+  },
+  {
+    "nombre": "Luis Torrez",
+    "licenciaConducir": "LIC-005-2024",
+    "telefono": null
+  },
+  {
+    "nombre": "Pedro Vargas",
+    "licenciaConducir": "LIC-006-2024",
+    "telefono": "+591-70767890"
+  },
+  {
+    "nombre": "Rosa Condori",
+    "licenciaConducir": "LIC-007-2024",
+    "telefono": "+591-70778901"
+  },
+  {
+    "nombre": "Miguel Angel Flores",
+    "licenciaConducir": "LIC-008-2024",
+    "telefono": null
+  },
+  {
+    "nombre": "Sofia Mamani",
+    "licenciaConducir": "LIC-009-2024",
+    "telefono": "+591-70790123"
+  },
+  {
+    "nombre": "Roberto Quiroz",
+    "licenciaConducir": "LIC-010-2024",
+    "telefono": "+591-70701234"
+  }
+]

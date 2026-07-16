@@ -1,0 +1,6 @@
+.agents/
+.opencode/
+reusableMds/
+opencode.json
+skills-lock.json
+db.sql

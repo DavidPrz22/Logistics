@@ -1,0 +1,14 @@
+enum TipoAlmacen {
+  PRINCIPAL
+  TRANSITO
+  MERMA
+}
+
+model almacen {
+  id                     Int                    @id @default(autoincrement())
+  nombre                 String
+  tipo                   TipoAlmacen
+  ordenesDespacho        ordenDespacho[]
+  detallesOrdenReingreso detalleRechazoOrden[]  @relation("AlmacenReingreso")
+  movimientosInventario  movimientoInventario[]
+}

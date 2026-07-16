@@ -1,0 +1,42 @@
+[
+  {
+    "nombre": "Almacén Central Cochabamba",
+    "tipo": "PRINCIPAL"
+  },
+  {
+    "nombre": "Almacén La Paz Norte",
+    "tipo": "PRINCIPAL"
+  },
+  {
+    "nombre": "Almacén Santa Cruz Sur",
+    "tipo": "PRINCIPAL"
+  },
+  {
+    "nombre": "En Tránsito Ruta 4",
+    "tipo": "TRANSITO"
+  },
+  {
+    "nombre": "En Tránsito Ruta 7",
+    "tipo": "TRANSITO"
+  },
+  {
+    "nombre": "En Tránsito Cochabamba-Oruro",
+    "tipo": "TRANSITO"
+  },
+  {
+    "nombre": "Almacén de Mermas CBBA",
+    "tipo": "MERMA"
+  },
+  {
+    "nombre": "Almacén de Mermas LPZ",
+    "tipo": "MERMA"
+  },
+  {
+    "nombre": "Depósito Quillacollo",
+    "tipo": "PRINCIPAL"
+  },
+  {
+    "nombre": "Centro Distribución Sacaba",
+    "tipo": "PRINCIPAL"
+  }
+]

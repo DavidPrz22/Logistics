@@ -1,0 +1,7 @@
+model chofer {
+  id               Int             @id @default(autoincrement())
+  nombre           String
+  licenciaConducir String          @unique
+  telefono         String?
+  ordenesDespacho  ordenDespacho[]
+}

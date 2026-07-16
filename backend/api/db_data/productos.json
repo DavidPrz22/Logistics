@@ -1,0 +1,255 @@
+[
+  {
+    "nombre": "Arroz Grano Largo",
+    "descripcion": "Arroz blanco de grano largo premium",
+    "variantes": [
+      { "sku": "ARR-1KG", "nombre": "Arroz 1kg", "precioBase": "8.50" },
+      { "sku": "ARR-5KG", "nombre": "Arroz 5kg", "precioBase": "38.00" },
+      { "sku": "ARR-10KG", "nombre": "Arroz 10kg", "precioBase": "72.00" }
+    ]
+  },
+  {
+    "nombre": "Aceite de Girasol",
+    "descripcion": "Aceite vegetal de girasol refinado",
+    "variantes": [
+      { "sku": "ACE-1L", "nombre": "Aceite 1L", "precioBase": "12.00" },
+      { "sku": "ACE-2L", "nombre": "Aceite 2L", "precioBase": "22.50" },
+      { "sku": "ACE-5L", "nombre": "Aceite 5L", "precioBase": "52.00" }
+    ]
+  },
+  {
+    "nombre": "Azúcar Blanca",
+    "descripcion": "Azúcar blanca refinada de caña",
+    "variantes": [
+      { "sku": "AZU-1KG", "nombre": "Azúcar 1kg", "precioBase": "6.80" },
+      { "sku": "AZU-5KG", "nombre": "Azúcar 5kg", "precioBase": "31.00" },
+      { "sku": "AZU-25KG", "nombre": "Azúcar 25kg", "precioBase": "140.00" }
+    ]
+  },
+  {
+    "nombre": "Harina de Trigo",
+    "descripcion": "Harina de trigo todo uso",
+    "variantes": [
+      { "sku": "HAR-1KG", "nombre": "Harina 1kg", "precioBase": "7.20" },
+      { "sku": "HAR-5KG", "nombre": "Harina 5kg", "precioBase": "33.50" }
+    ]
+  },
+  {
+    "nombre": "Fideos Spaghetti",
+    "descripcion": "Pasta de sémola de trigo duro",
+    "variantes": [
+      { "sku": "FID-250G", "nombre": "Fideos 250g", "precioBase": "4.50" },
+      { "sku": "FID-500G", "nombre": "Fideos 500g", "precioBase": "8.00" },
+      { "sku": "FID-1KG", "nombre": "Fideos 1kg", "precioBase": "14.50" }
+    ]
+  },
+  {
+    "nombre": "Leche Entera",
+    "descripcion": "Leche pasteurizada entera",
+    "variantes": [
+      { "sku": "LEC-1L", "nombre": "Leche 1L", "precioBase": "5.80" },
+      { "sku": "LEC-6PACK", "nombre": "Leche 6x1L", "precioBase": "33.00" }
+    ]
+  },
+  {
+    "nombre": "Atún en Aceite",
+    "descripcion": "Filete de atún en aceite vegetal",
+    "variantes": [
+      { "sku": "ATU-140G", "nombre": "Atún 140g", "precioBase": "11.50" },
+      { "sku": "ATU-185G", "nombre": "Atún 185g", "precioBase": "15.00" },
+      { "sku": "ATU-6PACK", "nombre": "Atún 6x140g", "precioBase": "65.00" }
+    ]
+  },
+  {
+    "nombre": "Sal Fina",
+    "descripcion": "Sal refinada yodada",
+    "variantes": [
+      { "sku": "SAL-500G", "nombre": "Sal 500g", "precioBase": "2.50" },
+      { "sku": "SAL-1KG", "nombre": "Sal 1kg", "precioBase": "4.50" }
+    ]
+  },
+  {
+    "nombre": "Café Molido",
+    "descripcion": "Café molido tostado premium",
+    "variantes": [
+      { "sku": "CAF-250G", "nombre": "Café 250g", "precioBase": "22.00" },
+      { "sku": "CAF-500G", "nombre": "Café 500g", "precioBase": "42.00" },
+      { "sku": "CAF-1KG", "nombre": "Café 1kg", "precioBase": "80.00" }
+    ]
+  },
+  {
+    "nombre": "Galletas Surtidas",
+    "descripcion": "Galletas dulces surtidas",
+    "variantes": [
+      { "sku": "GAL-200G", "nombre": "Galletas 200g", "precioBase": "5.50" },
+      { "sku": "GAL-400G", "nombre": "Galletas 400g", "precioBase": "10.00" }
+    ]
+  },
+  {
+    "nombre": "Mayonesa",
+    "descripcion": "Mayonesa cremosa clásica",
+    "variantes": [
+      { "sku": "MAY-250ML", "nombre": "Mayonesa 250ml", "precioBase": "8.00" },
+      { "sku": "MAY-500ML", "nombre": "Mayonesa 500ml", "precioBase": "14.50" },
+      { "sku": "MAY-1L", "nombre": "Mayonesa 1L", "precioBase": "26.00" }
+    ]
+  },
+  {
+    "nombre": "Ketchup",
+    "descripcion": "Salsa de tomate ketchup",
+    "variantes": [
+      { "sku": "KET-250ML", "nombre": "Ketchup 250ml", "precioBase": "9.00" },
+      { "sku": "KET-500ML", "nombre": "Ketchup 500ml", "precioBase": "16.00" }
+    ]
+  },
+  {
+    "nombre": "Jugo de Naranja",
+    "descripcion": "Jugo de naranja natural",
+    "variantes": [
+      { "sku": "JUG-1L", "nombre": "Jugo 1L", "precioBase": "10.50" },
+      { "sku": "JUG-2L", "nombre": "Jugo 2L", "precioBase": "19.00" }
+    ]
+  },
+  {
+    "nombre": "Agua Mineral",
+    "descripcion": "Agua mineral sin gas",
+    "variantes": [
+      { "sku": "AGUA-500ML", "nombre": "Agua 500ml", "precioBase": "2.50" },
+      { "sku": "AGUA-1L", "nombre": "Agua 1L", "precioBase": "3.80" },
+      { "sku": "AGUA-2.5L", "nombre": "Agua 2.5L", "precioBase": "7.00" }
+    ]
+  },
+  {
+    "nombre": "Chocolate en Barra",
+    "descripcion": "Chocolate con leche 40% cacao",
+    "variantes": [
+      { "sku": "CHOC-50G", "nombre": "Chocolate 50g", "precioBase": "5.00" },
+      { "sku": "CHOC-100G", "nombre": "Chocolate 100g", "precioBase": "9.50" },
+      { "sku": "CHOC-250G", "nombre": "Chocolate 250g", "precioBase": "22.00" }
+    ]
+  },
+  {
+    "nombre": "Mermelada de Fresa",
+    "descripcion": "Mermelada artesanal de fresa",
+    "variantes": [
+      { "sku": "MER-250G", "nombre": "Mermelada 250g", "precioBase": "12.00" },
+      { "sku": "MER-500G", "nombre": "Mermelada 500g", "precioBase": "21.00" }
+    ]
+  },
+  {
+    "nombre": "Avena en Hojuelas",
+    "descripcion": "Avena integral en hojuelas",
+    "variantes": [
+      { "sku": "AVE-500G", "nombre": "Avena 500g", "precioBase": "8.50" },
+      { "sku": "AVE-1KG", "nombre": "Avena 1kg", "precioBase": "15.00" }
+    ]
+  },
+  {
+    "nombre": "Cereal de Maíz",
+    "descripcion": "Cereal de maíz inflado azucarado",
+    "variantes": [
+      { "sku": "CER-300G", "nombre": "Cereal 300g", "precioBase": "18.00" },
+      { "sku": "CER-500G", "nombre": "Cereal 500g", "precioBase": "28.00" },
+      { "sku": "CER-750G", "nombre": "Cereal 750g", "precioBase": "40.00" }
+    ]
+  },
+  {
+    "nombre": "Miel de Abeja",
+    "descripcion": "Miel pura de abeja multifloral",
+    "variantes": [
+      { "sku": "MIE-250G", "nombre": "Miel 250g", "precioBase": "25.00" },
+      { "sku": "MIE-500G", "nombre": "Miel 500g", "precioBase": "45.00" }
+    ]
+  },
+  {
+    "nombre": "Pasta de Tomate",
+    "descripcion": "Pasta concentrada de tomate",
+    "variantes": [
+      { "sku": "PASTA-150G", "nombre": "Pasta tomate 150g", "precioBase": "4.00" },
+      { "sku": "PASTA-400G", "nombre": "Pasta tomate 400g", "precioBase": "9.50" }
+    ]
+  },
+  {
+    "nombre": "Salsa de Soya",
+    "descripcion": "Salsa de soya tradicional",
+    "variantes": [
+      { "sku": "SOY-250ML", "nombre": "Soya 250ml", "precioBase": "10.00" },
+      { "sku": "SOY-500ML", "nombre": "Soya 500ml", "precioBase": "18.00" }
+    ]
+  },
+  {
+    "nombre": "Vinagre Blanco",
+    "descripcion": "Vinagre blanco de alcohol",
+    "variantes": [
+      { "sku": "VIN-500ML", "nombre": "Vinagre 500ml", "precioBase": "4.50" },
+      { "sku": "VIN-1L", "nombre": "Vinagre 1L", "precioBase": "7.50" }
+    ]
+  },
+  {
+    "nombre": "Papas Fritas",
+    "descripcion": "Papas fritas en bolsa sabor original",
+    "variantes": [
+      { "sku": "PAP-50G", "nombre": "Papas 50g", "precioBase": "4.00" },
+      { "sku": "PAP-150G", "nombre": "Papas 150g", "precioBase": "10.50" },
+      { "sku": "PAP-300G", "nombre": "Papas 300g", "precioBase": "19.00" }
+    ]
+  },
+  {
+    "nombre": "Maní Salado",
+    "descripcion": "Maní tostado salado",
+    "variantes": [
+      { "sku": "MAN-100G", "nombre": "Maní 100g", "precioBase": "5.50" },
+      { "sku": "MAN-250G", "nombre": "Maní 250g", "precioBase": "12.00" },
+      { "sku": "MAN-500G", "nombre": "Maní 500g", "precioBase": "22.00" }
+    ]
+  },
+  {
+    "nombre": "Galletas de Soda",
+    "descripcion": "Galletas soda crujientes",
+    "variantes": [
+      { "sku": "SODA-200G", "nombre": "Galletas soda 200g", "precioBase": "4.50" },
+      { "sku": "SODA-400G", "nombre": "Galletas soda 400g", "precioBase": "8.00" }
+    ]
+  },
+  {
+    "nombre": "Arvejas en Lata",
+    "descripcion": "Arvejas verdes en conserva",
+    "variantes": [
+      { "sku": "ARV-300G", "nombre": "Arvejas 300g", "precioBase": "6.50" },
+      { "sku": "ARV-800G", "nombre": "Arvejas 800g", "precioBase": "14.00" }
+    ]
+  },
+  {
+    "nombre": "Duraznos en Lata",
+    "descripcion": "Duraznos en almíbar",
+    "variantes": [
+      { "sku": "DUR-400G", "nombre": "Duraznos 400g", "precioBase": "12.00" },
+      { "sku": "DUR-800G", "nombre": "Duraznos 800g", "precioBase": "21.00" }
+    ]
+  },
+  {
+    "nombre": "Sardinas en Lata",
+    "descripcion": "Sardinas en aceite vegetal",
+    "variantes": [
+      { "sku": "SAR-150G", "nombre": "Sardinas 150g", "precioBase": "7.00" },
+      { "sku": "SAR-400G", "nombre": "Sardinas 400g", "precioBase": "16.50" }
+    ]
+  },
+  {
+    "nombre": "Leche en Polvo",
+    "descripcion": "Leche entera en polvo instantánea",
+    "variantes": [
+      { "sku": "LECHE-400G", "nombre": "Leche polvo 400g", "precioBase": "28.00" },
+      { "sku": "LECHE-900G", "nombre": "Leche polvo 900g", "precioBase": "58.00" }
+    ]
+  },
+  {
+    "nombre": "Yogurt Natural",
+    "descripcion": "Yogurt natural sin azúcar",
+    "variantes": [
+      { "sku": "YOG-200ML", "nombre": "Yogurt 200ml", "precioBase": "4.50" },
+      { "sku": "YOG-1L", "nombre": "Yogurt 1L", "precioBase": "15.00" },
+      { "sku": "YOG-6PACK", "nombre": "Yogurt 6x200ml", "precioBase": "25.00" }
+    ]
+  }
+]

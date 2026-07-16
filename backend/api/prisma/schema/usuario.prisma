@@ -1,0 +1,9 @@
+model usuario {
+  id                    Int                    @id @default(autoincrement())
+  nombreUsuario         String                 @unique
+  hashContrasena        String
+  fechaCreacion         DateTime?              @default(now())
+  movimientosInventario movimientoInventario[]
+  transaccionesPago     transaccionPago[]
+  rechazos              detalleRechazoOrden[]
+}

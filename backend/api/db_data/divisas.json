@@ -1,0 +1,37 @@
+[
+  {
+    "codigo": "VES",
+    "nombre": "Bolívar Soberano",
+    "esMonedaBase": true
+  },
+  {
+    "codigo": "USD",
+    "nombre": "Dólar Estadounidense",
+    "esMonedaBase": false
+  },
+  {
+    "codigo": "EUR",
+    "nombre": "Euro",
+    "esMonedaBase": false
+  },
+  {
+    "codigo": "GBP",
+    "nombre": "Libra Esterlina",
+    "esMonedaBase": false
+  },
+  {
+    "codigo": "CNY",
+    "nombre": "Yuan Chino",
+    "esMonedaBase": false
+  },
+  {
+    "codigo": "BRL",
+    "nombre": "Real Brasileño",
+    "esMonedaBase": false
+  },
+  {
+    "codigo": "COP",
+    "nombre": "Peso Colombiano",
+    "esMonedaBase": false
+  }
+]

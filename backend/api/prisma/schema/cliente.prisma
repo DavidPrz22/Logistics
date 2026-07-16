@@ -1,0 +1,7 @@
+model cliente {
+  id              Int             @id @default(autoincrement())
+  nombre          String
+  telefono        String?
+  direccion       String?
+  ordenesDespacho ordenDespacho[]
+}

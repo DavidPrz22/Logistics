@@ -1,0 +1,17 @@
+[
+  {
+    "codigo": "EFECTIVO",
+    "descripcion": "Efectivo",
+    "requiereReferencia": false
+  },
+  {
+    "codigo": "TRANSFERENCIA",
+    "descripcion": "Transferencia Bancaria",
+    "requiereReferencia": true
+  },
+  {
+    "codigo": "PAGO_MOVIL",
+    "descripcion": "Pago Movil",
+    "requiereReferencia": true
+  }
+]

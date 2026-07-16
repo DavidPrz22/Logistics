@@ -1,0 +1,63 @@
+enum EstadoOrdenDespacho {
+  PREPARACION
+  EN_RUTA
+  LIQUIDADA
+}
+
+model ordenDespacho {
+  id                     Int            @id @default(autoincrement())
+  numeroOrden            String         @unique
+  clienteId              Int            
+  choferId               Int?           
+  almacenTransitoId      Int            
+  fechaSalida            DateTime?      @default(now()) 
+  estado                 EstadoOrdenDespacho? @default(PREPARACION)
+  totalFacturadoOriginal Decimal?       @default(0.00)
+  saldoNetoCobrar        Decimal?       @default(0.00)
+  totalRechazado         Decimal?       @default(0.00)
+  
+  cliente                cliente        @relation(fields: [clienteId], references: [id])
+  chofer                 chofer?        @relation(fields: [choferId], references: [id])
+  almacenTransito        almacen        @relation(fields: [almacenTransitoId], references: [id], onDelete: Restrict)
+  detalles               detalleOrden[]
+}
+
+model detalleOrden {
+  id                 Int            @id @default(autoincrement())
+  ordenId            Int            
+  loteId             Int            
+  cantidadEnviada    Int            
+  precioUnitario     Decimal
+  
+  orden              ordenDespacho  @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  lote               lote           @relation(fields: [loteId], references: [id], onDelete: Restrict)
+  
+  rechazos           detalleRechazoOrden[]
+  movimientos        movimientoInventario[]
+}
+
+model detalleRechazoOrden {
+  id                 Int            @id @default(autoincrement())
+  detalleOrdenId     Int
+  cantidadRechazada  Int
+  motivoRechazoId    Int
+  almacenReingresoId Int
+  usuarioId          Int
+  fechaRechazo       DateTime?      @default(now())
+  observaciones      String?
+
+  detalleOrden       detalleOrden   @relation(fields: [detalleOrdenId], references: [id], onDelete: Restrict)
+  motivoRechazo      motivoRechazo  @relation(fields: [motivoRechazoId], references: [id], onDelete: Restrict)
+  almacenReingreso   almacen        @relation("AlmacenReingreso", fields: [almacenReingresoId], references: [id], onDelete: Restrict)
+  usuario            usuario        @relation(fields: [usuarioId], references: [id])
+  
+  movimientos        movimientoInventario[]
+}
+
+model motivoRechazo {
+  id            Int            @id @default(autoincrement())
+  codigo        String         @unique
+  descripcion   String
+  requiereMerma Boolean?       @default(false) 
+  rechazos      detalleRechazoOrden[]
+}

@@ -1,0 +1,16 @@
+model producto {
+  id          Int                @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  variantes   varianteProducto[]
+}
+
+model varianteProducto {
+  id         Int      @id @default(autoincrement())
+  productoId Int      
+  sku        String   @unique
+  nombre     String
+  precioBase Decimal
+  producto   producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  lotes      lote[]
+}
