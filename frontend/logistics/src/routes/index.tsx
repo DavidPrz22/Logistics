@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { useERP, findCliente, findChofer } from "@/lib/erp-store";
+import { useERP } from "@/lib/erp-store";
+import { useAlmacenes, useClientes, useChoferes } from "@/hooks/queries/queries";
 import { Card } from "@/components/ui/card";
 import { EstadoBadge } from "@/components/shared/estado-badge";
 import { Truck, Boxes, AlertTriangle, CheckCircle2 } from "lucide-react";
@@ -10,8 +11,9 @@ export const Route = createFileRoute("/")({ component: Panel });
 function Panel() {
   const ordenes = useERP((s) => s.ordenes);
   const lotes = useERP((s) => s.lotes);
-  const almacenes = useERP((s) => s.almacenes);
-  const state = useERP((s) => s);
+  const { data: almacenes = [] } = useAlmacenes();
+  const { data: clientes = [] } = useClientes();
+  const { data: choferes = [] } = useChoferes();
 
   const enRuta = ordenes.filter((o) => o.estado === "EN_RUTA").length;
   const prep = ordenes.filter((o) => o.estado === "PREPARACION").length;
@@ -63,8 +65,8 @@ function Panel() {
             <Link key={o.id} to="/despachos/$ordenId" params={{ ordenId: String(o.id) }} className="flex items-center justify-between py-3 hover:bg-muted/40 -mx-2 px-2 rounded">
               <div className="flex items-center gap-4">
                 <div className="font-mono text-sm font-semibold">{o.numero_orden}</div>
-                <div className="text-sm text-muted-foreground">{findCliente(state, o.cliente_id)?.nombre}</div>
-                <div className="text-xs text-muted-foreground">· {findChofer(state, o.chofer_id)?.nombre ?? "Sin chofer"}</div>
+                <div className="text-sm text-muted-foreground">{clientes.find((c) => c.id === o.cliente_id)?.nombre}</div>
+                <div className="text-xs text-muted-foreground">· {choferes.find((c) => c.id === o.chofer_id)?.nombre ?? "Sin chofer"}</div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-sm font-mono tabular-nums">${o.saldo_neto_cobrar.toFixed(2)}</div>

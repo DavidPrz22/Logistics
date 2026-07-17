@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useERP, findAlmacen, findLote, findVariante } from "@/lib/erp-store";
+import { useERP, findLote, findVariante } from "@/lib/erp-store";
+import { useAlmacenes } from "@/hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/inventario/kardex")({ component: Kardex }
 
 function Kardex() {
   const state = useERP((s) => s);
+  const { data: almacenes = [] } = useAlmacenes();
   const [q, setQ] = useState("");
   const [tipo, setTipo] = useState<"ALL" | "ENTRADA" | "SALIDA">("ALL");
 
@@ -66,7 +68,7 @@ function Kardex() {
           <TableBody>
             {rows.length === 0 && <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-10">Sin movimientos.</TableCell></TableRow>}
             {rows.map((m) => {
-              const l = findLote(state, m.lote_id); const v = l ? findVariante(state, l.variante_id) : undefined; const a = findAlmacen(state, m.almacen_id);
+              const l = findLote(state, m.lote_id); const v = l ? findVariante(state, l.variante_id) : undefined; const a = almacenes.find((x) => x.id === m.almacen_id);
               const ordenId = m.detalle_orden_id ? state.detalles.find((d) => d.id === m.detalle_orden_id)?.orden_id : undefined;
               return (
                 <TableRow key={m.id} className="hover:bg-muted/40">

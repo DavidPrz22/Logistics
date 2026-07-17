@@ -1,33 +1,10 @@
 import { useSyncExternalStore } from "react";
 import type {
-  Almacen, Chofer, Cliente, DetalleOrden, DetalleRechazo, Lote,
+  DetalleOrden, DetalleRechazo, Lote,
   MotivoRechazo, Movimiento, OrdenDespacho, Producto, Variante,
 } from "@/types/types";
 
 // -------- Seed data --------
-const clientes: Cliente[] = [
-  { id: 1, nombre: "Supermercado Nacional", telefono: "809-555-0100", direccion: "Av. 27 de Febrero 42" },
-  { id: 2, nombre: "Colmado La Esquina", telefono: "809-555-0111", direccion: "Calle Duarte 15" },
-  { id: 3, nombre: "Distribuidora Sur", telefono: "809-555-0122", direccion: "Zona Franca km 12" },
-  { id: 4, nombre: "Bodega El Buen Precio", telefono: "809-555-0133", direccion: "Villa Mella #88" },
-  { id: 5, nombre: "Mayorista Central", telefono: "809-555-0144", direccion: "Mercado Nuevo Local 4" },
-];
-
-const choferes: Chofer[] = [
-  { id: 1, nombre: "Carlos Ramírez", licencia: "L-8842-DR", telefono: "829-555-2001" },
-  { id: 2, nombre: "Juan Peña", licencia: "L-9931-DR", telefono: "829-555-2002" },
-  { id: 3, nombre: "Miguel Santana", licencia: "L-7712-DR", telefono: "829-555-2003" },
-  { id: 4, nombre: "Luis Fernández", licencia: "L-6603-DR", telefono: "829-555-2004" },
-];
-
-const almacenes: Almacen[] = [
-  { id: 1, nombre: "Almacén Principal", tipo: "PRINCIPAL" },
-  { id: 2, nombre: "Tránsito Ruta Norte", tipo: "TRANSITO" },
-  { id: 3, nombre: "Tránsito Ruta Sur", tipo: "TRANSITO" },
-  { id: 4, nombre: "Tránsito Ruta Este", tipo: "TRANSITO" },
-  { id: 5, nombre: "Almacén Mermas", tipo: "MERMA" },
-];
-
 const motivosRechazo: MotivoRechazo[] = [
   { id: 1, codigo: "ROTO", descripcion: "Producto roto / dañado", requiere_merma: true },
   { id: 2, codigo: "VENC", descripcion: "Vencido o próximo a vencer", requiere_merma: true },
@@ -105,9 +82,6 @@ const movimientos: Movimiento[] = [
 
 // -------- Store --------
 interface ERPState {
-  clientes: Cliente[];
-  choferes: Chofer[];
-  almacenes: Almacen[];
   motivosRechazo: MotivoRechazo[];
   productos: Producto[];
   variantes: Variante[];
@@ -119,7 +93,7 @@ interface ERPState {
 }
 
 let state: ERPState = {
-  clientes, choferes, almacenes, motivosRechazo, productos, variantes,
+  motivosRechazo, productos, variantes,
   lotes, ordenes, detalles, rechazos, movimientos,
 };
 
@@ -216,9 +190,6 @@ export const erpActions = {
 };
 
 // -------- Selectors / helpers --------
-export const findCliente = (s: ERPState, id: number) => s.clientes.find((c) => c.id === id);
-export const findChofer = (s: ERPState, id: number | null) => id ? s.choferes.find((c) => c.id === id) : undefined;
-export const findAlmacen = (s: ERPState, id: number) => s.almacenes.find((a) => a.id === id);
 export const findLote = (s: ERPState, id: number) => s.lotes.find((l) => l.id === id);
 export const findVariante = (s: ERPState, id: number) => s.variantes.find((v) => v.id === id);
 export const findProducto = (s: ERPState, id: number) => s.productos.find((p) => p.id === id);

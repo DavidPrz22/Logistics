@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { erpActions, findAlmacen, findChofer, findCliente, findLote, findMotivo, findVariante, useERP } from "@/lib/erp-store";
+import { erpActions, findLote, findMotivo, findVariante, useERP } from "@/lib/erp-store";
+import { useAlmacenes, useChoferes, useClientes } from "@/hooks/queries/queries";
 import type { DetalleOrden } from "@/types/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { EstadoBadge } from "@/components/shared/estado-badge";
@@ -22,6 +23,9 @@ function DetalleOrden() {
   const { ordenId } = Route.useParams();
   const id = Number(ordenId);
   const state = useERP((s) => s);
+  const { data: clientes = [] } = useClientes();
+  const { data: choferes = [] } = useChoferes();
+  const { data: almacenes = [] } = useAlmacenes();
   const orden = state.ordenes.find((o) => o.id === id);
   if (!orden) throw notFound();
 
@@ -32,8 +36,8 @@ function DetalleOrden() {
     <div className="p-8 max-w-6xl mx-auto space-y-6">
       <PageHeader
         eyebrow={<span className="font-mono">{orden.numero_orden}</span> as unknown as string}
-        title={findCliente(state, orden.cliente_id)?.nombre ?? "Cliente"}
-        subtitle={`Chofer: ${findChofer(state, orden.chofer_id)?.nombre ?? "—"} · Tránsito: ${findAlmacen(state, orden.almacen_transito_id)?.nombre} · Salida: ${new Date(orden.fecha_salida).toLocaleString()}`}
+        title={clientes.find((c) => c.id === orden.cliente_id)?.nombre ?? "Cliente"}
+        subtitle={`Chofer: ${choferes.find((c) => c.id === orden.chofer_id)?.nombre ?? "—"} · Tránsito: ${almacenes.find((a) => a.id === orden.almacen_transito_id)?.nombre} · Salida: ${new Date(orden.fecha_salida).toLocaleString()}`}
         actions={
           <div className="flex items-center gap-3">
             <EstadoBadge estado={orden.estado} />
@@ -67,7 +71,6 @@ function StatCard({ label, value, mono, highlight }: { label: string; value: str
 
 // ------- PREPARACION -------
 function PreparacionPanel({ ordenId, detalles }: { ordenId: number; detalles: DetalleOrden[] }) {
-  const state = useERP((s) => s);
   const [editing, setEditing] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const canDispatch = detalles.length > 0;
@@ -240,6 +243,7 @@ interface DetalleLiq { detalle_id: number; devuelta: number; rechazos: RechazoDr
 
 function LiquidacionForm({ ordenId, detalles, onCancel }: { ordenId: number; detalles: DetalleOrden[]; onCancel: () => void }) {
   const state = useERP((s) => s);
+  const { data: almacenes = [] } = useAlmacenes();
   const [rows, setRows] = useState<DetalleLiq[]>(() => detalles.map((d) => ({ detalle_id: d.id, devuelta: 0, rechazos: [] })));
 
   const update = (idx: number, patch: Partial<DetalleLiq>) => setRows((prev) => prev.map((r, i) => i === idx ? { ...r, ...patch } : r));
@@ -325,7 +329,7 @@ function LiquidacionForm({ ordenId, detalles, onCancel }: { ordenId: number; det
                       </div>
                       <div className="col-span-3">
                         <label className="text-xs text-muted-foreground">Almacén reingreso</label>
-                        <Combobox items={state.almacenes.filter((a) => a.tipo !== "TRANSITO").map((a) => ({ value: String(a.id), label: a.nombre, hint: a.tipo }))} value={rc.almacen_id} onChange={(v) => updRechazo(idx, ri, { almacen_id: v })} />
+                        <Combobox items={almacenes.filter((a) => a.tipo !== "TRANSITO").map((a) => ({ value: String(a.id), label: a.nombre, hint: a.tipo }))} value={rc.almacen_id} onChange={(v) => updRechazo(idx, ri, { almacen_id: v })} />
                       </div>
                       <div className="col-span-2">
                         <label className="text-xs text-muted-foreground">Observaciones</label>
@@ -356,6 +360,7 @@ function LiquidacionForm({ ordenId, detalles, onCancel }: { ordenId: number; det
 // ------- LIQUIDADA -------
 function LiquidadaPanel({ detalles, rechazos }: { detalles: DetalleOrden[]; rechazos: ReturnType<typeof useERP<any>> }) {
   const state = useERP((s) => s);
+  const { data: almacenes = [] } = useAlmacenes();
   const rechs = rechazos as any[];
   return (
     <div className="space-y-4">
@@ -377,7 +382,7 @@ function LiquidadaPanel({ detalles, rechazos }: { detalles: DetalleOrden[]; rech
               {rechs.map((r: any) => {
                 const d = detalles.find((x) => x.id === r.detalle_orden_id); if (!d) return null;
                 const l = findLote(state, d.lote_id); const v = l ? findVariante(state, l.variante_id) : undefined;
-                const m = findMotivo(state, r.motivo_rechazo_id); const al = findAlmacen(state, r.almacen_reingreso_id);
+                const m = findMotivo(state, r.motivo_rechazo_id); const al = almacenes.find((x) => x.id === r.almacen_reingreso_id);
                 return (
                   <TableRow key={r.id}>
                     <TableCell><div className="font-mono font-semibold">{v?.sku}</div><div className="text-xs text-muted-foreground">{l?.numero_lote}</div></TableCell>

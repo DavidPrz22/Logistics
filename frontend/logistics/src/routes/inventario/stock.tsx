@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useERP, findVariante, findProducto } from "@/lib/erp-store";
+import { useAlmacenes } from "@/hooks/queries/queries";
 import type { TipoAlmacen } from "@/types/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card } from "@/components/ui/card";
@@ -19,18 +20,19 @@ const tipoMeta: Record<TipoAlmacen, { label: string; icon: any; tone: string; bg
 
 function Stock() {
   const state = useERP((s) => s);
+  const { data: almacenes = [] } = useAlmacenes();
   const [q, setQ] = useState("");
   const [almacenFiltro, setAlmacenFiltro] = useState("");
 
   const grupos = useMemo(() => {
     const tipos: TipoAlmacen[] = ["PRINCIPAL", "TRANSITO", "MERMA"];
     return tipos.map((tipo) => {
-      const almacenes = state.almacenes.filter((a) => a.tipo === tipo);
-      const rows = state.lotes.filter((l) => almacenes.some((a) => a.id === l.almacen_id));
+      const almacenesTipo = almacenes.filter((a) => a.tipo === tipo);
+      const rows = state.lotes.filter((l) => almacenesTipo.some((a) => a.id === l.almacen_id));
       const total = rows.reduce((s, l) => s + l.stock_actual, 0);
-      return { tipo, almacenes, rows, total };
+      return { tipo, almacenes: almacenesTipo, rows, total };
     });
-  }, [state]);
+  }, [state, almacenes]);
 
   const filas = useMemo(() => {
     return state.lotes
@@ -38,15 +40,15 @@ function Stock() {
       .filter((l) => {
         if (!q) return true;
         const v = findVariante(state, l.variante_id); const p = v ? findProducto(state, v.producto_id) : undefined;
-        const a = state.almacenes.find((x) => x.id === l.almacen_id);
+        const a = almacenes.find((x) => x.id === l.almacen_id);
         return `${v?.sku ?? ""} ${p?.nombre ?? ""} ${l.numero_lote} ${a?.nombre ?? ""}`.toLowerCase().includes(q.toLowerCase());
       })
       .sort((a, b) => (a.almacen_id - b.almacen_id) || a.numero_lote.localeCompare(b.numero_lote));
-  }, [state, q, almacenFiltro]);
+  }, [state, q, almacenFiltro, almacenes]);
 
   const almacenItems = [
     { value: "", label: "Todos los almacenes" },
-    ...state.almacenes.map((a) => ({ value: String(a.id), label: a.nombre, hint: tipoMeta[a.tipo].label })),
+    ...almacenes.map((a) => ({ value: String(a.id), label: a.nombre, hint: tipoMeta[a.tipo].label })),
   ];
 
   return (
@@ -106,7 +108,7 @@ function Stock() {
             {filas.length === 0 && <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-10">Sin existencias que coincidan.</TableCell></TableRow>}
             {filas.map((l) => {
               const v = findVariante(state, l.variante_id); const p = v ? findProducto(state, v.producto_id) : undefined;
-              const a = state.almacenes.find((x) => x.id === l.almacen_id);
+              const a = almacenes.find((x) => x.id === l.almacen_id);
               const meta = a ? tipoMeta[a.tipo] : undefined;
               const venc = new Date(l.fecha_vencimiento);
               const diasVenc = Math.floor((venc.getTime() - Date.now()) / 86400000);

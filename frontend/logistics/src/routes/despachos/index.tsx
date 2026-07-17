@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { useMemo } from "react";
-import { findChofer, findCliente, useERP } from "@/lib/erp-store";
+import { useERP } from "@/lib/erp-store";
+import { useChoferes, useClientes } from "@/hooks/queries/queries";
 import type { EstadoOrden } from "@/types/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { EstadoBadge } from "@/components/shared/estado-badge";
@@ -30,6 +31,8 @@ function DespachosList() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const state = useERP((s) => s);
+  const { data: clientes = [] } = useClientes();
+  const { data: choferes = [] } = useChoferes();
   const ordenes = state.ordenes;
 
   const filtered = useMemo(() => {
@@ -37,7 +40,7 @@ function DespachosList() {
       if (search.tab !== "TODOS" && o.estado !== search.tab) return false;
       if (search.chofer && String(o.chofer_id) !== search.chofer) return false;
       if (search.q) {
-        const cli = findCliente(state, o.cliente_id)?.nombre.toLowerCase() ?? "";
+        const cli = clientes.find((c) => c.id === o.cliente_id)?.nombre.toLowerCase() ?? "";
         const q = search.q.toLowerCase();
         if (!cli.includes(q) && !o.numero_orden.toLowerCase().includes(q)) return false;
       }
@@ -45,7 +48,7 @@ function DespachosList() {
       if (search.hasta && o.fecha_salida > `${search.hasta}T23:59:59Z`) return false;
       return true;
     });
-  }, [ordenes, search, state]);
+  }, [ordenes, search, clientes]);
 
   const counts: Record<string, number> = {
     TODOS: ordenes.length,
@@ -93,7 +96,7 @@ function DespachosList() {
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Chofer</label>
           <div className="mt-1">
             <Combobox
-              items={[{ value: "", label: "Todos los choferes" }, ...state.choferes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.licencia }))]}
+              items={[{ value: "", label: "Todos los choferes" }, ...choferes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.licenciaConducir }))]}
               value={search.chofer}
               onChange={(v) => setSearch({ chofer: v })}
               placeholder="Todos los choferes"
@@ -141,8 +144,8 @@ function DespachosList() {
                 className="cursor-pointer hover:bg-muted/40"
               >
                 <TableCell className="font-mono font-semibold">{o.numero_orden}</TableCell>
-                <TableCell>{findCliente(state, o.cliente_id)?.nombre}</TableCell>
-                <TableCell className="text-muted-foreground">{findChofer(state, o.chofer_id)?.nombre ?? "—"}</TableCell>
+                <TableCell>{clientes.find((c) => c.id === o.cliente_id)?.nombre}</TableCell>
+                <TableCell className="text-muted-foreground">{choferes.find((c) => c.id === o.chofer_id)?.nombre ?? "—"}</TableCell>
                 <TableCell className="text-muted-foreground tabular-nums">{new Date(o.fecha_salida).toLocaleDateString("es-DO")}</TableCell>
                 <TableCell><EstadoBadge estado={o.estado as EstadoOrden} /></TableCell>
                 <TableCell className="text-right font-mono tabular-nums">${o.total_facturado_original.toFixed(2)}</TableCell>

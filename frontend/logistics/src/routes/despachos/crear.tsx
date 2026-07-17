@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { erpActions, useERP, findLote, findVariante } from "@/lib/erp-store";
+import { useAlmacenes, useChoferes, useClientes } from "@/hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card } from "@/components/ui/card";
 import { Combobox } from "@/components/shared/combobox";
@@ -18,6 +19,9 @@ interface LineaBorrador { key: string; lote_id: number; cantidad: number; precio
 function CrearOrden() {
   const state = useERP((s) => s);
   const navigate = useNavigate();
+  const { data: clientes = [] } = useClientes();
+  const { data: choferes = [] } = useChoferes();
+  const { data: almacenes = [] } = useAlmacenes();
   const [cliente, setCliente] = useState("");
   const [chofer, setChofer] = useState("");
   const [almacen, setAlmacen] = useState("");
@@ -64,13 +68,13 @@ function CrearOrden() {
         <h2 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">Cabecera</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Cliente">
-            <Combobox items={state.clientes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.direccion }))} value={cliente} onChange={setCliente} placeholder="Elegir cliente…" />
+            <Combobox items={clientes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.direccion }))} value={cliente} onChange={setCliente} placeholder="Elegir cliente…" />
           </Field>
           <Field label="Chofer">
-            <Combobox items={state.choferes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.licencia }))} value={chofer} onChange={setChofer} placeholder="Elegir chofer…" />
+            <Combobox items={choferes.map((c) => ({ value: String(c.id), label: c.nombre, hint: c.licenciaConducir }))} value={chofer} onChange={setChofer} placeholder="Elegir chofer…" />
           </Field>
           <Field label="Almacén de tránsito">
-            <Combobox items={state.almacenes.filter((a) => a.tipo === "TRANSITO").map((a) => ({ value: String(a.id), label: a.nombre, hint: a.tipo }))} value={almacen} onChange={setAlmacen} placeholder="Elegir almacén…" />
+            <Combobox items={almacenes.filter((a) => a.tipo === "TRANSITO").map((a) => ({ value: String(a.id), label: a.nombre, hint: a.tipo }))} value={almacen} onChange={setAlmacen} placeholder="Elegir almacén…" />
           </Field>
           <Field label="Fecha de salida">
             <DatePicker value={fecha} onChange={(v) => setFecha(v)} placeholder="Fecha de salida" />
