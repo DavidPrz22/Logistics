@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 export const detallesOrdenDespachoSchema = z.object({
     loteId: z.number().int().positive({ message: "ID de lote inválido" }),
-    cantidadEnviada: z.number().positive({ message: "La cantidad debe ser mayor a 0" }),
-    precioUnitario: z.number().nonnegative({ message: "El precio no puede ser negativo" })
+    cantidadEnviada: z.number().min(0).positive({ message: "La cantidad debe ser mayor a 0" }),
+    precioUnitario: z.number().positive({ message: "El precio debe ser mayor a 0" })
 })
 
 export const ordenDespachoSchema = z.object({

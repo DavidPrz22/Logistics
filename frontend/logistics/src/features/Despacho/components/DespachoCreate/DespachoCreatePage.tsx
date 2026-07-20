@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ArrowLeft, Info } from "lucide-react";
@@ -10,6 +9,7 @@ import type { LineaBorrador } from "../../types/types";
 import { HeaderForm } from "./HeaderForm";
 import { LineaBorradorAddRow } from "./LineaBorradorAddRow";
 import { LineaBorradorTable } from "./LineaBorradorTable";
+import { useState, useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ordenDespachoSchema, type OrdenDespacho } from "../../schemas/schema";
@@ -24,13 +24,13 @@ export function DespachoCreatePage() {
   const { data: almacenes = [] } = useAlmacenes();
 
   const [lineas, setLineas] = useState<LineaBorrador[]>([]);
-  const createOrdenMutation = useCreateOrdenDespachoMutation();
+  const { mutateAsync: createOrdenMutation, isPending } = useCreateOrdenDespachoMutation();
 
   const {
     setValue,
     watch,
     handleSubmit,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm<OrdenDespacho>({
     resolver: zodResolver(ordenDespachoSchema),
     mode: "onChange",
@@ -38,23 +38,30 @@ export function DespachoCreatePage() {
       fechaSalida: new Date(),
     }
   });
+  console.log(watch()
+  )
+  useEffect(() => {
+    const detallesFormateados = lineas.map(l => ({
+        loteId: l.lote_id,
+        cantidadEnviada: l.cantidad,
+        precioUnitario: l.precio
+    }));
+    setValue("detallesOrdenDespacho", detallesFormateados, { shouldValidate: true });
+  }, [lineas, setValue]);
 
+  console.log(errors)
   const clienteId = watch("clienteId");
   const choferId = watch("choferId");
   const almacenTransitoId = watch("almacenTransitoId");
   const fechaSalida = watch("fechaSalida");
 
   const onSubmit: SubmitHandler<OrdenDespacho> = async (data) => {
-    const payload = {
-        ...data,
-        detallesOrdenDespacho: lineas.map(l => ({
-            loteId: l.lote_id,
-            cantidadEnviada: l.cantidad,
-            precioUnitario: l.precio
-        }))
-    };
-    
-    await createOrdenMutation.mutateAsync(payload);
+    // The data is already mapped to the schema and validated by the useEffect sync
+    const payload = data;
+
+    toast.success('HAHA!')
+    return;
+    await createOrdenMutation(payload);
     toast.success("Orden creada en estado PREPARACIÓN");
     navigate({ to: "/despachos" });
   };
@@ -85,7 +92,7 @@ export function DespachoCreatePage() {
   const updateLinea = (idx: number, patch: Partial<LineaBorrador>) => setLineas((prev) => prev.map((x, i) => i === idx ? { ...x, ...patch } : x));
   const removeLinea = (idx: number) => setLineas((prev) => prev.filter((_, i) => i !== idx));
 
-  const total = lineas.reduce((s, l) => s + l.cantidad * l.precio, 0);
+  const total = lineas.reduce((s, l) => s + Number(l.cantidad) * Number(l.precio), 0);
   const disabledLotes = lineas.map(l => l.lote_id);
 
   return (
@@ -132,10 +139,10 @@ export function DespachoCreatePage() {
         <Link to="/despachos" className="inline-flex items-center px-4 py-2 text-sm rounded-md border border-border hover:bg-muted">Cancelar</Link>
         <Button 
           onClick={handleSubmit(onSubmit)} 
-          disabled={!isValid || createOrdenMutation.isPending} 
+          disabled={!isValid || isPending} 
           className="bg-primary text-primary-foreground"
         >
-          {createOrdenMutation.isPending ? "Creando..." : "Crear orden"}
+          {isPending ? "Creando..." : "Crear orden"}
         </Button>
       </div>
     </div>

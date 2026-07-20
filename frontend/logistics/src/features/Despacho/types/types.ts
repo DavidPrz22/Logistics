@@ -5,8 +5,8 @@ export interface LineaBorrador {
   lote_id: number;
   numero_lote: string;
   stock_actual: number;
-  cantidad: number;
-  precio: number;
+  cantidad: number | string;
+  precio: number | string;
 }
 
 export interface RechazoDraft {

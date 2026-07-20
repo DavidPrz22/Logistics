@@ -12,16 +12,35 @@ interface LineaBorradorTableProps {
 }
 
 export function LineaBorradorTable({ lineas, onUpdateLinea, onRemoveLinea }: LineaBorradorTableProps) {
-  const handleCantidadChange = (idx: number, value: number, stockActual: number) => {
-    if (value > stockActual) {
+  const handleCantidadChange = (idx: number, value: string) => {
+    onUpdateLinea(idx, { cantidad: value });
+  };
+
+  const handleCantidadBlur = (idx: number, value: number | string, stockActual: number) => {
+    const numValue = Number(value);
+    if (numValue > stockActual) {
       toast.error(`Cantidad no disponible. Stock máximo: ${stockActual}`);
       onUpdateLinea(idx, { cantidad: stockActual });
-    } else if (value < 1) {
-      onUpdateLinea(idx, { cantidad: 1 });
+    } else if (numValue < 1 || isNaN(numValue)) {
+      onUpdateLinea(idx, { cantidad: 0 });
     } else {
-      onUpdateLinea(idx, { cantidad: value });
+      onUpdateLinea(idx, { cantidad: numValue });
     }
   };
+
+  const handlePrecioChange = (idx: number, value: string) => {
+    onUpdateLinea(idx, { precio: value });
+  }
+
+  const handlePrecioBlur = (idx: number, price: number | string) => {
+    const numValue = Number(price);
+    if (numValue <= 0 || isNaN(numValue)) {
+      toast.error(`El precio unitario debe ser mayor a 0`);
+      onUpdateLinea(idx, { precio: 0 });
+    } else {
+      onUpdateLinea(idx, { precio: numValue });
+    }
+  }
 
   return (
     <div className="rounded-md border border-border overflow-hidden">
@@ -53,13 +72,23 @@ export function LineaBorradorTable({ lineas, onUpdateLinea, onRemoveLinea }: Lin
                     min={1} 
                     max={ln.stock_actual} 
                     value={ln.cantidad} 
-                    onChange={(e) => handleCantidadChange(idx, Number(e.target.value), ln.stock_actual)} 
+                    onChange={(e) => handleCantidadChange(idx, e.target.value)} 
+                    onBlur={() => handleCantidadBlur(idx, ln.cantidad, ln.stock_actual)}
                     className="h-8" 
                   />
                 </TableCell>
-                <TableCell><Input type="number" step="0.01" min={0} value={ln.precio} onChange={(e) => onUpdateLinea(idx, { precio: Number(e.target.value) })} className="h-8 font-mono" /></TableCell>
-                <TableCell className="text-right font-mono tabular-nums">${(ln.cantidad * ln.precio).toFixed(2)}</TableCell>
-                <TableCell><Button size="icon" variant="ghost" onClick={() => onRemoveLinea(idx)}><Trash2 className="size-4 text-destructive" /></Button></TableCell>
+                <TableCell>
+                  <Input 
+                    type="number" 
+                    step="0.01" 
+                    min={0} 
+                    value={ln.precio} 
+                    onChange={(e) => handlePrecioChange(idx, e.target.value)} 
+                    onBlur={() => handlePrecioBlur(idx, ln.precio)}
+                    className="h-8 font-mono" />
+                    </TableCell>
+                <TableCell className="text-right font-mono tabular-nums">${(Number(ln.cantidad) * Number(ln.precio)).toFixed(2)}</TableCell>
+                <TableCell><Button type="button" size="icon" variant="ghost" onClick={() => onRemoveLinea(idx)}><Trash2 className="size-4 text-destructive" /></Button></TableCell>
               </TableRow>
             );
           })}
