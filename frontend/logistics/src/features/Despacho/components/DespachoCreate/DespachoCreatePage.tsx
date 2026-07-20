@@ -1,8 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ArrowLeft, Info } from "lucide-react";
-import { erpActions, useERP, findLote, findVariante } from "@/lib/erp-store";
 import { useAlmacenes, useChoferes, useClientes } from "@/hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card } from "@/components/ui/card";
@@ -11,48 +10,83 @@ import type { LineaBorrador } from "../../types/types";
 import { HeaderForm } from "./HeaderForm";
 import { LineaBorradorAddRow } from "./LineaBorradorAddRow";
 import { LineaBorradorTable } from "./LineaBorradorTable";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ordenDespachoSchema, type OrdenDespacho } from "../../schemas/schema";
+import { useCreateOrdenDespachoMutation } from "../../hooks/mutations/mutations";
+import type { LoteSearchResult } from "@/features/Despacho/schemas/schema";
+
 
 export function DespachoCreatePage() {
-  const state = useERP((s) => s);
   const navigate = useNavigate();
   const { data: clientes = [] } = useClientes();
   const { data: choferes = [] } = useChoferes();
   const { data: almacenes = [] } = useAlmacenes();
-  const [cliente, setCliente] = useState("");
-  const [chofer, setChofer] = useState("");
-  const [almacen, setAlmacen] = useState("");
-  const [fecha, setFecha] = useState(() => new Date().toISOString().slice(0, 10));
+
   const [lineas, setLineas] = useState<LineaBorrador[]>([]);
-  const [addLote, setAddLote] = useState("");
+  const createOrdenMutation = useCreateOrdenDespachoMutation();
 
-  const lotesDisponibles = useMemo(() => state.lotes.filter((l) => l.almacen_id === 1 && l.stock_actual > 0), [state.lotes]);
+  const {
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<OrdenDespacho>({
+    resolver: zodResolver(ordenDespachoSchema),
+    mode: "onChange",
+    defaultValues: {
+      fechaSalida: new Date(),
+    }
+  });
 
-  const addLinea = () => {
-    const l = findLote(state, Number(addLote));
-    if (!l) return;
-    const v = findVariante(state, l.variante_id);
-    setLineas((prev) => [...prev, { key: `${Date.now()}-${l.id}`, lote_id: l.id, cantidad: 1, precio: v?.precio_base ?? 0 }]);
-    setAddLote("");
+  const clienteId = watch("clienteId");
+  const choferId = watch("choferId");
+  const almacenTransitoId = watch("almacenTransitoId");
+  const fechaSalida = watch("fechaSalida");
+
+  const onSubmit: SubmitHandler<OrdenDespacho> = async (data) => {
+    const payload = {
+        ...data,
+        detallesOrdenDespacho: lineas.map(l => ({
+            loteId: l.lote_id,
+            cantidadEnviada: l.cantidad,
+            precioUnitario: l.precio
+        }))
+    };
+    
+    await createOrdenMutation.mutateAsync(payload);
+    toast.success("Orden creada en estado PREPARACIÓN");
+    navigate({ to: "/despachos" });
+  };
+
+  const handleSelectLote = (lote: LoteSearchResult) => {
+    const isDuplicate = lineas.some(l => l.lote_id === lote.id);
+    
+    if (isDuplicate) {
+      toast.error("Este lote ya está en la lista");
+      return;
+    }
+
+    const newLinea: LineaBorrador = {
+      key: crypto.randomUUID(),
+      sku: lote.sku,
+      variante_nombre: lote.varianteNombre,
+      lote_id: lote.id,
+      numero_lote: lote.numeroLote,
+      stock_actual: lote.stockActual,
+      cantidad: 1,
+      precio: lote.precioBase,
+    };
+
+    setLineas(prev => [...prev, newLinea]);
+    toast.success(`Lote ${lote.numeroLote} añadido`);
   };
 
   const updateLinea = (idx: number, patch: Partial<LineaBorrador>) => setLineas((prev) => prev.map((x, i) => i === idx ? { ...x, ...patch } : x));
   const removeLinea = (idx: number) => setLineas((prev) => prev.filter((_, i) => i !== idx));
 
   const total = lineas.reduce((s, l) => s + l.cantidad * l.precio, 0);
-  const canCreate = cliente && chofer && almacen && fecha;
-
-  const submit = () => {
-    if (!canCreate) return;
-    const id = erpActions.createOrden({
-      cliente_id: Number(cliente),
-      chofer_id: Number(chofer),
-      almacen_transito_id: Number(almacen),
-      fecha_salida: `${fecha}T08:00:00Z`,
-      detalles: lineas.map((l) => ({ lote_id: l.lote_id, cantidad_enviada: l.cantidad, precio_unitario: l.precio })),
-    });
-    toast.success("Orden creada en estado PREPARACIÓN");
-    navigate({ to: "/despachos/$ordenId", params: { ordenId: String(id) } });
-  };
+  const disabledLotes = lineas.map(l => l.lote_id);
 
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-6">
@@ -64,9 +98,15 @@ export function DespachoCreatePage() {
       />
 
       <HeaderForm
-        cliente={cliente} chofer={chofer} almacen={almacen} fecha={fecha}
+        cliente={clienteId ? String(clienteId) : ""} 
+        chofer={choferId ? String(choferId) : ""} 
+        almacen={almacenTransitoId ? String(almacenTransitoId) : ""} 
+        fecha={fechaSalida ? fechaSalida.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
         clientes={clientes} choferes={choferes} almacenes={almacenes}
-        onClienteChange={setCliente} onChoferChange={setChofer} onAlmacenChange={setAlmacen} onFechaChange={setFecha}
+        onClienteChange={(v) => setValue("clienteId", Number(v), { shouldValidate: true })}
+        onChoferChange={(v) => setValue("choferId", Number(v), { shouldValidate: true })}
+        onAlmacenChange={(v) => setValue("almacenTransitoId", Number(v), { shouldValidate: true })}
+        onFechaChange={(v) => setValue("fechaSalida", new Date(v), { shouldValidate: true })}
       />
 
       <Card className="p-6 space-y-4">
@@ -75,7 +115,7 @@ export function DespachoCreatePage() {
           <p className="text-xs text-muted-foreground mt-1">Opcional en creación. Podrás añadir lotes desde el panel de detalle antes de despachar.</p>
         </div>
 
-        <LineaBorradorAddRow lotesDisponibles={lotesDisponibles} addLote={addLote} onAddLoteChange={setAddLote} onAdd={addLinea} />
+        <LineaBorradorAddRow onSelectLote={handleSelectLote} disabledLotes={disabledLotes} />
 
         <LineaBorradorTable lineas={lineas} onUpdateLinea={updateLinea} onRemoveLinea={removeLinea} />
 
@@ -90,7 +130,13 @@ export function DespachoCreatePage() {
 
       <div className="flex justify-end gap-2">
         <Link to="/despachos" className="inline-flex items-center px-4 py-2 text-sm rounded-md border border-border hover:bg-muted">Cancelar</Link>
-        <Button onClick={submit} disabled={!canCreate} className="bg-primary text-primary-foreground">Crear orden</Button>
+        <Button 
+          onClick={handleSubmit(onSubmit)} 
+          disabled={!isValid || createOrdenMutation.isPending} 
+          className="bg-primary text-primary-foreground"
+        >
+          {createOrdenMutation.isPending ? "Creando..." : "Crear orden"}
+        </Button>
       </div>
     </div>
   );

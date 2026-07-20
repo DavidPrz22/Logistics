@@ -20,7 +20,7 @@ export function Combobox({ items, value, onChange, placeholder = "Seleccionar…
           <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[--radix-popover-trigger-width] pointer-events-auto" align="start">
+      <PopoverContent className="p-0 pointer-events-auto" align="start">
         <Command>
           <CommandInput placeholder="Buscar…" />
           <CommandList>

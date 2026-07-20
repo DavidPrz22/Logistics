@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { fetchAlmacenes, fetchChoferes, fetchClientes, fetchDivisas, fetchTasasCambio, fetchMetodosPago } from '@/api/api';
+import { fetchAlmacenes, fetchChoferes, fetchClientes, fetchDivisas, fetchTasasCambio, fetchMetodosPago, fetchLotesSearch } from '@/api/api';
 
 export const almacenesQueryOptions = queryOptions({
   queryKey: ['almacenes'],
@@ -35,4 +35,11 @@ export const metodosPagoQueryOptions = queryOptions({
   queryKey: ['metodosPago'],
   queryFn: fetchMetodosPago,
   staleTime: Infinity,
+});
+
+export const lotesSearchQueryOptions = (query: string) => queryOptions({
+  queryKey: ['lotesSearch', query],
+  queryFn: () => fetchLotesSearch(query),
+  staleTime: 0,
+  enabled: query.length >= 3,
 });

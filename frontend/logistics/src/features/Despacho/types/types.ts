@@ -1,6 +1,10 @@
 export interface LineaBorrador {
   key: string;
+  sku: string;
+  variante_nombre: string;
   lote_id: number;
+  numero_lote: string;
+  stock_actual: number;
   cantidad: number;
   precio: number;
 }

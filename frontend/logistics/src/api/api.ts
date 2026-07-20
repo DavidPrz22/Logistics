@@ -1,5 +1,5 @@
 import apiClient from "./client";
-import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago } from "@/types/zodType";
+import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago, LoteSearchResult } from "@/types/zodType";
 
 
 
@@ -59,6 +59,18 @@ export const fetchMetodosPago = async (): Promise<MetodoPago[]> => {
         return data;
     } catch (error) {
         console.error("Error fetching metodos de pago:", error);
+        throw error;
+    }
+};
+
+export const fetchLotesSearch = async (query: string): Promise<LoteSearchResult[]> => {
+    try {
+        const { data } = await apiClient.get<LoteSearchResult[]>('despacho/lotes/search', {
+            params: { q: query }
+        });
+        return data;
+    } catch (error) {
+        console.error("Error fetching lotes:", error);
         throw error;
     }
 };

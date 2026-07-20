@@ -1,36 +1,24 @@
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/shared/combobox";
+import { ServerSearchCombobox } from "@/features/Despacho/components/DespachoCreate/searchCombobox";
 import { Field } from "../Field";
-import { findVariante, useERP } from "@/lib/erp-store";
-import type { Lote } from "@/types/types";
+import type { LoteSearchResult } from "@/features/Despacho/schemas/schema";
 
 interface LineaBorradorAddRowProps {
-  lotesDisponibles: Lote[];
-  addLote: string;
-  onAddLoteChange: (v: string) => void;
-  onAdd: () => void;
+  onSelectLote: (lote: LoteSearchResult) => void;
+  disabledLotes: number[];
 }
 
-export function LineaBorradorAddRow({ lotesDisponibles, addLote, onAddLoteChange, onAdd }: LineaBorradorAddRowProps) {
-  const state = useERP((s) => s);
-
+export function LineaBorradorAddRow({ onSelectLote, disabledLotes }: LineaBorradorAddRowProps) {
   return (
     <div className="flex gap-2 items-end">
       <div className="flex-1">
         <Field label="Buscar variante / lote">
-          <Combobox
-            items={lotesDisponibles.map((l) => {
-              const v = findVariante(state, l.variante_id)!;
-              return { value: String(l.id), label: `${v.sku} · ${v.nombre}`, hint: `Lote ${l.numero_lote} · Stock ${l.stock_actual}` };
-            })}
-            value={addLote}
-            onChange={onAddLoteChange}
+          <ServerSearchCombobox
+            onSelect={onSelectLote}
             placeholder="Buscar SKU o lote…"
+            disabledLotes={disabledLotes}
           />
         </Field>
       </div>
-      <Button onClick={onAdd} disabled={!addLote}><Plus className="size-4 mr-1" /> Añadir</Button>
     </div>
   );
 }
