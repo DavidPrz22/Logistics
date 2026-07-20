@@ -56,9 +56,13 @@ export function LineaBorradorTable({ lineas, onUpdateLinea, onRemoveLinea }: Lin
             <TableHead className="w-12" />
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="w-full">
           {lineas.length === 0 && (
-            <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Sin líneas. Puedes crear la orden vacía y añadir después.</TableCell></TableRow>
+            <TableRow>
+              <TableCell colSpan={7} className="text-center text-muted-foreground py-8 ">
+                Sin líneas. Puedes crear la orden vacía y añadir después.
+              </TableCell>
+            </TableRow>
           )}
           {lineas.map((ln, idx) => {
             return (

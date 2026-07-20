@@ -47,14 +47,14 @@ export function ServerSearchCombobox({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger className="w-120">
         <Button variant="outline" role="combobox" className={cn("w-full justify-between font-normal", !currentLote && "text-muted-foreground", className)}>
           <span className="truncate">{currentLote ? `${currentLote.sku} · Lote ${currentLote.numeroLote}` : placeholder}</span>
           <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 w-[--radix-popover-trigger-width] pointer-events-auto" align="start">
-        <Command shouldFilter={false}>
+        <Command shouldFilter={false} className="w-120">
           <CommandInput 
             placeholder={placeholder} 
             value={searchTerm}

@@ -30,7 +30,7 @@ export function DespachoCreatePage() {
     setValue,
     watch,
     handleSubmit,
-    formState: { isValid, errors },
+    formState: { isValid },
   } = useForm<OrdenDespacho>({
     resolver: zodResolver(ordenDespachoSchema),
     mode: "onChange",
@@ -38,18 +38,17 @@ export function DespachoCreatePage() {
       fechaSalida: new Date(),
     }
   });
-  console.log(watch()
-  )
+
   useEffect(() => {
     const detallesFormateados = lineas.map(l => ({
         loteId: l.lote_id,
-        cantidadEnviada: l.cantidad,
-        precioUnitario: l.precio
+        cantidadEnviada: Number(l.cantidad),
+        precioUnitario: Number(l.precio)
     }));
+  
     setValue("detallesOrdenDespacho", detallesFormateados, { shouldValidate: true });
   }, [lineas, setValue]);
 
-  console.log(errors)
   const clienteId = watch("clienteId");
   const choferId = watch("choferId");
   const almacenTransitoId = watch("almacenTransitoId");
@@ -58,9 +57,6 @@ export function DespachoCreatePage() {
   const onSubmit: SubmitHandler<OrdenDespacho> = async (data) => {
     // The data is already mapped to the schema and validated by the useEffect sync
     const payload = data;
-
-    toast.success('HAHA!')
-    return;
     await createOrdenMutation(payload);
     toast.success("Orden creada en estado PREPARACIÓN");
     navigate({ to: "/despachos" });

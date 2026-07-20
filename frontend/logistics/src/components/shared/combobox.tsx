@@ -14,14 +14,14 @@ export function Combobox({ items, value, onChange, placeholder = "Seleccionar…
   const current = items.find((i) => i.value === value);
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger className="w-full">
         <Button variant="outline" role="combobox" className={cn("w-full justify-between font-normal", !current && "text-muted-foreground", className)}>
           <span className="truncate">{current ? current.label : placeholder}</span>
           <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 pointer-events-auto" align="start">
-        <Command>
+        <Command className="w-110">
           <CommandInput placeholder="Buscar…" />
           <CommandList>
             <CommandEmpty>{empty}</CommandEmpty>
