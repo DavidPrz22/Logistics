@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
-import { useChoferes, useOrdenesDespacho } from "@/hooks/queries/queries";
+import { useChoferes } from "@/hooks/queries/queries";
+import { useOrdenesDespacho } from "../../hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import type { OrdenSearchParams } from "../../types/types";
 import type { ListOrdenDespacho } from "../../schemas/schema";

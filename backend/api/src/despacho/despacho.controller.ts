@@ -10,7 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { DespachoService } from './despacho.service';
-import { CreateOrdenODT, UpdateOrdenODT } from './ODTs/despacho.odts';
+import {
+  CreateOrdenODT,
+  UpdateDetallesOrdenODT,
+  UpdateOrdenODT,
+} from './ODTs/despacho.odts';
 
 @Controller('despacho')
 export class DespachoController {
@@ -32,6 +36,17 @@ export class DespachoController {
     @Body() data: UpdateOrdenODT,
   ) {
     return this.despachoService.updateOrdenDespacho(id, data);
+  }
+
+  @Put('orden-despacho/:id/detalles')
+  async updateDetallesOrdenDespacho(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateDetallesOrdenODT,
+  ) {
+    return this.despachoService.updateDetallesOrdenDespacho(
+      id,
+      data.detalles,
+    );
   }
 
   @Get('ordenes-despacho')

@@ -1,19 +1,55 @@
-import { IsOptional } from 'class-validator';
+import { IsArray, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
-import type { DetalleOrdenDespacho } from '../types/despacho.types';
 
 export class LoteSearchQueryODT {
+  @IsOptional()
   q?: string;
 }
 
-export class CreateOrdenODT {
-  clienteId!: number;
-  choferId!: number;
-  fechaSalida!: Date;
-  almacenTransitoId!: number;
-  totalFacturadoOriginal!: number;
+export class DetalleOrdenDespachoODT {
   @IsOptional()
-  detallesOrdenDespacho!: DetalleOrdenDespacho[];
+  @IsInt()
+  id?: number;
+
+  @IsInt()
+  loteId!: number;
+
+  @IsInt()
+  cantidadEnviada!: number;
+
+  @IsNumber()
+  precioUnitario!: number;
+}
+
+export class CreateOrdenODT {
+  @IsInt()
+  clienteId!: number;
+
+  @IsInt()
+  choferId!: number;
+
+  @Type(() => Date)
+  fechaSalida!: Date;
+
+  @IsInt()
+  almacenTransitoId!: number;
+
+  @IsNumber()
+  totalFacturadoOriginal!: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetalleOrdenDespachoODT)
+  detallesOrdenDespacho?: DetalleOrdenDespachoODT[];
 }
 
 export class UpdateOrdenODT extends PartialType(CreateOrdenODT) {}
+
+export class UpdateDetallesOrdenODT {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetalleOrdenDespachoODT)
+  detalles!: DetalleOrdenDespachoODT[];
+}

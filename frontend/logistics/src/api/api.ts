@@ -1,6 +1,5 @@
 import apiClient from "./client";
 import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago } from "@/types/zodType";
-import type { LoteSearchResult, ListOrdenDespacho, OrdenDespachoDetail } from "@/features/Despacho/schemas/schema";
 
 
 
@@ -60,48 +59,6 @@ export const fetchMetodosPago = async (): Promise<MetodoPago[]> => {
         return data;
     } catch (error) {
         console.error("Error fetching metodos de pago:", error);
-        throw error;
-    }
-};
-
-export const fetchLotesSearch = async (query: string): Promise<LoteSearchResult[]> => {
-    try {
-        const { data } = await apiClient.get<LoteSearchResult[]>('despacho/lotes/search', {
-            params: { q: query }
-        });
-        return data;
-    } catch (error) {
-        console.error("Error fetching lotes:", error);
-        throw error;
-    }
-};
-
-export const fetchOrdenesDespacho = async (): Promise<ListOrdenDespacho[]> => {
-    try {
-        const { data } = await apiClient.get<ListOrdenDespacho[]>('despacho/ordenes-despacho');
-        return data;
-    } catch (error) {
-        console.error("Error fetching ordenes de despacho:", error);
-        throw error;
-    }
-};
-
-export const fetchOrdenDespachoDetail = async (id: number): Promise<OrdenDespachoDetail> => {
-    try {
-        const { data } = await apiClient.get<OrdenDespachoDetail>(`despacho/orden-despacho/${id}`);
-        return data;
-    } catch (error) {
-        console.error("Error fetching orden de despacho detail:", error);
-        throw error;
-    }
-};
-
-export const updateOrdenEstado = async (id: number): Promise<{ message: string }> => {
-    try {
-        const { data } = await apiClient.patch<{ message: string }>(`despacho/orden-despacho/${id}`);
-        return data;
-    } catch (error) {
-        console.error("Error updating orden estado:", error);
         throw error;
     }
 };

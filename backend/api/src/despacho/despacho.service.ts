@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateOrdenODT, UpdateOrdenODT } from './ODTs/despacho.odts';
+import { CreateOrdenODT, UpdateOrdenODT, DetalleOrdenDespachoODT } from './ODTs/despacho.odts';
 
 import type {
   LoteSearchResult,
   ListOrdenDespacho,
   OrdenDespachoDetail,
+  
 } from './types/despacho.types';
 
 @Injectable()
@@ -86,6 +87,76 @@ export class DespachoService {
       const message =
         error instanceof Error ? error.message : 'Error desconocido';
       throw new Error(`Error al crear la orden de despacho: ${message}`);
+    }
+  }
+
+  async updateDetallesOrdenDespacho(
+    ordenId: number,
+    detallesOrdenDespacho: DetalleOrdenDespachoODT[],
+  ): Promise<{ message: string }> {
+    try {
+      const existingDetalles = await this.prisma.detalleOrden.findMany({
+        where: { ordenId },
+        select: { id: true },
+      });
+
+      const existingIds = new Set(existingDetalles.map((d) => d.id));
+      const incomingIds = new Set<number>();
+
+      const updateOperations: {
+        where: { id: number };
+        data: {
+          loteId: number;
+          cantidadEnviada: number;
+          precioUnitario: number;
+        };
+      }[] = [];
+      const createOperations: {
+        loteId: number;
+        cantidadEnviada: number;
+        precioUnitario: number;
+      }[] = [];
+
+      for (const detalle of detallesOrdenDespacho ?? []) {
+        if (detalle.id) {
+          incomingIds.add(detalle.id);
+          updateOperations.push({
+            where: { id: detalle.id },
+            data: {
+              loteId: detalle.loteId,
+              cantidadEnviada: detalle.cantidadEnviada,
+              precioUnitario: detalle.precioUnitario,
+            },
+          });
+        } else {
+          createOperations.push({
+            loteId: detalle.loteId,
+            cantidadEnviada: detalle.cantidadEnviada,
+            precioUnitario: detalle.precioUnitario,
+          });
+        }
+      }
+
+      const deleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
+
+      await this.prisma.ordenDespacho.update({
+        where: { id: ordenId },
+        data: {
+          detalles: {
+            update: updateOperations,
+            create: createOperations,
+            deleteMany:
+              deleteIds.length > 0 ? [{ id: { in: deleteIds } }] : undefined,
+          },
+        },
+      });
+
+      return { message: 'Detalles de orden de despacho actualizados exitosamente' };
+    
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Error desconocido';
+      throw new Error('Error al actualizar los detalles de la orden: ' + message);
     }
   }
 

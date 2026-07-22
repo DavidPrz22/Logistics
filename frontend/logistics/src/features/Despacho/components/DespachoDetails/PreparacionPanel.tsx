@@ -4,12 +4,10 @@ import { Truck, Edit, AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import type { DetalleOrdenDetail } from "../../schemas/schema";
-import type { LineaBorrador } from "../../types/types";
+import type { DetalleOrdenDetail, DetallesOrdenDespacho } from "../../schemas/schema";
 import { DetallesTable } from "../DetallesTable";
 import { EditorLineasDialog } from "./EditorLineasDialog";
-import { updateOrdenDetalles } from "../../api/api";
-
+import { useUpdateOrdenDetallesMutation } from "../../hooks/mutations/mutations";
 interface PreparacionPanelProps {
   ordenId: number;
   detalles: DetalleOrdenDetail[];
@@ -21,9 +19,11 @@ export function PreparacionPanel({ ordenId, detalles, onDispatch }: PreparacionP
   const [confirm, setConfirm] = useState(false);
   const canDispatch = detalles.length > 0;
 
-  const handleSaveLineas = async (lineas: LineaBorrador[]) => {
+  const { mutateAsync: updateOrdenDetalles } = useUpdateOrdenDetallesMutation(ordenId);
+
+  const handleSaveLineas = async (detalles: DetallesOrdenDespacho[]) => {
     try {
-      await updateOrdenDetalles(ordenId, lineas);
+      await updateOrdenDetalles(detalles);
       toast.success("Componentes actualizados");
     } catch {
       toast.error("Error al actualizar los componentes");
@@ -31,9 +31,9 @@ export function PreparacionPanel({ ordenId, detalles, onDispatch }: PreparacionP
   };
 
   const handleDispatch = async () => {
-              await onDispatch();
-              setConfirm(false)
-              }
+    await onDispatch();
+    setConfirm(false)
+  }
   return (
     <>
       <Card className="overflow-hidden">
@@ -45,7 +45,7 @@ export function PreparacionPanel({ ordenId, detalles, onDispatch }: PreparacionP
           <div className="flex items-center gap-2">
             <Button variant="outline" size="lg" onClick={() => setEditing(true)}><Edit className="size-4 mr-1 cursor-pointer" /> Editar componentes</Button>
             <Button size="lg" disabled={!canDispatch} onClick={() => setConfirm(true)} className="bg-accent text-accent-foreground hover:bg-amber-500 cursor-pointer">
-              <Truck className="size-4 mr-1" /> Despachar (EN_RUTA)
+              <Truck className="size-4 mr-1" /> Despachar
             </Button>
           </div>
         </div>
@@ -57,7 +57,7 @@ export function PreparacionPanel({ ordenId, detalles, onDispatch }: PreparacionP
         )}
       </Card>
 
-      {editing && <EditorLineasDialog ordenId={ordenId} initial={detalles} onClose={() => setEditing(false)} onSave={handleSaveLineas} />}
+      {editing && <EditorLineasDialog initial={detalles} onClose={() => setEditing(false)} onSave={handleSaveLineas} />}
 
       <Dialog open={confirm} onOpenChange={setConfirm}>
         <DialogContent className="sm:max-w-lg">

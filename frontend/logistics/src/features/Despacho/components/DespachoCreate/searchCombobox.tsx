@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useLotesSearch } from "@/hooks/queries/queries";
+import { useLotesSearch } from "../../hooks/queries/queries";
 import type { LoteSearchResult } from "@/features/Despacho/schemas/schema";
 
 export interface ComboboxItem { value: string; label: string; hint?: string; }

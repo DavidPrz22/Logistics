@@ -16,7 +16,8 @@ import { Route as DespachosIndexRouteImport } from './routes/despachos/index'
 import { Route as InventarioStockRouteImport } from './routes/inventario/stock'
 import { Route as InventarioKardexRouteImport } from './routes/inventario/kardex'
 import { Route as DespachosCrearRouteImport } from './routes/despachos/crear'
-import { Route as DespachosOrdenIdRouteImport } from './routes/despachos/$ordenId'
+import { Route as DespachosOrdenIdIndexRouteImport } from './routes/despachos/$ordenId/index'
+import { Route as DespachosOrdenIdEditRouteImport } from './routes/despachos/$ordenId/edit'
 
 const InventarioRouteRoute = InventarioRouteRouteImport.update({
   id: '/inventario',
@@ -53,9 +54,14 @@ const DespachosCrearRoute = DespachosCrearRouteImport.update({
   path: '/crear',
   getParentRoute: () => DespachosRouteRoute,
 } as any)
-const DespachosOrdenIdRoute = DespachosOrdenIdRouteImport.update({
-  id: '/$ordenId',
-  path: '/$ordenId',
+const DespachosOrdenIdIndexRoute = DespachosOrdenIdIndexRouteImport.update({
+  id: '/$ordenId/',
+  path: '/$ordenId/',
+  getParentRoute: () => DespachosRouteRoute,
+} as any)
+const DespachosOrdenIdEditRoute = DespachosOrdenIdEditRouteImport.update({
+  id: '/$ordenId/edit',
+  path: '/$ordenId/edit',
   getParentRoute: () => DespachosRouteRoute,
 } as any)
 
@@ -63,31 +69,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/despachos': typeof DespachosRouteRouteWithChildren
   '/inventario': typeof InventarioRouteRouteWithChildren
-  '/despachos/$ordenId': typeof DespachosOrdenIdRoute
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
+  '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
+  '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/inventario': typeof InventarioRouteRouteWithChildren
-  '/despachos/$ordenId': typeof DespachosOrdenIdRoute
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos': typeof DespachosIndexRoute
+  '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
+  '/despachos/$ordenId': typeof DespachosOrdenIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/despachos': typeof DespachosRouteRouteWithChildren
   '/inventario': typeof InventarioRouteRouteWithChildren
-  '/despachos/$ordenId': typeof DespachosOrdenIdRoute
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
+  '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
+  '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -95,30 +104,33 @@ export interface FileRouteTypes {
     | '/'
     | '/despachos'
     | '/inventario'
-    | '/despachos/$ordenId'
     | '/despachos/crear'
     | '/inventario/kardex'
     | '/inventario/stock'
     | '/despachos/'
+    | '/despachos/$ordenId/edit'
+    | '/despachos/$ordenId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/inventario'
-    | '/despachos/$ordenId'
     | '/despachos/crear'
     | '/inventario/kardex'
     | '/inventario/stock'
     | '/despachos'
+    | '/despachos/$ordenId/edit'
+    | '/despachos/$ordenId'
   id:
     | '__root__'
     | '/'
     | '/despachos'
     | '/inventario'
-    | '/despachos/$ordenId'
     | '/despachos/crear'
     | '/inventario/kardex'
     | '/inventario/stock'
     | '/despachos/'
+    | '/despachos/$ordenId/edit'
+    | '/despachos/$ordenId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -178,26 +190,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DespachosCrearRouteImport
       parentRoute: typeof DespachosRouteRoute
     }
-    '/despachos/$ordenId': {
-      id: '/despachos/$ordenId'
+    '/despachos/$ordenId/': {
+      id: '/despachos/$ordenId/'
       path: '/$ordenId'
-      fullPath: '/despachos/$ordenId'
-      preLoaderRoute: typeof DespachosOrdenIdRouteImport
+      fullPath: '/despachos/$ordenId/'
+      preLoaderRoute: typeof DespachosOrdenIdIndexRouteImport
+      parentRoute: typeof DespachosRouteRoute
+    }
+    '/despachos/$ordenId/edit': {
+      id: '/despachos/$ordenId/edit'
+      path: '/$ordenId/edit'
+      fullPath: '/despachos/$ordenId/edit'
+      preLoaderRoute: typeof DespachosOrdenIdEditRouteImport
       parentRoute: typeof DespachosRouteRoute
     }
   }
 }
 
 interface DespachosRouteRouteChildren {
-  DespachosOrdenIdRoute: typeof DespachosOrdenIdRoute
   DespachosCrearRoute: typeof DespachosCrearRoute
   DespachosIndexRoute: typeof DespachosIndexRoute
+  DespachosOrdenIdEditRoute: typeof DespachosOrdenIdEditRoute
+  DespachosOrdenIdIndexRoute: typeof DespachosOrdenIdIndexRoute
 }
 
 const DespachosRouteRouteChildren: DespachosRouteRouteChildren = {
-  DespachosOrdenIdRoute: DespachosOrdenIdRoute,
   DespachosCrearRoute: DespachosCrearRoute,
   DespachosIndexRoute: DespachosIndexRoute,
+  DespachosOrdenIdEditRoute: DespachosOrdenIdEditRoute,
+  DespachosOrdenIdIndexRoute: DespachosOrdenIdIndexRoute,
 }
 
 const DespachosRouteRouteWithChildren = DespachosRouteRoute._addFileChildren(

@@ -1,6 +1,6 @@
 import { Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
-import { useOrdenDespachoDetail } from "@/hooks/queries/queries";
+import { ArrowLeft, Edit } from "lucide-react";
+import { useOrdenDespachoDetail } from "../../hooks/queries/queries";
 import { useUpdateOrdenEstadoMutation } from "../../hooks/mutations/mutations";
 import { PageHeader } from "@/components/shared/page-header";
 import { EstadoBadge } from "@/components/shared/estado-badge";
@@ -8,6 +8,8 @@ import { StatCard } from "../StatCard";
 import { PreparacionPanel } from "./PreparacionPanel";
 import { EnRutaPanel } from "./EnRutaPanel";
 import { LiquidadaPanel } from "./LiquidadaPanel";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "@tanstack/react-router";
 
 interface DespachoDetailsPageProps {
   ordenId: string;
@@ -16,8 +18,9 @@ interface DespachoDetailsPageProps {
 export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
   const id = Number(ordenId);
   const { data: orden, isLoading } = useOrdenDespachoDetail(id);
-  const { mutateAsync: updateEstadoMutation} = useUpdateOrdenEstadoMutation();
+  const { mutateAsync: updateEstadoMutation } = useUpdateOrdenEstadoMutation();
 
+  const navigate = useNavigate()
   if (isLoading) return <div className="p-8">Cargando...</div>;
   if (!orden) throw notFound();
 
@@ -28,6 +31,16 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
     await updateEstadoMutation(id);
   };
 
+  const handleUpdateEntireForm = () => {
+      navigate({
+      to: '/despachos/$ordenId/edit/',
+      params: {
+        ordenId: String(id)
+      }
+    })
+
+  };
+
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
       <PageHeader
@@ -36,6 +49,13 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
         subtitle={`Chofer: ${orden.choferNombre ?? "—"} · Tránsito: ${orden.almacenTransitoNombre} · Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
         actions={
           <div className="flex items-center gap-3">
+            {
+              orden.estado === "PREPARACION" && (
+              <Button className="cursor-pointer" variant="outline" onClick={() => handleUpdateEntireForm()}>
+                <Edit className="size-4" /> 
+                Editar
+              </Button>
+            )}
             <EstadoBadge estado={orden.estado} />
             <Link to="/despachos" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> Lista</Link>
           </div>
@@ -54,4 +74,5 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
       {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} />}
     </div>
   );
+
 }
