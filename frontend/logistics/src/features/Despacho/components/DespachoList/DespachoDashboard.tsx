@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
-import { useERP } from "@/lib/erp-store";
-import { useChoferes, useClientes } from "@/hooks/queries/queries";
+import { useChoferes, useOrdenesDespacho } from "@/hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import type { OrdenSearchParams } from "../../types/types";
+import type { ListOrdenDespacho } from "../../schemas/schema";
 import { OrdenTabs } from "./OrdenTabs";
 import { OrdenFilters } from "./OrdenFilters";
 import { OrdenTable } from "./OrdenTable";
@@ -17,25 +17,22 @@ interface DespachoDashboardProps {
 }
 
 export function DespachoDashboard({ search, onSearchChange, onClearFilters, onRowClick }: DespachoDashboardProps) {
-  const state = useERP((s) => s);
-  const { data: clientes = [] } = useClientes();
+  const { data: ordenes = [] } = useOrdenesDespacho() as { data: ListOrdenDespacho[] };
   const { data: choferes = [] } = useChoferes();
-  const ordenes = state.ordenes;
 
   const filtered = useMemo(() => {
     return ordenes.filter((o) => {
       if (search.tab !== "TODOS" && o.estado !== search.tab) return false;
-      if (search.chofer && String(o.chofer_id) !== search.chofer) return false;
+      if (search.chofer && o.choferNombre !== search.chofer) return false;
       if (search.q) {
-        const cli = clientes.find((c) => c.id === o.cliente_id)?.nombre.toLowerCase() ?? "";
         const q = search.q.toLowerCase();
-        if (!cli.includes(q) && !o.numero_orden.toLowerCase().includes(q)) return false;
+        if (!o.clienteNombre.toLowerCase().includes(q) && !o.numeroOrden.toLowerCase().includes(q)) return false;
       }
-      if (search.desde && o.fecha_salida < search.desde) return false;
-      if (search.hasta && o.fecha_salida > `${search.hasta}T23:59:59Z`) return false;
+      if (search.desde && o.FechaSalida < search.desde) return false;
+      if (search.hasta && o.FechaSalida > `${search.hasta}T23:59:59Z`) return false;
       return true;
     });
-  }, [ordenes, search, clientes]);
+  }, [ordenes, search]);
 
   const counts: Record<string, number> = {
     TODOS: ordenes.length,
@@ -45,7 +42,7 @@ export function DespachoDashboard({ search, onSearchChange, onClearFilters, onRo
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-[1400px] mx-auto">
+    <div className="p-8 space-y-6 max-w-350 mx-auto">
       <PageHeader
         eyebrow="Módulo de tráfico"
         title="Órdenes y despachos"
@@ -61,7 +58,7 @@ export function DespachoDashboard({ search, onSearchChange, onClearFilters, onRo
 
       <OrdenFilters search={search} choferes={choferes} onSearchChange={onSearchChange} onClearFilters={onClearFilters} />
 
-      <OrdenTable ordenes={filtered} clientes={clientes} choferes={choferes} onRowClick={onRowClick} />
+      <OrdenTable ordenes={filtered} onRowClick={onRowClick} />
     </div>
   );
 }

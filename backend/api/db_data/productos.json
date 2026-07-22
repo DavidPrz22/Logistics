@@ -165,8 +165,16 @@
     "nombre": "Pasta de Tomate",
     "descripcion": "Pasta concentrada de tomate",
     "variantes": [
-      { "sku": "PASTA-150G", "nombre": "Pasta tomate 150g", "precioBase": "4.00" },
-      { "sku": "PASTA-400G", "nombre": "Pasta tomate 400g", "precioBase": "9.50" }
+      {
+        "sku": "PASTA-150G",
+        "nombre": "Pasta tomate 150g",
+        "precioBase": "4.00"
+      },
+      {
+        "sku": "PASTA-400G",
+        "nombre": "Pasta tomate 400g",
+        "precioBase": "9.50"
+      }
     ]
   },
   {
@@ -207,8 +215,16 @@
     "nombre": "Galletas de Soda",
     "descripcion": "Galletas soda crujientes",
     "variantes": [
-      { "sku": "SODA-200G", "nombre": "Galletas soda 200g", "precioBase": "4.50" },
-      { "sku": "SODA-400G", "nombre": "Galletas soda 400g", "precioBase": "8.00" }
+      {
+        "sku": "SODA-200G",
+        "nombre": "Galletas soda 200g",
+        "precioBase": "4.50"
+      },
+      {
+        "sku": "SODA-400G",
+        "nombre": "Galletas soda 400g",
+        "precioBase": "8.00"
+      }
     ]
   },
   {
@@ -239,8 +255,16 @@
     "nombre": "Leche en Polvo",
     "descripcion": "Leche entera en polvo instantánea",
     "variantes": [
-      { "sku": "LECHE-400G", "nombre": "Leche polvo 400g", "precioBase": "28.00" },
-      { "sku": "LECHE-900G", "nombre": "Leche polvo 900g", "precioBase": "58.00" }
+      {
+        "sku": "LECHE-400G",
+        "nombre": "Leche polvo 400g",
+        "precioBase": "28.00"
+      },
+      {
+        "sku": "LECHE-900G",
+        "nombre": "Leche polvo 900g",
+        "precioBase": "58.00"
+      }
     ]
   },
   {

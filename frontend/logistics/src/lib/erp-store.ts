@@ -116,32 +116,6 @@ const nid = () => ++nextId;
 
 // -------- Actions --------
 export const erpActions = {
-  createOrden(input: { cliente_id: number; chofer_id: number; almacen_transito_id: number; fecha_salida: string; detalles: { lote_id: number; cantidad_enviada: number; precio_unitario: number }[] }) {
-    const id = nid();
-    const numero = `ORD-2026-${String(id).padStart(4, "0")}`;
-    const total = input.detalles.reduce((s, d) => s + d.cantidad_enviada * d.precio_unitario, 0);
-    const nueva: OrdenDespacho = {
-      id, numero_orden: numero,
-      cliente_id: input.cliente_id, chofer_id: input.chofer_id,
-      almacen_transito_id: input.almacen_transito_id,
-      fecha_salida: input.fecha_salida,
-      estado: "PREPARACION",
-      total_facturado_original: total, saldo_neto_cobrar: total, total_rechazado: 0,
-    };
-    const nuevosDet: DetalleOrden[] = input.detalles.map((d) => ({ id: nid(), orden_id: id, ...d }));
-    mutate((s) => ({ ...s, ordenes: [nueva, ...s.ordenes], detalles: [...s.detalles, ...nuevosDet] }));
-    return id;
-  },
-
-  updateDetalles(orden_id: number, nuevos: { id?: number; lote_id: number; cantidad_enviada: number; precio_unitario: number }[]) {
-    mutate((s) => {
-      const otros = s.detalles.filter((d) => d.orden_id !== orden_id);
-      const mapped: DetalleOrden[] = nuevos.map((d) => ({ id: d.id ?? nid(), orden_id, lote_id: d.lote_id, cantidad_enviada: d.cantidad_enviada, precio_unitario: d.precio_unitario }));
-      const total = mapped.reduce((sum, d) => sum + d.cantidad_enviada * d.precio_unitario, 0);
-      const ordenes = s.ordenes.map((o) => o.id === orden_id ? { ...o, total_facturado_original: total, saldo_neto_cobrar: total } : o);
-      return { ...s, detalles: [...otros, ...mapped], ordenes };
-    });
-  },
 
   despachar(orden_id: number) {
     const s = state;

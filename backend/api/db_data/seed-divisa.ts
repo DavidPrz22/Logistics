@@ -22,7 +22,9 @@ async function main() {
       const result = await prisma.divisa.create({
         data: divisa,
       });
-      console.log(`Created divisa: ${result.nombre} (${result.codigo}) - Base: ${result.esMonedaBase} (ID: ${result.id})`);
+      console.log(
+        `Created divisa: ${result.nombre} (${result.codigo}) - Base: ${result.esMonedaBase} (ID: ${result.id})`,
+      );
     } catch (error) {
       if (error.code === 'P2002') {
         console.log(`Skipping duplicate: ${divisa.nombre} (${divisa.codigo})`);

@@ -35,7 +35,9 @@ async function main() {
           variantes: true,
         },
       });
-      console.log(`Created producto: ${result.nombre} with ${result.variantes.length} variantes (ID: ${result.id})`);
+      console.log(
+        `Created producto: ${result.nombre} with ${result.variantes.length} variantes (ID: ${result.id})`,
+      );
     } catch (error) {
       if (error.code === 'P2002') {
         console.log(`Skipping duplicate: ${producto.nombre}`);

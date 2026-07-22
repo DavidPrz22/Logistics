@@ -7,12 +7,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/shared/combobox";
-import type { DetalleOrden } from "@/types/types";
+import type { DetalleOrdenDetail } from "../../schemas/schema";
 import type { DetalleLiq, RechazoDraft } from "../../types/types";
 
 interface LiquidacionFormProps {
   ordenId: number;
-  detalles: DetalleOrden[];
+  detalles: DetalleOrdenDetail[];
   onCancel: () => void;
 }
 
@@ -53,7 +53,7 @@ export function LiquidacionForm({ ordenId, detalles, onCancel }: LiquidacionForm
 
   return (
     <Card className="overflow-hidden">
-      <div className="p-4 border-b border-border bg-[color:var(--status-liq-bg)]/40">
+      <div className="p-4 border-b border-border bg-(--status-liq-bg)/40">
         <h2 className="font-semibold">Liquidación de retornos</h2>
         <p className="text-xs text-muted-foreground">Registra las unidades devueltas y divide por motivo. La suma de motivos debe igualar la cantidad devuelta.</p>
       </div>
@@ -124,7 +124,7 @@ export function LiquidacionForm({ ordenId, detalles, onCancel }: LiquidacionForm
       </div>
       <div className="p-4 border-t border-border flex justify-end gap-2">
         <Button variant="ghost" onClick={onCancel}>Cancelar</Button>
-        <Button onClick={submit} disabled={hasErrors} className="bg-[color:var(--status-liq)] text-white hover:brightness-95">
+        <Button onClick={submit} disabled={hasErrors} className="bg-(--status-liq) text-white hover:brightness-95">
           <CheckCircle2 className="size-4 mr-1" /> Confirmar liquidación
         </Button>
       </div>

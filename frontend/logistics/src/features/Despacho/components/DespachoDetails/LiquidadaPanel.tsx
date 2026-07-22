@@ -3,12 +3,12 @@ import { useERP, findLote, findMotivo, findVariante } from "@/lib/erp-store";
 import { useAlmacenes } from "@/hooks/queries/queries";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { DetalleOrden, DetalleRechazo } from "@/types/types";
+import type { DetalleOrdenDetail, DetalleRechazoOrden } from "@/features/Despacho/schemas/schema";
 import { DetallesTable } from "../DetallesTable";
 
 interface LiquidadaPanelProps {
-  detalles: DetalleOrden[];
-  rechazos: DetalleRechazo[];
+  detalles: DetalleOrdenDetail[];
+  rechazos: DetalleRechazoOrden[];
 }
 
 export function LiquidadaPanel({ detalles, rechazos }: LiquidadaPanelProps) {

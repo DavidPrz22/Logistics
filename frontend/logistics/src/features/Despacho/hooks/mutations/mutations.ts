@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createOrdenDespacho } from "@/features/Despacho/api/api";
+import { updateOrdenEstado } from "@/api/api";
 import type { OrdenDespacho } from "@/features/Despacho/schemas/schema";
 import { toast } from "sonner";
 
@@ -14,5 +15,16 @@ export const useCreateOrdenDespachoMutation = () => {
             console.error(error)
             toast.error(error.message)
         }
+    });
+};
+
+export const useUpdateOrdenEstadoMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateOrdenEstado,
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: ["ordenDespachoDetail", id] });
+            queryClient.invalidateQueries({ queryKey: ["ordenesDespacho"] });
+        },
     });
 };

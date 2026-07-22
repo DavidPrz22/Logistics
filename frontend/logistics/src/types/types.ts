@@ -22,13 +22,6 @@ export interface DetalleRechazo {
   observaciones?: string;
 }
 
-export interface DetalleOrden {
-  id: number;
-  orden_id: number;
-  lote_id: number;
-  cantidad_enviada: number;
-  precio_unitario: number;
-}
 
 export interface OrdenDespacho {
   id: number;

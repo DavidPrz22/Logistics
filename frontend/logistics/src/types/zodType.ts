@@ -45,7 +45,6 @@ export const metodoPagoSchema = z.object({
   requiereReferencia: z.boolean().nullable(),
 });
 
-
 export type Almacen = z.infer<typeof almacenSchema>;
 export type Chofer = z.infer<typeof choferSchema>;
 export type Cliente = z.infer<typeof clienteSchema>;

@@ -25,7 +25,9 @@ async function main() {
       console.log(`Created chofer: ${result.nombre} (ID: ${result.id})`);
     } catch (error) {
       if (error.code === 'P2002') {
-        console.log(`Skipping duplicate: ${chofer.nombre} (${chofer.licenciaConducir})`);
+        console.log(
+          `Skipping duplicate: ${chofer.nombre} (${chofer.licenciaConducir})`,
+        );
       } else {
         console.error(`Error creating ${chofer.nombre}:`, error);
       }

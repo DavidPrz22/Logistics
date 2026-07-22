@@ -49,6 +49,12 @@ export function DespachoCreatePage() {
     setValue("detallesOrdenDespacho", detallesFormateados, { shouldValidate: true });
   }, [lineas, setValue]);
 
+  const total = lineas.reduce((s, l) => s + Number(l.cantidad) * Number(l.precio), 0);
+  
+  useEffect(() => {
+    setValue('saldoNetoCobrar', total)
+  }, [total, setValue]);
+
   const clienteId = watch("clienteId");
   const choferId = watch("choferId");
   const almacenTransitoId = watch("almacenTransitoId");
@@ -88,7 +94,6 @@ export function DespachoCreatePage() {
   const updateLinea = (idx: number, patch: Partial<LineaBorrador>) => setLineas((prev) => prev.map((x, i) => i === idx ? { ...x, ...patch } : x));
   const removeLinea = (idx: number) => setLineas((prev) => prev.filter((_, i) => i !== idx));
 
-  const total = lineas.reduce((s, l) => s + Number(l.cantidad) * Number(l.precio), 0);
   const disabledLotes = lineas.map(l => l.lote_id);
 
   return (

@@ -17,7 +17,9 @@ async function main() {
 
   console.log('Starting to populate lote table...');
 
-  const variantes = await prisma.varianteProducto.findMany({ select: { id: true, sku: true } });
+  const variantes = await prisma.varianteProducto.findMany({
+    select: { id: true, sku: true },
+  });
   const skuToVarianteId = new Map<string, number>();
   for (const v of variantes) {
     skuToVarianteId.set(v.sku, v.id);
@@ -31,7 +33,9 @@ async function main() {
   for (const lote of lotesData) {
     const varianteId = skuToVarianteId.get(lote.sku);
     if (!varianteId) {
-      console.warn(`No variante found for SKU: ${lote.sku}, skipping lote ${lote.numeroLote}`);
+      console.warn(
+        `No variante found for SKU: ${lote.sku}, skipping lote ${lote.numeroLote}`,
+      );
       skipped++;
       continue;
     }
@@ -46,7 +50,9 @@ async function main() {
         },
       });
       created++;
-      console.log(`Created lote: ${lote.numeroLote} (varianteId: ${varianteId})`);
+      console.log(
+        `Created lote: ${lote.numeroLote} (varianteId: ${varianteId})`,
+      );
     } catch (error) {
       if (error.code === 'P2002') {
         console.log(`Skipping duplicate: ${lote.numeroLote}`);
@@ -57,7 +63,9 @@ async function main() {
     }
   }
 
-  console.log(`Finished populating lote table. Created: ${created}, Skipped: ${skipped}`);
+  console.log(
+    `Finished populating lote table. Created: ${created}, Skipped: ${skipped}`,
+  );
 }
 
 main()

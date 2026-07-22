@@ -22,7 +22,9 @@ async function main() {
       const result = await prisma.metodoPago.create({
         data: metodo,
       });
-      console.log(`Created metodoPago: ${result.descripcion} (ID: ${result.id})`);
+      console.log(
+        `Created metodoPago: ${result.descripcion} (ID: ${result.id})`,
+      );
     } catch (error) {
       if (error.code === 'P2002') {
         console.log(`Skipping duplicate: ${metodo.descripcion}`);
