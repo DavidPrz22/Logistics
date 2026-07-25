@@ -24,7 +24,7 @@ export function EnRutaPanel({ ordenId, detalles }: EnRutaPanelProps) {
             <p className="text-xs text-muted-foreground">La orden está en la calle. No se puede editar hasta liquidar el retorno.</p>
           </div>
         </div>
-        <Button size="sm" className="bg-accent text-accent-foreground" onClick={() => setLiquidando(true)}>
+        <Button size="lg" className="bg-accent text-accent-foreground cursor-pointer hover:bg-amber-500" onClick={() => setLiquidando(true)}>
           <CheckCircle2 className="size-4 mr-1" /> Iniciar liquidación
         </Button>
       </div>

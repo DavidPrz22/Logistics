@@ -1,0 +1,22 @@
+[
+  {
+    "codigo": "DAN",
+    "descripcion": "Producto dañado",
+    "requiereMerma": true
+  },
+  {
+    "codigo": "INC",
+    "descripcion": "Producto incorrecto",
+    "requiereMerma": false
+  },
+  {
+    "codigo": "CAD",
+    "descripcion": "Producto caducado",
+    "requiereMerma": true
+  },
+  {
+    "codigo": "FAL",
+    "descripcion": "Falta de producto",
+    "requiereMerma": false
+  }
+]

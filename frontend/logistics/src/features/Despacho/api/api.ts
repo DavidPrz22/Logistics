@@ -1,6 +1,6 @@
 import apiClient from "@/api/client";
 import type { OrdenDespacho, DetallesOrdenDespacho } from "../schemas/schema";
-import type { LoteSearchResult, ListOrdenDespacho, OrdenDespachoDetail } from "@/features/Despacho/schemas/schema";
+import type { LoteSearchResult, ListOrdenDespacho, OrdenDespachoDetail, LiquidacionSchema } from "@/features/Despacho/schemas/schema";
 
 export const createOrdenDespacho = async (data: OrdenDespacho): Promise<{ message: string }> => {
     try {
@@ -81,3 +81,15 @@ export const fetchOrdenDespachoDetail = async (id: number): Promise<OrdenDespach
         throw error;
     }
 };
+
+export const registrarLiquidacion = async (id: number, bodydata: LiquidacionSchema ): Promise<{message: string}> => {
+    try {
+        const { data } = await apiClient.patch(`despacho/order-despacho/${id}`, {
+            bodydata
+        })
+        return data;
+    } catch (error) {
+        console.error("Error registrando liquidacion de orden", error)
+        throw error;
+    }
+}

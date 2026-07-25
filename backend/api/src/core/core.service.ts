@@ -30,4 +30,8 @@ export class CoreService {
   findAllMetodosPago() {
     return this.prisma.metodoPago.findMany();
   }
+
+  findAllMotivoRechazo() {
+    return this.prisma.motivoRechazo.findMany();
+  }
 }

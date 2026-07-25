@@ -1,3 +1,5 @@
+import type { RechazoSchema } from "../schemas/schema";
+
 export interface LineaBorrador {
   key: string;
   id?: number;
@@ -10,18 +12,24 @@ export interface LineaBorrador {
   precio: number | string;
 }
 
-export interface RechazoDraft {
-  key: string;
-  cantidad: number;
-  motivo_id: string;
-  almacen_id: string;
-  obs: string;
-}
+export type LiquidacionRowData = {
+  id: number;
+  sku: string;
+  varianteNombre: string;
+  numeroLote: string;
+  cantidadEnviada: number;
+  precioUnitario: number;
+  devuelta: number;
+  rechazos: RechazoSchema[];
+  sumRech: number;
+  problems: string[];
+};
+
 
 export interface DetalleLiq {
-  detalle_id: number;
+  detalleId: number;
   devuelta: number;
-  rechazos: RechazoDraft[];
+  rechazos: RechazoSchema[];
 }
 
 export interface EditorLinea {

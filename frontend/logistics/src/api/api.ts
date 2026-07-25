@@ -1,5 +1,5 @@
 import apiClient from "./client";
-import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago } from "@/types/zodType";
+import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago, MotivoRechazo } from "@/types/zodType";
 
 
 
@@ -59,6 +59,17 @@ export const fetchMetodosPago = async (): Promise<MetodoPago[]> => {
         return data;
     } catch (error) {
         console.error("Error fetching metodos de pago:", error);
+        throw error;
+    }
+};
+
+export const fetchMotivosRechazo = async (): Promise<MotivoRechazo[]> => {
+    try {
+        const { data } = await apiClient.get<MotivoRechazo[]>('core/motivo-rechazo');
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching motivos de pago:", error);
         throw error;
     }
 };

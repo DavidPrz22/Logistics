@@ -34,4 +34,9 @@ export class CoreController {
   findAllMetodosPago() {
     return this.coreService.findAllMetodosPago();
   }
+
+  @Get('motivo-rechazo')
+  findAllMotivoRechazo() {
+    return this.coreService.findAllMotivoRechazo();
+  }
 }

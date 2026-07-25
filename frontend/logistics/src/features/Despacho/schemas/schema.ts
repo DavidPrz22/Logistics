@@ -94,3 +94,24 @@ export const ordenDespachoDetailSchema = z.object({
 export type DetalleRechazoOrden = z.infer<typeof detalleRechazoOrdenSchema>;
 export type DetalleOrdenDetail = z.infer<typeof detalleOrdenDetailSchema>;
 export type OrdenDespachoDetail = z.infer<typeof ordenDespachoDetailSchema>;
+
+
+const detallesRechazoSchema = z.object({
+  cantidadRechazada: z.number(),
+  motivoRechazoId: z.number(),
+  almacenReingresoId: z.number(),
+  observaciones: z.string().optional()
+})
+
+const detallesLiquidacionSchema = z.object({
+  detalleId: z.number(),
+  rechazos: z.array(detallesRechazoSchema)
+})
+
+export const liquidacionSchema = z.object({
+  ordenId: z.number(),
+  detallesLiquidacion: z.array(detallesLiquidacionSchema) 
+})
+
+export type RechazoSchema = z.infer<typeof detallesRechazoSchema>
+export type LiquidacionSchema = z.infer<typeof liquidacionSchema>

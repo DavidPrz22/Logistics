@@ -45,9 +45,17 @@ export const metodoPagoSchema = z.object({
   requiereReferencia: z.boolean().nullable(),
 });
 
+export const motivosRechazoSchema = z.object({
+  id: z.number(),
+  codigo: z.string(),
+  descripcion: z.string(),
+  requiere_merma: z.boolean(),
+})
+
 export type Almacen = z.infer<typeof almacenSchema>;
 export type Chofer = z.infer<typeof choferSchema>;
 export type Cliente = z.infer<typeof clienteSchema>;
 export type Divisa = z.infer<typeof divisaSchema>;
 export type TasaCambio = z.infer<typeof tasaCambioSchema>;
 export type MetodoPago = z.infer<typeof metodoPagoSchema>;
+export type MotivoRechazo = z.infer<typeof motivosRechazoSchema>;

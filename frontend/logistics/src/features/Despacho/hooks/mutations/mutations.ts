@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateOrdenEstado } from "@/features/Despacho/api/api";
-import { createOrdenDespacho, updateOrden, updateOrdenDetalles } from "@/features/Despacho/api/api";
-import type { OrdenDespacho, DetallesOrdenDespacho } from "@/features/Despacho/schemas/schema";
+import { createOrdenDespacho, updateOrden, updateOrdenDetalles, registrarLiquidacion } from "@/features/Despacho/api/api";
+import type { OrdenDespacho, DetallesOrdenDespacho, LiquidacionSchema} from "@/features/Despacho/schemas/schema";
 import { toast } from "sonner";
 import { ordenDespachoDetailQueryOptions } from "../queries/queryOptions";
 export const useCreateOrdenDespachoMutation = () => {
@@ -53,5 +53,25 @@ export const useUpdateOrdenDetallesMutation = (id: number) => {
             queryClient.invalidateQueries({ queryKey: ordenDespachoDetailQueryOptions(id).queryKey });
             queryClient.invalidateQueries({ queryKey: ["ordenesDespacho"] });
         },
+        onError: (error) => {
+            console.error(error)
+            toast.error(error.message)
+        }
+    });
+};
+
+
+export const useRegistrarLiquidacionMutation = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: LiquidacionSchema) => registrarLiquidacion(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ordenDespachoDetailQueryOptions(id).queryKey });
+            queryClient.invalidateQueries({ queryKey: ["ordenesDespacho"] });
+        },
+        onError: (error) => {
+            console.error(error)
+            toast.error(error.message)
+        }
     });
 };
