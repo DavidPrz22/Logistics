@@ -26,11 +26,11 @@ export const updateOrden = async (ordenId: number, bodydata: OrdenDespacho): Pro
 };
 
 
-export const updateOrdenDetalles = async (ordenId: number, detalles: DetallesOrdenDespacho[]): Promise<{ message: string }> => {
+export const updateOrdenDetalles = async (ordenId: number, payload: { detalles: DetallesOrdenDespacho[], totalFacturado: number }): Promise<{ message: string }> => {
     try {
         const { data } = await apiClient.put<{ message: string }>(
             `despacho/orden-despacho/${ordenId}/detalles`,
-            { detalles }
+            payload
         );
         return data;
     } catch (error) {
@@ -83,10 +83,9 @@ export const fetchOrdenDespachoDetail = async (id: number): Promise<OrdenDespach
 };
 
 export const registrarLiquidacion = async (id: number, bodydata: LiquidacionSchema ): Promise<{message: string}> => {
+    console.log(bodydata)
     try {
-        const { data } = await apiClient.patch(`despacho/order-despacho/${id}`, {
-            bodydata
-        })
+        const { data } = await apiClient.patch(`despacho/orden-despacho/${id}/liquidar`,  bodydata);
         return data;
     } catch (error) {
         console.error("Error registrando liquidacion de orden", error)

@@ -12,7 +12,7 @@ export const ordenDespachoSchema = z.object({
     choferId: z.number().int().positive({ message: "ID de chofer inválido" }),
     fechaSalida: z.date(),
     almacenTransitoId: z.number().int().positive({ message: "ID de almacén inválido" }),
-    saldoNetoCobrar: z.number().positive({ message: "El total debe ser mayor a 0" }),
+    totalFacturado: z.number().positive({ message: "El total debe ser mayor a 0" }),
     detallesOrdenDespacho: z.array(detallesOrdenDespachoSchema).optional()
 })
 
@@ -40,7 +40,7 @@ export const listOrdenDespachoSchema = z.object({
   choferNombre: z.string(),
   FechaSalida: z.string(),
   estado: z.enum(['PREPARACION', 'EN_RUTA', 'LIQUIDADA']),
-  totalFactudaroOriginal: z.number(),
+  totalOriginal: z.number(),
   saldoNetoCobrar: z.number(),
 });
 
@@ -85,8 +85,10 @@ export const ordenDespachoDetailSchema = z.object({
   almacenTransitoNombre: z.string(),
   fechaSalida: z.string(),
   estado: z.enum(['PREPARACION', 'EN_RUTA', 'LIQUIDADA']),
-  totalFacturadoOriginal: z.number(),
+  totalOriginal: z.number(),
   saldoNetoCobrar: z.number(),
+  totalAbonado: z.number(),
+  montoFacturadoNeto: z.number(),
   totalRechazado: z.number(),
   detalles: z.array(detalleOrdenDetailSchema),
 });

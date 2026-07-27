@@ -26,7 +26,7 @@ export interface ListOrdenDespacho {
   choferNombre: string;
   FechaSalida: string;
   estado: EstadoOrdenDespacho;
-  totalFactudaroOriginal: number;
+  totalOriginal: number;
   saldoNetoCobrar: number;
 }
 
@@ -69,8 +69,10 @@ export interface OrdenDespachoDetail {
   almacenTransitoNombre: string;
   fechaSalida: string;
   estado: EstadoOrdenDespacho;
-  totalFacturadoOriginal: number;
+  totalOriginal: number;
+  totalAbonado: number;
   saldoNetoCobrar: number;
+  montoFacturadoNeto: number;
   totalRechazado: number;
   detalles: DetalleOrdenDetail[];
 }

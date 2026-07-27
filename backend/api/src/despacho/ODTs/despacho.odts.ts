@@ -1,4 +1,10 @@
-import { IsArray, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -36,7 +42,7 @@ export class CreateOrdenODT {
   almacenTransitoId!: number;
 
   @IsNumber()
-  totalFacturadoOriginal!: number;
+  totalFacturado!: number;
 
   @IsOptional()
   @IsArray()
@@ -52,4 +58,41 @@ export class UpdateDetallesOrdenODT {
   @ValidateNested({ each: true })
   @Type(() => DetalleOrdenDespachoODT)
   detalles!: DetalleOrdenDespachoODT[];
+
+  @IsNumber()
+  totalFacturado!: number;
+}
+
+export class DetalleRechazoODT {
+  @IsInt()
+  cantidadRechazada!: number;
+
+  @IsInt()
+  motivoRechazoId!: number;
+
+  @IsInt()
+  almacenReingresoId!: number;
+
+  @IsOptional()
+  observaciones?: string;
+}
+
+export class DetalleLiquidacionODT {
+  @IsInt()
+  detalleId!: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetalleRechazoODT)
+  rechazos!: DetalleRechazoODT[];
+}
+
+export class LiquidacionDespachoODT {
+  @IsInt()
+  ordenId!: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetalleLiquidacionODT)
+  detallesLiquidacion!: DetalleLiquidacionODT[];
 }

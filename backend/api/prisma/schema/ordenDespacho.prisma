@@ -12,9 +12,14 @@ model ordenDespacho {
   almacenTransitoId      Int            
   fechaSalida            DateTime?      @default(now()) 
   estado                 EstadoOrdenDespacho? @default(PREPARACION)
-  totalFacturadoOriginal Decimal?       @default(0.00)
-  saldoNetoCobrar        Decimal?       @default(0.00)
-  totalRechazado         Decimal?       @default(0.00)
+
+  ///
+  // CAMPOS FINANCIEROS
+  totalOriginal          Decimal?             @default(0.00) // Valor bruto enviado a ruta
+  totalRechazado         Decimal?             @default(0.00) // Suma de (cantidadRechazada * precioUnitario)
+  montoFacturadoNeto     Decimal?             @default(0.00) // totalOriginal - totalRechazado (Mercancía entregada/aceptada)
+  totalAbonado           Decimal?             @default(0.00) // Suma de cobros recibidos
+  saldoNetoCobrar        Decimal?             @default(0.00) // montoFacturadoNeto - totalAbonado
   
   cliente                cliente        @relation(fields: [clienteId], references: [id])
   chofer                 chofer?        @relation(fields: [choferId], references: [id])

@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateOrdenODT, UpdateOrdenODT, DetalleOrdenDespachoODT } from './ODTs/despacho.odts';
+import {
+  CreateOrdenODT,
+  UpdateOrdenODT,
+  DetalleOrdenDespachoODT,
+  LiquidacionDespachoODT,
+} from './ODTs/despacho.odts';
 
 import type {
   LoteSearchResult,
   ListOrdenDespacho,
   OrdenDespachoDetail,
-  
 } from './types/despacho.types';
 
 @Injectable()
@@ -62,7 +66,7 @@ export class DespachoService {
   async createOrdenDespacho(
     ordenData: CreateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, ...ordenFields } = ordenData;
+    const { detallesOrdenDespacho, totalFacturado, ...ordenFields } = ordenData;
 
     const numeroOrden = `OD-${Date.now()}`;
 
@@ -70,6 +74,9 @@ export class DespachoService {
       await this.prisma.ordenDespacho.create({
         data: {
           ...ordenFields,
+          totalOriginal: totalFacturado,
+          saldoNetoCobrar: totalFacturado,
+          montoFacturadoNeto: totalFacturado,
           numeroOrden,
           detalles: {
             create:
@@ -93,6 +100,7 @@ export class DespachoService {
   async updateDetallesOrdenDespacho(
     ordenId: number,
     detallesOrdenDespacho: DetalleOrdenDespachoODT[],
+    totalFacturado: number,
   ): Promise<{ message: string }> {
     try {
       const existingDetalles = await this.prisma.detalleOrden.findMany({
@@ -148,15 +156,21 @@ export class DespachoService {
             deleteMany:
               deleteIds.length > 0 ? [{ id: { in: deleteIds } }] : undefined,
           },
+          totalOriginal: totalFacturado,
+          saldoNetoCobrar: totalFacturado,
+          montoFacturadoNeto: totalFacturado,
         },
       });
 
-      return { message: 'Detalles de orden de despacho actualizados exitosamente' };
-    
+      return {
+        message: 'Detalles de orden de despacho actualizados exitosamente',
+      };
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : 'Error desconocido';
-      throw new Error('Error al actualizar los detalles de la orden: ' + message);
+      throw new Error(
+        'Error al actualizar los detalles de la orden: ' + message,
+      );
     }
   }
 
@@ -164,7 +178,7 @@ export class DespachoService {
     id: number,
     data: UpdateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, ...ordenFields } = data;
+    const { detallesOrdenDespacho, totalFacturado, ...ordenFields } = data;
 
     try {
       const existingDetalles = await this.prisma.detalleOrden.findMany({
@@ -211,10 +225,19 @@ export class DespachoService {
 
       const deleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
 
+      const financialFields = totalFacturado
+        ? {
+            totalOriginal: totalFacturado,
+            saldoNetoCobrar: totalFacturado,
+            montoFacturadoNeto: totalFacturado,
+          }
+        : {};
+
       await this.prisma.ordenDespacho.update({
         where: { id },
         data: {
           ...ordenFields,
+          ...financialFields,
           detalles: {
             update: updateOperations,
             create: createOperations,
@@ -250,7 +273,7 @@ export class DespachoService {
       choferNombre: orden.chofer?.nombre || '',
       FechaSalida: orden.fechaSalida?.toISOString() || '',
       estado: orden.estado || 'PREPARACION',
-      totalFactudaroOriginal: Number(orden.totalFacturadoOriginal ?? 0),
+      totalOriginal: Number(orden.totalOriginal ?? 0),
       saldoNetoCobrar: Number(orden.saldoNetoCobrar ?? 0),
     }));
 
@@ -301,8 +324,10 @@ export class DespachoService {
       almacenTransitoNombre: orden.almacenTransito.nombre,
       fechaSalida: orden.fechaSalida?.toISOString() ?? '',
       estado: orden.estado ?? 'PREPARACION',
-      totalFacturadoOriginal: Number(orden.totalFacturadoOriginal ?? 0),
+      totalOriginal: Number(orden.totalOriginal ?? 0),
+      totalAbonado: Number(orden.totalAbonado ?? 0),
       saldoNetoCobrar: Number(orden.saldoNetoCobrar ?? 0),
+      montoFacturadoNeto: Number(orden.montoFacturadoNeto ?? 0),
       totalRechazado: Number(orden.totalRechazado ?? 0),
       detalles: orden.detalles.map((detalle) => ({
         id: detalle.id,
@@ -383,16 +408,77 @@ export class DespachoService {
     throw new Error(`Transición de estado no soportada: ${orden.estado}`);
   }
 
-  async getOrdenbyId(id: number): Promise<void> {
-    const orden = await this.prisma.ordenDespacho.findUnique(
-      {
+  async updateOrdenDespachoLiquidar(id: number, data: LiquidacionDespachoODT) {
+    return this.prisma.$transaction(async (tx) => {
+      const orden = await tx.ordenDespacho.findUnique({
         where: { id },
         include: {
           detalles: true,
         },
-      },
-    );
-
-    
+      });
+      if (!orden) {
+        throw new Error('Orden de despacho no encontrada');
+      }
+      if (orden.estado === 'LIQUIDADA') {
+        throw new Error('La orden ya está liquidada');
+      }
+      if (!orden.detalles || orden.detalles.length === 0) {
+        throw new Error('La orden no tiene detalles para liquidar');
+      }
+      let totalRechazado = 0;
+      for (const detalle of data.detallesLiquidacion) {
+        const detalleOrden = orden.detalles.find(
+          (el) => el.id === detalle.detalleId,
+        );
+        if (!detalleOrden) {
+          throw new Error('Detalle de orden de despacho no encontrado');
+        }
+        detalle.rechazos.forEach((re) => {
+          if (re.cantidadRechazada) {
+            totalRechazado +=
+              Number(detalleOrden.precioUnitario) * re.cantidadRechazada;
+          }
+        });
+        for (const rechazo of detalle.rechazos) {
+          const nuevoRechazo = await tx.detalleRechazoOrden.create({
+            data: {
+              detalleOrdenId: detalle.detalleId,
+              cantidadRechazada: rechazo.cantidadRechazada,
+              motivoRechazoId: rechazo.motivoRechazoId,
+              almacenReingresoId: rechazo.almacenReingresoId,
+              usuarioId: 1,
+              observaciones: rechazo.observaciones,
+            },
+          });
+          if (rechazo.cantidadRechazada > 0) {
+            await tx.movimientoInventario.create({
+              data: {
+                tipoMovimiento: 'ENTRADA',
+                cantidad: rechazo.cantidadRechazada,
+                loteId: detalleOrden.loteId,
+                detalleOrdenId: detalle.detalleId,
+                detalleRechazoId: nuevoRechazo.id,
+                referencia: orden.numeroOrden,
+                almacenId: rechazo.almacenReingresoId,
+                usuarioId: 1,
+              },
+            });
+            await tx.lote.update({
+              where: { id: detalleOrden.loteId },
+              data: { stockActual: { increment: rechazo.cantidadRechazada } },
+            });
+          }
+        }
+      }
+      return tx.ordenDespacho.update({
+        where: { id },
+        data: {
+          estado: 'LIQUIDADA',
+          montoFacturadoNeto: Number(orden.totalOriginal) - totalRechazado,
+          saldoNetoCobrar: Number(orden.totalOriginal) - totalRechazado,
+          totalRechazado: totalRechazado,
+        },
+      });
+    });
   }
 }

@@ -15,7 +15,7 @@ import { LineaBorradorAddRow } from "../DespachoCreate/LineaBorradorAddRow";
 interface EditorLineasDialogProps {
   initial: DetalleOrdenDetail[];
   onClose: () => void;
-  onSave?: (lineas: DetallesOrdenDespacho[]) => void;
+  onSave?: (lineas: DetallesOrdenDespacho[], totalFacturado: number) => void;
 }
 
 type FormValues = {
@@ -102,7 +102,7 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
   };
 
   const onSubmit = (data: FormValues) => {
-    onSave?.(data.detalles);
+    onSave?.(data.detalles, total);
     toast.success("Componentes actualizados");
     onClose();
   };

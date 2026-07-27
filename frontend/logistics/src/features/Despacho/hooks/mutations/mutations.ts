@@ -48,7 +48,7 @@ export const useUpdateOrdenEstadoMutation = () => {
 export const useUpdateOrdenDetallesMutation = (id: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: DetallesOrdenDespacho[]) => updateOrdenDetalles(id, data),
+        mutationFn: (data: { detalles: DetallesOrdenDespacho[], totalFacturado: number }) => updateOrdenDetalles(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ordenDespachoDetailQueryOptions(id).queryKey });
             queryClient.invalidateQueries({ queryKey: ["ordenesDespacho"] });

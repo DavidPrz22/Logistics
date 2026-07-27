@@ -14,6 +14,7 @@ import {
   CreateOrdenODT,
   UpdateDetallesOrdenODT,
   UpdateOrdenODT,
+  LiquidacionDespachoODT,
 } from './ODTs/despacho.odts';
 
 @Controller('despacho')
@@ -43,10 +44,7 @@ export class DespachoController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateDetallesOrdenODT,
   ) {
-    return this.despachoService.updateDetallesOrdenDespacho(
-      id,
-      data.detalles,
-    );
+    return this.despachoService.updateDetallesOrdenDespacho(id, data.detalles, data.totalFacturado);
   }
 
   @Get('ordenes-despacho')
@@ -62,5 +60,13 @@ export class DespachoController {
   @Patch('orden-despacho/:id')
   async updateOrdenDespachoById(@Param('id', ParseIntPipe) id: number) {
     return this.despachoService.updateOrdenEstado(id);
+  }
+
+  @Patch('orden-despacho/:id/liquidar')
+  async updateOrdenDespachoLiquidar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: LiquidacionDespachoODT,
+  ) {
+    return this.despachoService.updateOrdenDespachoLiquidar(id, data);
   }
 }

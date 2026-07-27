@@ -64,7 +64,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       choferId: ordenDetail?.choferId ?? undefined,
       almacenTransitoId: ordenDetail?.almacenTransitoId,
       fechaSalida: ordenDetail?.fechaSalida ? new Date(ordenDetail.fechaSalida) : new Date(),
-      saldoNetoCobrar: ordenDetail?.saldoNetoCobrar,
+      totalFacturado: ordenDetail?.saldoNetoCobrar,
       detallesOrdenDespacho: [],
     }
   });
@@ -83,7 +83,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
   const total = lineas.reduce((s, l) => s + Number(l.cantidad) * Number(l.precio), 0);
   
   useEffect(() => {
-    setValue('saldoNetoCobrar', total)
+    setValue('totalFacturado', total)
   }, [total, setValue]);
 
   const clienteId = watch("clienteId");

@@ -18,7 +18,7 @@ export function LiquidadaPanel({ detalles, rechazos }: LiquidadaPanelProps) {
           <CheckCircle2 className="size-4 text-(--status-liq)" />
           <h2 className="font-semibold">Operación cerrada — resumen de carga</h2>
         </div>
-        <DetallesTable detalles={detalles} showSubtotal />
+        <DetallesTable detalles={detalles} showSubtotal showSubtotalRechazo />
       </Card>
       {rechazos.length > 0 && (
         <Card className="overflow-hidden">

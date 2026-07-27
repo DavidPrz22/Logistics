@@ -1,7 +1,7 @@
 import type { DetalleOrdenDetail } from ".././schemas/schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export function DetallesTable({ detalles, showSubtotal }: { detalles: DetalleOrdenDetail[]; showSubtotal?: boolean }) {
+export function DetallesTable({ detalles, showSubtotal, showSubtotalRechazo }: { detalles: DetalleOrdenDetail[]; showSubtotal?: boolean, showSubtotalRechazo?: boolean }) {
   return (
     <Table>
       <TableHeader className="bg-secondary/60">
@@ -12,6 +12,7 @@ export function DetallesTable({ detalles, showSubtotal }: { detalles: DetalleOrd
           <TableHead className="text-right">Cantidad</TableHead>
           <TableHead className="text-right">Precio</TableHead>
           {showSubtotal && <TableHead className="text-right">Subtotal</TableHead>}
+          {showSubtotal && <TableHead className="text-right">Monto Rechazado</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -25,6 +26,7 @@ export function DetallesTable({ detalles, showSubtotal }: { detalles: DetalleOrd
               <TableCell className="text-right tabular-nums">{d.cantidadEnviada}</TableCell>
               <TableCell className="text-right font-mono tabular-nums">${d.precioUnitario.toFixed(2)}</TableCell>
               {showSubtotal && <TableCell className="text-right font-mono tabular-nums">${(d.cantidadEnviada * d.precioUnitario).toFixed(2)}</TableCell>}
+              {showSubtotalRechazo && <TableCell className="text-right font-mono tabular-nums">${(d.rechazos.reduce((acc, current) => acc + current.cantidadRechazada, 0) * d.precioUnitario).toFixed(2)}</TableCell>}
             </TableRow>
           );
         })}

@@ -21,9 +21,9 @@ export function PreparacionPanel({ ordenId, detalles, onDispatch }: PreparacionP
 
   const { mutateAsync: updateOrdenDetalles } = useUpdateOrdenDetallesMutation(ordenId);
 
-  const handleSaveLineas = async (detalles: DetallesOrdenDespacho[]) => {
+  const handleSaveLineas = async (detalles: DetallesOrdenDespacho[], totalFacturado: number) => {
     try {
-      await updateOrdenDetalles(detalles);
+      await updateOrdenDetalles({ detalles, totalFacturado });
       toast.success("Componentes actualizados");
     } catch {
       toast.error("Error al actualizar los componentes");

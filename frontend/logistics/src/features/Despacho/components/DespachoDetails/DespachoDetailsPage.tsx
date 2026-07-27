@@ -65,7 +65,7 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard label="Líneas" value={detalles.length} />
         <StatCard label="Unidades" value={detalles.reduce((s, d) => s + d.cantidadEnviada, 0)} />
-        <StatCard label="Facturado" value={`$${orden.totalFacturadoOriginal.toFixed(2)}`} mono />
+        <StatCard label="Facturado" value={`$${orden.totalOriginal.toFixed(2)}`} mono />
         <StatCard label="Neto a cobrar" value={`$${orden.saldoNetoCobrar.toFixed(2)}`} mono highlight />
       </div>
 

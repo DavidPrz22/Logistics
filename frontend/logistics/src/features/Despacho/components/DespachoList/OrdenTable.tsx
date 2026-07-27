@@ -39,7 +39,7 @@ export function OrdenTable({ ordenes, onRowClick }: OrdenTableProps) {
               <TableCell className="text-muted-foreground">{o.choferNombre}</TableCell>
               <TableCell className="text-muted-foreground tabular-nums">{new Date(o.FechaSalida).toLocaleDateString("es-DO")}</TableCell>
               <TableCell><EstadoBadge estado={o.estado as EstadoOrden} /></TableCell>
-              <TableCell className="text-right font-mono tabular-nums">${o.totalFactudaroOriginal.toFixed(2)}</TableCell>
+              <TableCell className="text-right font-mono tabular-nums">${o.totalOriginal.toFixed(2)}</TableCell>
               <TableCell className="text-right font-mono tabular-nums font-semibold">${o.saldoNetoCobrar.toFixed(2)}</TableCell>
             </TableRow>
           ))}
