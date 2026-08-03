@@ -41,19 +41,25 @@ enum TipoDocumentoDeuda {
   NOTA_CREDITO
 }
 
+enum ListadoOrigen {
+  RUTA_LIQUIDADA
+  VENTA_MOSTRADOR
+}
+
 model documentoDeuda {
-  id                   Int               @id @default(autoincrement())
-  sistemaOrigen        String
-  referenciaOrigen     String
+  id                   Int                    @id @default(autoincrement())
+  sistemaOrigen        ListadoOrigen
+  ordenId              Int                    @unique
   identificadorCliente String
   montoTotalBase       Decimal               // En FACTURA: Monto positivo. En NOTA_CREDITO: Monto a descontar.
   saldoPendienteBase   Decimal               // Saldo vivo por cobrar
-  estado               EstadoDocumentoDeuda? @default(PENDIENTE)
-  tipoDocumento        TipoDocumentoDeuda? @default(FACTURA)
-  fechaEmision         DateTime?         @default(now()) 
+  estado               EstadoDocumentoDeuda?  @default(PENDIENTE)
+  tipoDocumento        TipoDocumentoDeuda?    @default(FACTURA)
+  fechaEmision         DateTime?              @default(now()) 
   transaccionesPago    transaccionPago[]
 
-  @@unique([sistemaOrigen, referenciaOrigen])
+  orden               ordenDespacho           @relation(fields: [ordenId], references: [id])
+  @@unique([sistemaOrigen, ordenId])
 }
 
 enum EstadoTransaccionPago {
@@ -83,9 +89,17 @@ enum TipoOperacionPago {
   EGRESO
 }
 
+enum TipoDePago {
+  ANTICIPO
+  COBRO_FACTURA
+  SALDO_A_FAVOR
+}
+
 model transaccionPago {
   id                   Int            @id @default(autoincrement())
-  documentoId          Int            
+  documentoId          Int?
+  ordenId              Int?
+  tipoDePago           TipoDePago         
   metodoPagoId         Int            
   divisaPagoId         Int            
   montoOrigen          Decimal
@@ -98,7 +112,7 @@ model transaccionPago {
   cuentaDestinoId      Int?
   usuarioId            Int            
 
-  documento     documentoDeuda @relation(fields: [documentoId], references: [id], onDelete: Restrict)
+  documento     documentoDeuda? @relation(fields: [documentoId], references: [id], onDelete: Restrict)
   metodoPago    metodoPago     @relation(fields: [metodoPagoId], references: [id])
   divisa        divisa         @relation(fields: [divisaPagoId], references: [id])
   cuentaDestino cuentaDestino? @relation(fields: [cuentaDestinoId], references: [id], onDelete: Restrict)

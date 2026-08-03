@@ -3,6 +3,14 @@ enum EstadoOrdenDespacho {
   EN_RUTA
   LIQUIDADA
 }
+// AGREGAR CAMPO A ORDENN
+// AGREGAR CAMPO A ORDENN
+// AGREGAR CAMPO A ORDENN
+// AGREGAR CAMPO A ORDENN
+enum TipoDeOrden {
+  DESPACHO_RUTA 
+  VENTA_MOSTRADOR
+}
 
 model ordenDespacho {
   id                     Int            @id @default(autoincrement())
@@ -13,6 +21,7 @@ model ordenDespacho {
   fechaSalida            DateTime?      @default(now()) 
   estado                 EstadoOrdenDespacho? @default(PREPARACION)
 
+  tipoOrden              TipoDeOrden
   ///
   // CAMPOS FINANCIEROS
   totalOriginal          Decimal?             @default(0.00) // Valor bruto enviado a ruta
@@ -25,6 +34,7 @@ model ordenDespacho {
   chofer                 chofer?        @relation(fields: [choferId], references: [id])
   almacenTransito        almacen        @relation(fields: [almacenTransitoId], references: [id], onDelete: Restrict)
   detalles               detalleOrden[]
+  documentoDeuda         documentoDeuda?
 }
 
 model detalleOrden {

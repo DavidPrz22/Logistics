@@ -35,6 +35,14 @@ export const EstadoOrdenDespacho = {
 export type EstadoOrdenDespacho = (typeof EstadoOrdenDespacho)[keyof typeof EstadoOrdenDespacho]
 
 
+export const TipoDeOrden = {
+  DESPACHO_RUTA: 'DESPACHO_RUTA',
+  VENTA_MOSTRADOR: 'VENTA_MOSTRADOR'
+} as const
+
+export type TipoDeOrden = (typeof TipoDeOrden)[keyof typeof TipoDeOrden]
+
+
 export const EstadoDocumentoDeuda = {
   PENDIENTE: 'PENDIENTE',
   PAGADO_PARCIAL: 'PAGADO_PARCIAL',
@@ -51,6 +59,14 @@ export const TipoDocumentoDeuda = {
 } as const
 
 export type TipoDocumentoDeuda = (typeof TipoDocumentoDeuda)[keyof typeof TipoDocumentoDeuda]
+
+
+export const ListadoOrigen = {
+  RUTA_LIQUIDADA: 'RUTA_LIQUIDADA',
+  VENTA_MOSTRADOR: 'VENTA_MOSTRADOR'
+} as const
+
+export type ListadoOrigen = (typeof ListadoOrigen)[keyof typeof ListadoOrigen]
 
 
 export const EstadoTransaccionPago = {
@@ -77,3 +93,12 @@ export const TipoOperacionPago = {
 } as const
 
 export type TipoOperacionPago = (typeof TipoOperacionPago)[keyof typeof TipoOperacionPago]
+
+
+export const TipoDePago = {
+  ANTICIPO: 'ANTICIPO',
+  COBRO_FACTURA: 'COBRO_FACTURA',
+  SALDO_A_FAVOR: 'SALDO_A_FAVOR'
+} as const
+
+export type TipoDePago = (typeof TipoDePago)[keyof typeof TipoDePago]

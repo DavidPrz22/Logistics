@@ -134,3 +134,121 @@ Order states: `PREPARACION` → `EN_RUTA` → `LIQUIDADA`
 1. Edit `.prisma` files in `backend/api/prisma/schema/`
 2. Run `pnpm prisma migrate dev --name migration_name` from `backend/api/`
 3. Run `pnpm prisma generate` to update client
+
+## Implementation Patterns
+
+### Backend Module Pattern
+
+Each domain module (`despacho`, `pagos`, `core`) follows this structure:
+
+```
+src/<module>/
+├── <module>.module.ts       # Imports PrismaModule, registers controller + service
+├── <module>.controller.ts   # @Controller('<prefix>') with route handlers
+├── <module>.service.ts      # @Injectable(), injects PrismaService, business logic
+├── ODTs/
+│   └── <module>.odts.ts     # DTOs with class-validator + class-transformer
+└── types/
+    └── <module>.types.ts    # Plain TS interfaces for response shapes
+```
+
+**Steps to add a new backend module:**
+1. Create module folder with the structure above
+2. Define Prisma model in `prisma/schema/`
+3. Run `pnpm prisma generate`
+4. Create ODTs (DTOs) with validation decorators
+5. Implement service methods with Prisma queries
+6. Add controller endpoints
+7. Register module in `app.module.ts` imports array
+
+### Frontend Feature Structure
+
+Each feature (`Despacho`, `Dashboard`, `Stock`, `Movimientos`) is self-contained:
+
+```
+src/features/<Feature>/
+├── api/
+│   └── api.ts               # Async functions using shared apiClient
+├── schemas/
+│   └── schema.ts            # Zod schemas + z.infer types
+├── types/
+│   └── types.ts             # Plain TS interfaces for UI state
+├── hooks/
+│   ├── queries/
+│   │   ├── queryOptions.ts  # queryOptions() factories
+│   │   └── queries.ts       # useQuery() wrappers
+│   └── mutations/
+│       └── mutations.ts     # useMutation() with invalidateQueries
+├── components/              # Feature-specific UI, grouped by sub-view
+├── store/
+│   └── store.ts             # Zustand slice (if needed)
+└── lib/
+    └── helpers.ts           # Pure utility functions
+```
+
+**Steps to add a new feature:**
+1. Create feature folder with structure above
+2. Define Zod schemas in `schemas/schema.ts`
+3. Create API functions in `api/api.ts`
+4. Build queryOptions and query hooks
+5. Build mutation hooks with cache invalidation
+6. Create components that consume hooks
+
+### Shared/Global Layer
+
+Cross-feature resources live in `src/`:
+
+- `api/client.ts` → Axios instance (base URL, headers, credentials)
+- `api/api.ts` → Shared fetch functions for core endpoints (almacenes, choferes, clientes, etc.)
+- `hooks/queries/queryOptions.ts` → Shared queryOptions factories
+- `hooks/queries/queries.ts` → Shared useQuery wrappers
+- `types/zodType.ts` → Shared Zod schemas for common entities
+- `components/ui/` → shadcn/ui primitives (button, dialog, table, etc.)
+- `components/shared/` → Reusable business components (combobox, date-picker, badges)
+- `lib/erp-store.ts` → Global Zustand store with seed data
+
+### Route Conventions
+
+TanStack Router uses file-based routing in `src/routes/`:
+
+```
+routes/
+├── __root.tsx               # Root layout with sidebar, QueryClientProvider
+├── index.tsx                # Home route (/)
+├── <module>/
+│   ├── route.tsx            # Layout wrapper with <Outlet />
+│   ├── index.tsx            # List/default view (uses validateSearch for URL params)
+│   ├── crear.tsx            # Create view
+│   └── $paramName/
+│       ├── index.tsx        # Detail view (dynamic route)
+│       └── edit.tsx         # Edit view
+```
+
+**Key patterns:**
+- Routes are thin — delegate rendering to feature components
+- Use `validateSearch` with Zod schemas for URL search params
+- Dynamic routes use `$paramName` syntax
+- Layout routes use `<Outlet />` to render child routes
+- Route tree auto-generates at `src/routeTree.gen.ts` on dev server restart
+
+### Data Flow
+
+**API call chain:**
+```
+Route → Feature component → Query/Mutation hook → API function → apiClient → Backend controller → Service → Prisma
+```
+
+**Example flow (fetching dispatch orders):**
+1. Route `/despachos` renders `DespachoDashboard` component
+2. Component calls `useOrdenesDespacho()` hook
+3. Hook uses `useQuery()` with `ordenesDespachoQueryOptions`
+4. QueryOptions calls `fetchOrdenesDespacho()` API function
+5. API function uses `apiClient.get('despacho/ordenes-despacho')`
+6. Backend `DespachoController.getAllDespachos()` handles request
+7. `DespachoService.getAllDespachos()` queries Prisma
+8. Response flows back through the chain
+
+**Cache invalidation pattern:**
+- Mutations call `queryClient.invalidateQueries({ queryKey: [...] })` in `onSuccess`
+- Use specific query keys (e.g., `['ordenDespachoDetail', id]`) for targeted invalidation
+- Use general query keys (e.g., `['ordenesDespacho']`) to refresh lists

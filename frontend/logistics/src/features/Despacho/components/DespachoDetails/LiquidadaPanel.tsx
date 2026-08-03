@@ -1,18 +1,31 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, FileText } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { DetalleOrdenDetail, DetalleRechazoOrden } from "@/features/Despacho/schemas/schema";
+import type { DetalleOrdenDetail, DetalleRechazoOrden, DocumentoDeudaDetail } from "@/features/Despacho/schemas/schema";
 import { DetallesTable } from "../DetallesTable";
+import { EstadoDocumentoBadge } from "@/components/shared/estado-badge";
 
 interface LiquidadaPanelProps {
   detalles: DetalleOrdenDetail[];
   rechazos: DetalleRechazoOrden[];
+  documentoDeuda: DocumentoDeudaDetail | null;
 }
 
-export function LiquidadaPanel({ detalles, rechazos }: LiquidadaPanelProps) {
+export function LiquidadaPanel({ detalles, rechazos, documentoDeuda }: LiquidadaPanelProps) {
 
   return (
     <div className="space-y-4">
+      {documentoDeuda && (
+        <Card className="overflow-hidden">
+          <div className="p-4 border-b border-border bg-(--status-liq-bg)/50 flex items-center gap-2">
+            <FileText className="size-4 text-(--status-liq)" />
+            <h2 className="font-semibold">Factura generada</h2>
+            <div className="ml-auto">
+              <EstadoDocumentoBadge estado={documentoDeuda.estado} />
+            </div>
+          </div>
+        </Card>
+      )}
       <Card className="overflow-hidden">
         <div className="p-4 border-b border-border bg-(--status-liq-bg)/50 flex items-center gap-2">
           <CheckCircle2 className="size-4 text-(--status-liq)" />

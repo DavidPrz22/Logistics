@@ -58,6 +58,7 @@ export type OrdenDespachoMinAggregateOutputType = {
   almacenTransitoId: number | null
   fechaSalida: Date | null
   estado: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden | null
   totalOriginal: runtime.Decimal | null
   totalRechazado: runtime.Decimal | null
   montoFacturadoNeto: runtime.Decimal | null
@@ -73,6 +74,7 @@ export type OrdenDespachoMaxAggregateOutputType = {
   almacenTransitoId: number | null
   fechaSalida: Date | null
   estado: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden | null
   totalOriginal: runtime.Decimal | null
   totalRechazado: runtime.Decimal | null
   montoFacturadoNeto: runtime.Decimal | null
@@ -88,6 +90,7 @@ export type OrdenDespachoCountAggregateOutputType = {
   almacenTransitoId: number
   fechaSalida: number
   estado: number
+  tipoOrden: number
   totalOriginal: number
   totalRechazado: number
   montoFacturadoNeto: number
@@ -129,6 +132,7 @@ export type OrdenDespachoMinAggregateInputType = {
   almacenTransitoId?: true
   fechaSalida?: true
   estado?: true
+  tipoOrden?: true
   totalOriginal?: true
   totalRechazado?: true
   montoFacturadoNeto?: true
@@ -144,6 +148,7 @@ export type OrdenDespachoMaxAggregateInputType = {
   almacenTransitoId?: true
   fechaSalida?: true
   estado?: true
+  tipoOrden?: true
   totalOriginal?: true
   totalRechazado?: true
   montoFacturadoNeto?: true
@@ -159,6 +164,7 @@ export type OrdenDespachoCountAggregateInputType = {
   almacenTransitoId?: true
   fechaSalida?: true
   estado?: true
+  tipoOrden?: true
   totalOriginal?: true
   totalRechazado?: true
   montoFacturadoNeto?: true
@@ -261,6 +267,7 @@ export type OrdenDespachoGroupByOutputType = {
   almacenTransitoId: number
   fechaSalida: Date | null
   estado: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal: runtime.Decimal | null
   totalRechazado: runtime.Decimal | null
   montoFacturadoNeto: runtime.Decimal | null
@@ -299,6 +306,7 @@ export type ordenDespachoWhereInput = {
   almacenTransitoId?: Prisma.IntFilter<"ordenDespacho"> | number
   fechaSalida?: Prisma.DateTimeNullableFilter<"ordenDespacho"> | Date | string | null
   estado?: Prisma.EnumEstadoOrdenDespachoNullableFilter<"ordenDespacho"> | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFilter<"ordenDespacho"> | $Enums.TipoDeOrden
   totalOriginal?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -308,6 +316,7 @@ export type ordenDespachoWhereInput = {
   chofer?: Prisma.XOR<Prisma.ChoferNullableScalarRelationFilter, Prisma.choferWhereInput> | null
   almacenTransito?: Prisma.XOR<Prisma.AlmacenScalarRelationFilter, Prisma.almacenWhereInput>
   detalles?: Prisma.DetalleOrdenListRelationFilter
+  documentoDeuda?: Prisma.XOR<Prisma.DocumentoDeudaNullableScalarRelationFilter, Prisma.documentoDeudaWhereInput> | null
 }
 
 export type ordenDespachoOrderByWithRelationInput = {
@@ -318,6 +327,7 @@ export type ordenDespachoOrderByWithRelationInput = {
   almacenTransitoId?: Prisma.SortOrder
   fechaSalida?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrderInput | Prisma.SortOrder
+  tipoOrden?: Prisma.SortOrder
   totalOriginal?: Prisma.SortOrderInput | Prisma.SortOrder
   totalRechazado?: Prisma.SortOrderInput | Prisma.SortOrder
   montoFacturadoNeto?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -327,6 +337,7 @@ export type ordenDespachoOrderByWithRelationInput = {
   chofer?: Prisma.choferOrderByWithRelationInput
   almacenTransito?: Prisma.almacenOrderByWithRelationInput
   detalles?: Prisma.detalleOrdenOrderByRelationAggregateInput
+  documentoDeuda?: Prisma.documentoDeudaOrderByWithRelationInput
 }
 
 export type ordenDespachoWhereUniqueInput = Prisma.AtLeast<{
@@ -340,6 +351,7 @@ export type ordenDespachoWhereUniqueInput = Prisma.AtLeast<{
   almacenTransitoId?: Prisma.IntFilter<"ordenDespacho"> | number
   fechaSalida?: Prisma.DateTimeNullableFilter<"ordenDespacho"> | Date | string | null
   estado?: Prisma.EnumEstadoOrdenDespachoNullableFilter<"ordenDespacho"> | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFilter<"ordenDespacho"> | $Enums.TipoDeOrden
   totalOriginal?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -349,6 +361,7 @@ export type ordenDespachoWhereUniqueInput = Prisma.AtLeast<{
   chofer?: Prisma.XOR<Prisma.ChoferNullableScalarRelationFilter, Prisma.choferWhereInput> | null
   almacenTransito?: Prisma.XOR<Prisma.AlmacenScalarRelationFilter, Prisma.almacenWhereInput>
   detalles?: Prisma.DetalleOrdenListRelationFilter
+  documentoDeuda?: Prisma.XOR<Prisma.DocumentoDeudaNullableScalarRelationFilter, Prisma.documentoDeudaWhereInput> | null
 }, "id" | "numeroOrden">
 
 export type ordenDespachoOrderByWithAggregationInput = {
@@ -359,6 +372,7 @@ export type ordenDespachoOrderByWithAggregationInput = {
   almacenTransitoId?: Prisma.SortOrder
   fechaSalida?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrderInput | Prisma.SortOrder
+  tipoOrden?: Prisma.SortOrder
   totalOriginal?: Prisma.SortOrderInput | Prisma.SortOrder
   totalRechazado?: Prisma.SortOrderInput | Prisma.SortOrder
   montoFacturadoNeto?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -382,6 +396,7 @@ export type ordenDespachoScalarWhereWithAggregatesInput = {
   almacenTransitoId?: Prisma.IntWithAggregatesFilter<"ordenDespacho"> | number
   fechaSalida?: Prisma.DateTimeNullableWithAggregatesFilter<"ordenDespacho"> | Date | string | null
   estado?: Prisma.EnumEstadoOrdenDespachoNullableWithAggregatesFilter<"ordenDespacho"> | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenWithAggregatesFilter<"ordenDespacho"> | $Enums.TipoDeOrden
   totalOriginal?: Prisma.DecimalNullableWithAggregatesFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.DecimalNullableWithAggregatesFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.DecimalNullableWithAggregatesFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -393,6 +408,7 @@ export type ordenDespachoCreateInput = {
   numeroOrden: string
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -402,6 +418,7 @@ export type ordenDespachoCreateInput = {
   chofer?: Prisma.choferCreateNestedOneWithoutOrdenesDespachoInput
   almacenTransito: Prisma.almacenCreateNestedOneWithoutOrdenesDespachoInput
   detalles?: Prisma.detalleOrdenCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUncheckedCreateInput = {
@@ -412,18 +429,21 @@ export type ordenDespachoUncheckedCreateInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUpdateInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -433,6 +453,7 @@ export type ordenDespachoUpdateInput = {
   chofer?: Prisma.choferUpdateOneWithoutOrdenesDespachoNestedInput
   almacenTransito?: Prisma.almacenUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   detalles?: Prisma.detalleOrdenUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateInput = {
@@ -443,12 +464,14 @@ export type ordenDespachoUncheckedUpdateInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoCreateManyInput = {
@@ -459,6 +482,7 @@ export type ordenDespachoCreateManyInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -470,6 +494,7 @@ export type ordenDespachoUpdateManyMutationInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -485,6 +510,7 @@ export type ordenDespachoUncheckedUpdateManyInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -510,6 +536,7 @@ export type ordenDespachoCountOrderByAggregateInput = {
   almacenTransitoId?: Prisma.SortOrder
   fechaSalida?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  tipoOrden?: Prisma.SortOrder
   totalOriginal?: Prisma.SortOrder
   totalRechazado?: Prisma.SortOrder
   montoFacturadoNeto?: Prisma.SortOrder
@@ -537,6 +564,7 @@ export type ordenDespachoMaxOrderByAggregateInput = {
   almacenTransitoId?: Prisma.SortOrder
   fechaSalida?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  tipoOrden?: Prisma.SortOrder
   totalOriginal?: Prisma.SortOrder
   totalRechazado?: Prisma.SortOrder
   montoFacturadoNeto?: Prisma.SortOrder
@@ -552,6 +580,7 @@ export type ordenDespachoMinOrderByAggregateInput = {
   almacenTransitoId?: Prisma.SortOrder
   fechaSalida?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  tipoOrden?: Prisma.SortOrder
   totalOriginal?: Prisma.SortOrder
   totalRechazado?: Prisma.SortOrder
   montoFacturadoNeto?: Prisma.SortOrder
@@ -706,6 +735,10 @@ export type NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput = {
   set?: $Enums.EstadoOrdenDespacho | null
 }
 
+export type EnumTipoDeOrdenFieldUpdateOperationsInput = {
+  set?: $Enums.TipoDeOrden
+}
+
 export type NullableDecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -728,10 +761,25 @@ export type ordenDespachoUpdateOneRequiredWithoutDetallesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ordenDespachoUpdateToOneWithWhereWithoutDetallesInput, Prisma.ordenDespachoUpdateWithoutDetallesInput>, Prisma.ordenDespachoUncheckedUpdateWithoutDetallesInput>
 }
 
+export type ordenDespachoCreateNestedOneWithoutDocumentoDeudaInput = {
+  create?: Prisma.XOR<Prisma.ordenDespachoCreateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedCreateWithoutDocumentoDeudaInput>
+  connectOrCreate?: Prisma.ordenDespachoCreateOrConnectWithoutDocumentoDeudaInput
+  connect?: Prisma.ordenDespachoWhereUniqueInput
+}
+
+export type ordenDespachoUpdateOneRequiredWithoutDocumentoDeudaNestedInput = {
+  create?: Prisma.XOR<Prisma.ordenDespachoCreateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedCreateWithoutDocumentoDeudaInput>
+  connectOrCreate?: Prisma.ordenDespachoCreateOrConnectWithoutDocumentoDeudaInput
+  upsert?: Prisma.ordenDespachoUpsertWithoutDocumentoDeudaInput
+  connect?: Prisma.ordenDespachoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ordenDespachoUpdateToOneWithWhereWithoutDocumentoDeudaInput, Prisma.ordenDespachoUpdateWithoutDocumentoDeudaInput>, Prisma.ordenDespachoUncheckedUpdateWithoutDocumentoDeudaInput>
+}
+
 export type ordenDespachoCreateWithoutAlmacenTransitoInput = {
   numeroOrden: string
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -740,6 +788,7 @@ export type ordenDespachoCreateWithoutAlmacenTransitoInput = {
   cliente: Prisma.clienteCreateNestedOneWithoutOrdenesDespachoInput
   chofer?: Prisma.choferCreateNestedOneWithoutOrdenesDespachoInput
   detalles?: Prisma.detalleOrdenCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUncheckedCreateWithoutAlmacenTransitoInput = {
@@ -749,12 +798,14 @@ export type ordenDespachoUncheckedCreateWithoutAlmacenTransitoInput = {
   choferId?: number | null
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoCreateOrConnectWithoutAlmacenTransitoInput = {
@@ -793,6 +844,7 @@ export type ordenDespachoScalarWhereInput = {
   almacenTransitoId?: Prisma.IntFilter<"ordenDespacho"> | number
   fechaSalida?: Prisma.DateTimeNullableFilter<"ordenDespacho"> | Date | string | null
   estado?: Prisma.EnumEstadoOrdenDespachoNullableFilter<"ordenDespacho"> | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFilter<"ordenDespacho"> | $Enums.TipoDeOrden
   totalOriginal?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.DecimalNullableFilter<"ordenDespacho"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -804,6 +856,7 @@ export type ordenDespachoCreateWithoutChoferInput = {
   numeroOrden: string
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -812,6 +865,7 @@ export type ordenDespachoCreateWithoutChoferInput = {
   cliente: Prisma.clienteCreateNestedOneWithoutOrdenesDespachoInput
   almacenTransito: Prisma.almacenCreateNestedOneWithoutOrdenesDespachoInput
   detalles?: Prisma.detalleOrdenCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUncheckedCreateWithoutChoferInput = {
@@ -821,12 +875,14 @@ export type ordenDespachoUncheckedCreateWithoutChoferInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoCreateOrConnectWithoutChoferInput = {
@@ -858,6 +914,7 @@ export type ordenDespachoCreateWithoutClienteInput = {
   numeroOrden: string
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -866,6 +923,7 @@ export type ordenDespachoCreateWithoutClienteInput = {
   chofer?: Prisma.choferCreateNestedOneWithoutOrdenesDespachoInput
   almacenTransito: Prisma.almacenCreateNestedOneWithoutOrdenesDespachoInput
   detalles?: Prisma.detalleOrdenCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUncheckedCreateWithoutClienteInput = {
@@ -875,12 +933,14 @@ export type ordenDespachoUncheckedCreateWithoutClienteInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedCreateNestedManyWithoutOrdenInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoCreateOrConnectWithoutClienteInput = {
@@ -912,6 +972,7 @@ export type ordenDespachoCreateWithoutDetallesInput = {
   numeroOrden: string
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -920,6 +981,7 @@ export type ordenDespachoCreateWithoutDetallesInput = {
   cliente: Prisma.clienteCreateNestedOneWithoutOrdenesDespachoInput
   chofer?: Prisma.choferCreateNestedOneWithoutOrdenesDespachoInput
   almacenTransito: Prisma.almacenCreateNestedOneWithoutOrdenesDespachoInput
+  documentoDeuda?: Prisma.documentoDeudaCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoUncheckedCreateWithoutDetallesInput = {
@@ -930,11 +992,13 @@ export type ordenDespachoUncheckedCreateWithoutDetallesInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  documentoDeuda?: Prisma.documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput
 }
 
 export type ordenDespachoCreateOrConnectWithoutDetallesInput = {
@@ -957,6 +1021,7 @@ export type ordenDespachoUpdateWithoutDetallesInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -965,6 +1030,7 @@ export type ordenDespachoUpdateWithoutDetallesInput = {
   cliente?: Prisma.clienteUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   chofer?: Prisma.choferUpdateOneWithoutOrdenesDespachoNestedInput
   almacenTransito?: Prisma.almacenUpdateOneRequiredWithoutOrdenesDespachoNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateWithoutDetallesInput = {
@@ -975,11 +1041,95 @@ export type ordenDespachoUncheckedUpdateWithoutDetallesInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  documentoDeuda?: Prisma.documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput
+}
+
+export type ordenDespachoCreateWithoutDocumentoDeudaInput = {
+  numeroOrden: string
+  fechaSalida?: Date | string | null
+  estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
+  totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cliente: Prisma.clienteCreateNestedOneWithoutOrdenesDespachoInput
+  chofer?: Prisma.choferCreateNestedOneWithoutOrdenesDespachoInput
+  almacenTransito: Prisma.almacenCreateNestedOneWithoutOrdenesDespachoInput
+  detalles?: Prisma.detalleOrdenCreateNestedManyWithoutOrdenInput
+}
+
+export type ordenDespachoUncheckedCreateWithoutDocumentoDeudaInput = {
+  id?: number
+  numeroOrden: string
+  clienteId: number
+  choferId?: number | null
+  almacenTransitoId: number
+  fechaSalida?: Date | string | null
+  estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
+  totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAbonado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  saldoNetoCobrar?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  detalles?: Prisma.detalleOrdenUncheckedCreateNestedManyWithoutOrdenInput
+}
+
+export type ordenDespachoCreateOrConnectWithoutDocumentoDeudaInput = {
+  where: Prisma.ordenDespachoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ordenDespachoCreateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedCreateWithoutDocumentoDeudaInput>
+}
+
+export type ordenDespachoUpsertWithoutDocumentoDeudaInput = {
+  update: Prisma.XOR<Prisma.ordenDespachoUpdateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedUpdateWithoutDocumentoDeudaInput>
+  create: Prisma.XOR<Prisma.ordenDespachoCreateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedCreateWithoutDocumentoDeudaInput>
+  where?: Prisma.ordenDespachoWhereInput
+}
+
+export type ordenDespachoUpdateToOneWithWhereWithoutDocumentoDeudaInput = {
+  where?: Prisma.ordenDespachoWhereInput
+  data: Prisma.XOR<Prisma.ordenDespachoUpdateWithoutDocumentoDeudaInput, Prisma.ordenDespachoUncheckedUpdateWithoutDocumentoDeudaInput>
+}
+
+export type ordenDespachoUpdateWithoutDocumentoDeudaInput = {
+  numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
+  totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cliente?: Prisma.clienteUpdateOneRequiredWithoutOrdenesDespachoNestedInput
+  chofer?: Prisma.choferUpdateOneWithoutOrdenesDespachoNestedInput
+  almacenTransito?: Prisma.almacenUpdateOneRequiredWithoutOrdenesDespachoNestedInput
+  detalles?: Prisma.detalleOrdenUpdateManyWithoutOrdenNestedInput
+}
+
+export type ordenDespachoUncheckedUpdateWithoutDocumentoDeudaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.IntFieldUpdateOperationsInput | number
+  choferId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
+  fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
+  totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  detalles?: Prisma.detalleOrdenUncheckedUpdateManyWithoutOrdenNestedInput
 }
 
 export type ordenDespachoCreateManyAlmacenTransitoInput = {
@@ -989,6 +1139,7 @@ export type ordenDespachoCreateManyAlmacenTransitoInput = {
   choferId?: number | null
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1000,6 +1151,7 @@ export type ordenDespachoUpdateWithoutAlmacenTransitoInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1008,6 +1160,7 @@ export type ordenDespachoUpdateWithoutAlmacenTransitoInput = {
   cliente?: Prisma.clienteUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   chofer?: Prisma.choferUpdateOneWithoutOrdenesDespachoNestedInput
   detalles?: Prisma.detalleOrdenUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateWithoutAlmacenTransitoInput = {
@@ -1017,12 +1170,14 @@ export type ordenDespachoUncheckedUpdateWithoutAlmacenTransitoInput = {
   choferId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateManyWithoutAlmacenTransitoInput = {
@@ -1032,6 +1187,7 @@ export type ordenDespachoUncheckedUpdateManyWithoutAlmacenTransitoInput = {
   choferId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1046,6 +1202,7 @@ export type ordenDespachoCreateManyChoferInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1057,6 +1214,7 @@ export type ordenDespachoUpdateWithoutChoferInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1065,6 +1223,7 @@ export type ordenDespachoUpdateWithoutChoferInput = {
   cliente?: Prisma.clienteUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   almacenTransito?: Prisma.almacenUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   detalles?: Prisma.detalleOrdenUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateWithoutChoferInput = {
@@ -1074,12 +1233,14 @@ export type ordenDespachoUncheckedUpdateWithoutChoferInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateManyWithoutChoferInput = {
@@ -1089,6 +1250,7 @@ export type ordenDespachoUncheckedUpdateManyWithoutChoferInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1103,6 +1265,7 @@ export type ordenDespachoCreateManyClienteInput = {
   almacenTransitoId: number
   fechaSalida?: Date | string | null
   estado?: $Enums.EstadoOrdenDespacho | null
+  tipoOrden: $Enums.TipoDeOrden
   totalOriginal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1114,6 +1277,7 @@ export type ordenDespachoUpdateWithoutClienteInput = {
   numeroOrden?: Prisma.StringFieldUpdateOperationsInput | string
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1122,6 +1286,7 @@ export type ordenDespachoUpdateWithoutClienteInput = {
   chofer?: Prisma.choferUpdateOneWithoutOrdenesDespachoNestedInput
   almacenTransito?: Prisma.almacenUpdateOneRequiredWithoutOrdenesDespachoNestedInput
   detalles?: Prisma.detalleOrdenUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateWithoutClienteInput = {
@@ -1131,12 +1296,14 @@ export type ordenDespachoUncheckedUpdateWithoutClienteInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAbonado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoNetoCobrar?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   detalles?: Prisma.detalleOrdenUncheckedUpdateManyWithoutOrdenNestedInput
+  documentoDeuda?: Prisma.documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput
 }
 
 export type ordenDespachoUncheckedUpdateManyWithoutClienteInput = {
@@ -1146,6 +1313,7 @@ export type ordenDespachoUncheckedUpdateManyWithoutClienteInput = {
   almacenTransitoId?: Prisma.IntFieldUpdateOperationsInput | number
   fechaSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.NullableEnumEstadoOrdenDespachoFieldUpdateOperationsInput | $Enums.EstadoOrdenDespacho | null
+  tipoOrden?: Prisma.EnumTipoDeOrdenFieldUpdateOperationsInput | $Enums.TipoDeOrden
   totalOriginal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalRechazado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   montoFacturadoNeto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1192,6 +1360,7 @@ export type ordenDespachoSelect<ExtArgs extends runtime.Types.Extensions.Interna
   almacenTransitoId?: boolean
   fechaSalida?: boolean
   estado?: boolean
+  tipoOrden?: boolean
   totalOriginal?: boolean
   totalRechazado?: boolean
   montoFacturadoNeto?: boolean
@@ -1201,6 +1370,7 @@ export type ordenDespachoSelect<ExtArgs extends runtime.Types.Extensions.Interna
   chofer?: boolean | Prisma.ordenDespacho$choferArgs<ExtArgs>
   almacenTransito?: boolean | Prisma.almacenDefaultArgs<ExtArgs>
   detalles?: boolean | Prisma.ordenDespacho$detallesArgs<ExtArgs>
+  documentoDeuda?: boolean | Prisma.ordenDespacho$documentoDeudaArgs<ExtArgs>
   _count?: boolean | Prisma.OrdenDespachoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ordenDespacho"]>
 
@@ -1212,6 +1382,7 @@ export type ordenDespachoSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   almacenTransitoId?: boolean
   fechaSalida?: boolean
   estado?: boolean
+  tipoOrden?: boolean
   totalOriginal?: boolean
   totalRechazado?: boolean
   montoFacturadoNeto?: boolean
@@ -1230,6 +1401,7 @@ export type ordenDespachoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   almacenTransitoId?: boolean
   fechaSalida?: boolean
   estado?: boolean
+  tipoOrden?: boolean
   totalOriginal?: boolean
   totalRechazado?: boolean
   montoFacturadoNeto?: boolean
@@ -1248,6 +1420,7 @@ export type ordenDespachoSelectScalar = {
   almacenTransitoId?: boolean
   fechaSalida?: boolean
   estado?: boolean
+  tipoOrden?: boolean
   totalOriginal?: boolean
   totalRechazado?: boolean
   montoFacturadoNeto?: boolean
@@ -1255,12 +1428,13 @@ export type ordenDespachoSelectScalar = {
   saldoNetoCobrar?: boolean
 }
 
-export type ordenDespachoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "numeroOrden" | "clienteId" | "choferId" | "almacenTransitoId" | "fechaSalida" | "estado" | "totalOriginal" | "totalRechazado" | "montoFacturadoNeto" | "totalAbonado" | "saldoNetoCobrar", ExtArgs["result"]["ordenDespacho"]>
+export type ordenDespachoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "numeroOrden" | "clienteId" | "choferId" | "almacenTransitoId" | "fechaSalida" | "estado" | "tipoOrden" | "totalOriginal" | "totalRechazado" | "montoFacturadoNeto" | "totalAbonado" | "saldoNetoCobrar", ExtArgs["result"]["ordenDespacho"]>
 export type ordenDespachoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.clienteDefaultArgs<ExtArgs>
   chofer?: boolean | Prisma.ordenDespacho$choferArgs<ExtArgs>
   almacenTransito?: boolean | Prisma.almacenDefaultArgs<ExtArgs>
   detalles?: boolean | Prisma.ordenDespacho$detallesArgs<ExtArgs>
+  documentoDeuda?: boolean | Prisma.ordenDespacho$documentoDeudaArgs<ExtArgs>
   _count?: boolean | Prisma.OrdenDespachoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ordenDespachoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1281,6 +1455,7 @@ export type $ordenDespachoPayload<ExtArgs extends runtime.Types.Extensions.Inter
     chofer: Prisma.$choferPayload<ExtArgs> | null
     almacenTransito: Prisma.$almacenPayload<ExtArgs>
     detalles: Prisma.$detalleOrdenPayload<ExtArgs>[]
+    documentoDeuda: Prisma.$documentoDeudaPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1290,6 +1465,7 @@ export type $ordenDespachoPayload<ExtArgs extends runtime.Types.Extensions.Inter
     almacenTransitoId: number
     fechaSalida: Date | null
     estado: $Enums.EstadoOrdenDespacho | null
+    tipoOrden: $Enums.TipoDeOrden
     totalOriginal: runtime.Decimal | null
     totalRechazado: runtime.Decimal | null
     montoFacturadoNeto: runtime.Decimal | null
@@ -1693,6 +1869,7 @@ export interface Prisma__ordenDespachoClient<T, Null = never, ExtArgs extends ru
   chofer<T extends Prisma.ordenDespacho$choferArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ordenDespacho$choferArgs<ExtArgs>>): Prisma.Prisma__choferClient<runtime.Types.Result.GetResult<Prisma.$choferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   almacenTransito<T extends Prisma.almacenDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.almacenDefaultArgs<ExtArgs>>): Prisma.Prisma__almacenClient<runtime.Types.Result.GetResult<Prisma.$almacenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   detalles<T extends Prisma.ordenDespacho$detallesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ordenDespacho$detallesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$detalleOrdenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documentoDeuda<T extends Prisma.ordenDespacho$documentoDeudaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ordenDespacho$documentoDeudaArgs<ExtArgs>>): Prisma.Prisma__documentoDeudaClient<runtime.Types.Result.GetResult<Prisma.$documentoDeudaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1729,6 +1906,7 @@ export interface ordenDespachoFieldRefs {
   readonly almacenTransitoId: Prisma.FieldRef<"ordenDespacho", 'Int'>
   readonly fechaSalida: Prisma.FieldRef<"ordenDespacho", 'DateTime'>
   readonly estado: Prisma.FieldRef<"ordenDespacho", 'EstadoOrdenDespacho'>
+  readonly tipoOrden: Prisma.FieldRef<"ordenDespacho", 'TipoDeOrden'>
   readonly totalOriginal: Prisma.FieldRef<"ordenDespacho", 'Decimal'>
   readonly totalRechazado: Prisma.FieldRef<"ordenDespacho", 'Decimal'>
   readonly montoFacturadoNeto: Prisma.FieldRef<"ordenDespacho", 'Decimal'>
@@ -2173,6 +2351,25 @@ export type ordenDespacho$detallesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.DetalleOrdenScalarFieldEnum | Prisma.DetalleOrdenScalarFieldEnum[]
+}
+
+/**
+ * ordenDespacho.documentoDeuda
+ */
+export type ordenDespacho$documentoDeudaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documentoDeuda
+   */
+  select?: Prisma.documentoDeudaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documentoDeuda
+   */
+  omit?: Prisma.documentoDeudaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documentoDeudaInclude<ExtArgs> | null
+  where?: Prisma.documentoDeudaWhereInput
 }
 
 /**

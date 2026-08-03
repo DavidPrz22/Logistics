@@ -44,7 +44,11 @@ export class DespachoController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateDetallesOrdenODT,
   ) {
-    return this.despachoService.updateDetallesOrdenDespacho(id, data.detalles, data.totalFacturado);
+    return this.despachoService.updateDetallesOrdenDespacho(
+      id,
+      data.detalles,
+      data.totalFacturado,
+    );
   }
 
   @Get('ordenes-despacho')

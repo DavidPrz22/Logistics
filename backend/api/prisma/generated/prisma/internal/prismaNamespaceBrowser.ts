@@ -149,6 +149,7 @@ export const OrdenDespachoScalarFieldEnum = {
   almacenTransitoId: 'almacenTransitoId',
   fechaSalida: 'fechaSalida',
   estado: 'estado',
+  tipoOrden: 'tipoOrden',
   totalOriginal: 'totalOriginal',
   totalRechazado: 'totalRechazado',
   montoFacturadoNeto: 'montoFacturadoNeto',
@@ -229,7 +230,7 @@ export type MetodoPagoScalarFieldEnum = (typeof MetodoPagoScalarFieldEnum)[keyof
 export const DocumentoDeudaScalarFieldEnum = {
   id: 'id',
   sistemaOrigen: 'sistemaOrigen',
-  referenciaOrigen: 'referenciaOrigen',
+  ordenId: 'ordenId',
   identificadorCliente: 'identificadorCliente',
   montoTotalBase: 'montoTotalBase',
   saldoPendienteBase: 'saldoPendienteBase',
@@ -254,6 +255,8 @@ export type CuentaDestinoScalarFieldEnum = (typeof CuentaDestinoScalarFieldEnum)
 export const TransaccionPagoScalarFieldEnum = {
   id: 'id',
   documentoId: 'documentoId',
+  ordenId: 'ordenId',
+  tipoDePago: 'tipoDePago',
   metodoPagoId: 'metodoPagoId',
   divisaPagoId: 'divisaPagoId',
   montoOrigen: 'montoOrigen',

@@ -28,20 +28,22 @@ export type AggregateDocumentoDeuda = {
 
 export type DocumentoDeudaAvgAggregateOutputType = {
   id: number | null
+  ordenId: number | null
   montoTotalBase: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
 }
 
 export type DocumentoDeudaSumAggregateOutputType = {
   id: number | null
+  ordenId: number | null
   montoTotalBase: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
 }
 
 export type DocumentoDeudaMinAggregateOutputType = {
   id: number | null
-  sistemaOrigen: string | null
-  referenciaOrigen: string | null
+  sistemaOrigen: $Enums.ListadoOrigen | null
+  ordenId: number | null
   identificadorCliente: string | null
   montoTotalBase: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
@@ -52,8 +54,8 @@ export type DocumentoDeudaMinAggregateOutputType = {
 
 export type DocumentoDeudaMaxAggregateOutputType = {
   id: number | null
-  sistemaOrigen: string | null
-  referenciaOrigen: string | null
+  sistemaOrigen: $Enums.ListadoOrigen | null
+  ordenId: number | null
   identificadorCliente: string | null
   montoTotalBase: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
@@ -65,7 +67,7 @@ export type DocumentoDeudaMaxAggregateOutputType = {
 export type DocumentoDeudaCountAggregateOutputType = {
   id: number
   sistemaOrigen: number
-  referenciaOrigen: number
+  ordenId: number
   identificadorCliente: number
   montoTotalBase: number
   saldoPendienteBase: number
@@ -78,12 +80,14 @@ export type DocumentoDeudaCountAggregateOutputType = {
 
 export type DocumentoDeudaAvgAggregateInputType = {
   id?: true
+  ordenId?: true
   montoTotalBase?: true
   saldoPendienteBase?: true
 }
 
 export type DocumentoDeudaSumAggregateInputType = {
   id?: true
+  ordenId?: true
   montoTotalBase?: true
   saldoPendienteBase?: true
 }
@@ -91,7 +95,7 @@ export type DocumentoDeudaSumAggregateInputType = {
 export type DocumentoDeudaMinAggregateInputType = {
   id?: true
   sistemaOrigen?: true
-  referenciaOrigen?: true
+  ordenId?: true
   identificadorCliente?: true
   montoTotalBase?: true
   saldoPendienteBase?: true
@@ -103,7 +107,7 @@ export type DocumentoDeudaMinAggregateInputType = {
 export type DocumentoDeudaMaxAggregateInputType = {
   id?: true
   sistemaOrigen?: true
-  referenciaOrigen?: true
+  ordenId?: true
   identificadorCliente?: true
   montoTotalBase?: true
   saldoPendienteBase?: true
@@ -115,7 +119,7 @@ export type DocumentoDeudaMaxAggregateInputType = {
 export type DocumentoDeudaCountAggregateInputType = {
   id?: true
   sistemaOrigen?: true
-  referenciaOrigen?: true
+  ordenId?: true
   identificadorCliente?: true
   montoTotalBase?: true
   saldoPendienteBase?: true
@@ -213,8 +217,8 @@ export type documentoDeudaGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 
 export type DocumentoDeudaGroupByOutputType = {
   id: number
-  sistemaOrigen: string
-  referenciaOrigen: string
+  sistemaOrigen: $Enums.ListadoOrigen
+  ordenId: number
   identificadorCliente: string
   montoTotalBase: runtime.Decimal
   saldoPendienteBase: runtime.Decimal
@@ -248,8 +252,8 @@ export type documentoDeudaWhereInput = {
   OR?: Prisma.documentoDeudaWhereInput[]
   NOT?: Prisma.documentoDeudaWhereInput | Prisma.documentoDeudaWhereInput[]
   id?: Prisma.IntFilter<"documentoDeuda"> | number
-  sistemaOrigen?: Prisma.StringFilter<"documentoDeuda"> | string
-  referenciaOrigen?: Prisma.StringFilter<"documentoDeuda"> | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFilter<"documentoDeuda"> | $Enums.ListadoOrigen
+  ordenId?: Prisma.IntFilter<"documentoDeuda"> | number
   identificadorCliente?: Prisma.StringFilter<"documentoDeuda"> | string
   montoTotalBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -257,12 +261,13 @@ export type documentoDeudaWhereInput = {
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableFilter<"documentoDeuda"> | Date | string | null
   transaccionesPago?: Prisma.TransaccionPagoListRelationFilter
+  orden?: Prisma.XOR<Prisma.OrdenDespachoScalarRelationFilter, Prisma.ordenDespachoWhereInput>
 }
 
 export type documentoDeudaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   sistemaOrigen?: Prisma.SortOrder
-  referenciaOrigen?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   identificadorCliente?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
@@ -270,16 +275,17 @@ export type documentoDeudaOrderByWithRelationInput = {
   tipoDocumento?: Prisma.SortOrderInput | Prisma.SortOrder
   fechaEmision?: Prisma.SortOrderInput | Prisma.SortOrder
   transaccionesPago?: Prisma.transaccionPagoOrderByRelationAggregateInput
+  orden?: Prisma.ordenDespachoOrderByWithRelationInput
 }
 
 export type documentoDeudaWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  sistemaOrigen_referenciaOrigen?: Prisma.documentoDeudaSistemaOrigenReferenciaOrigenCompoundUniqueInput
+  ordenId?: number
+  sistemaOrigen_ordenId?: Prisma.documentoDeudaSistemaOrigenOrdenIdCompoundUniqueInput
   AND?: Prisma.documentoDeudaWhereInput | Prisma.documentoDeudaWhereInput[]
   OR?: Prisma.documentoDeudaWhereInput[]
   NOT?: Prisma.documentoDeudaWhereInput | Prisma.documentoDeudaWhereInput[]
-  sistemaOrigen?: Prisma.StringFilter<"documentoDeuda"> | string
-  referenciaOrigen?: Prisma.StringFilter<"documentoDeuda"> | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFilter<"documentoDeuda"> | $Enums.ListadoOrigen
   identificadorCliente?: Prisma.StringFilter<"documentoDeuda"> | string
   montoTotalBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -287,12 +293,13 @@ export type documentoDeudaWhereUniqueInput = Prisma.AtLeast<{
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableFilter<"documentoDeuda"> | Date | string | null
   transaccionesPago?: Prisma.TransaccionPagoListRelationFilter
-}, "id" | "sistemaOrigen_referenciaOrigen">
+  orden?: Prisma.XOR<Prisma.OrdenDespachoScalarRelationFilter, Prisma.ordenDespachoWhereInput>
+}, "id" | "ordenId" | "sistemaOrigen_ordenId">
 
 export type documentoDeudaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   sistemaOrigen?: Prisma.SortOrder
-  referenciaOrigen?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   identificadorCliente?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
@@ -311,8 +318,8 @@ export type documentoDeudaScalarWhereWithAggregatesInput = {
   OR?: Prisma.documentoDeudaScalarWhereWithAggregatesInput[]
   NOT?: Prisma.documentoDeudaScalarWhereWithAggregatesInput | Prisma.documentoDeudaScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"documentoDeuda"> | number
-  sistemaOrigen?: Prisma.StringWithAggregatesFilter<"documentoDeuda"> | string
-  referenciaOrigen?: Prisma.StringWithAggregatesFilter<"documentoDeuda"> | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenWithAggregatesFilter<"documentoDeuda"> | $Enums.ListadoOrigen
+  ordenId?: Prisma.IntWithAggregatesFilter<"documentoDeuda"> | number
   identificadorCliente?: Prisma.StringWithAggregatesFilter<"documentoDeuda"> | string
   montoTotalBase?: Prisma.DecimalWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -322,8 +329,7 @@ export type documentoDeudaScalarWhereWithAggregatesInput = {
 }
 
 export type documentoDeudaCreateInput = {
-  sistemaOrigen: string
-  referenciaOrigen: string
+  sistemaOrigen: $Enums.ListadoOrigen
   identificadorCliente: string
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -331,12 +337,13 @@ export type documentoDeudaCreateInput = {
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
   transaccionesPago?: Prisma.transaccionPagoCreateNestedManyWithoutDocumentoInput
+  orden: Prisma.ordenDespachoCreateNestedOneWithoutDocumentoDeudaInput
 }
 
 export type documentoDeudaUncheckedCreateInput = {
   id?: number
-  sistemaOrigen: string
-  referenciaOrigen: string
+  sistemaOrigen: $Enums.ListadoOrigen
+  ordenId: number
   identificadorCliente: string
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -347,8 +354,7 @@ export type documentoDeudaUncheckedCreateInput = {
 }
 
 export type documentoDeudaUpdateInput = {
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -356,12 +362,13 @@ export type documentoDeudaUpdateInput = {
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   transaccionesPago?: Prisma.transaccionPagoUpdateManyWithoutDocumentoNestedInput
+  orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDocumentoDeudaNestedInput
 }
 
 export type documentoDeudaUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
+  ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -373,8 +380,8 @@ export type documentoDeudaUncheckedUpdateInput = {
 
 export type documentoDeudaCreateManyInput = {
   id?: number
-  sistemaOrigen: string
-  referenciaOrigen: string
+  sistemaOrigen: $Enums.ListadoOrigen
+  ordenId: number
   identificadorCliente: string
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -384,8 +391,7 @@ export type documentoDeudaCreateManyInput = {
 }
 
 export type documentoDeudaUpdateManyMutationInput = {
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -396,8 +402,8 @@ export type documentoDeudaUpdateManyMutationInput = {
 
 export type documentoDeudaUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
+  ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -406,15 +412,20 @@ export type documentoDeudaUncheckedUpdateManyInput = {
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type documentoDeudaSistemaOrigenReferenciaOrigenCompoundUniqueInput = {
-  sistemaOrigen: string
-  referenciaOrigen: string
+export type DocumentoDeudaNullableScalarRelationFilter = {
+  is?: Prisma.documentoDeudaWhereInput | null
+  isNot?: Prisma.documentoDeudaWhereInput | null
+}
+
+export type documentoDeudaSistemaOrigenOrdenIdCompoundUniqueInput = {
+  sistemaOrigen: $Enums.ListadoOrigen
+  ordenId: number
 }
 
 export type documentoDeudaCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sistemaOrigen?: Prisma.SortOrder
-  referenciaOrigen?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   identificadorCliente?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
@@ -425,6 +436,7 @@ export type documentoDeudaCountOrderByAggregateInput = {
 
 export type documentoDeudaAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
 }
@@ -432,7 +444,7 @@ export type documentoDeudaAvgOrderByAggregateInput = {
 export type documentoDeudaMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sistemaOrigen?: Prisma.SortOrder
-  referenciaOrigen?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   identificadorCliente?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
@@ -444,7 +456,7 @@ export type documentoDeudaMaxOrderByAggregateInput = {
 export type documentoDeudaMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sistemaOrigen?: Prisma.SortOrder
-  referenciaOrigen?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   identificadorCliente?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
@@ -455,13 +467,45 @@ export type documentoDeudaMinOrderByAggregateInput = {
 
 export type documentoDeudaSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ordenId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
 }
 
-export type DocumentoDeudaScalarRelationFilter = {
-  is?: Prisma.documentoDeudaWhereInput
-  isNot?: Prisma.documentoDeudaWhereInput
+export type documentoDeudaCreateNestedOneWithoutOrdenInput = {
+  create?: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+  connectOrCreate?: Prisma.documentoDeudaCreateOrConnectWithoutOrdenInput
+  connect?: Prisma.documentoDeudaWhereUniqueInput
+}
+
+export type documentoDeudaUncheckedCreateNestedOneWithoutOrdenInput = {
+  create?: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+  connectOrCreate?: Prisma.documentoDeudaCreateOrConnectWithoutOrdenInput
+  connect?: Prisma.documentoDeudaWhereUniqueInput
+}
+
+export type documentoDeudaUpdateOneWithoutOrdenNestedInput = {
+  create?: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+  connectOrCreate?: Prisma.documentoDeudaCreateOrConnectWithoutOrdenInput
+  upsert?: Prisma.documentoDeudaUpsertWithoutOrdenInput
+  disconnect?: Prisma.documentoDeudaWhereInput | boolean
+  delete?: Prisma.documentoDeudaWhereInput | boolean
+  connect?: Prisma.documentoDeudaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentoDeudaUpdateToOneWithWhereWithoutOrdenInput, Prisma.documentoDeudaUpdateWithoutOrdenInput>, Prisma.documentoDeudaUncheckedUpdateWithoutOrdenInput>
+}
+
+export type documentoDeudaUncheckedUpdateOneWithoutOrdenNestedInput = {
+  create?: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+  connectOrCreate?: Prisma.documentoDeudaCreateOrConnectWithoutOrdenInput
+  upsert?: Prisma.documentoDeudaUpsertWithoutOrdenInput
+  disconnect?: Prisma.documentoDeudaWhereInput | boolean
+  delete?: Prisma.documentoDeudaWhereInput | boolean
+  connect?: Prisma.documentoDeudaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentoDeudaUpdateToOneWithWhereWithoutOrdenInput, Prisma.documentoDeudaUpdateWithoutOrdenInput>, Prisma.documentoDeudaUncheckedUpdateWithoutOrdenInput>
+}
+
+export type EnumListadoOrigenFieldUpdateOperationsInput = {
+  set?: $Enums.ListadoOrigen
 }
 
 export type NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput = {
@@ -478,29 +522,93 @@ export type documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput = {
   connect?: Prisma.documentoDeudaWhereUniqueInput
 }
 
-export type documentoDeudaUpdateOneRequiredWithoutTransaccionesPagoNestedInput = {
+export type documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput = {
   create?: Prisma.XOR<Prisma.documentoDeudaCreateWithoutTransaccionesPagoInput, Prisma.documentoDeudaUncheckedCreateWithoutTransaccionesPagoInput>
   connectOrCreate?: Prisma.documentoDeudaCreateOrConnectWithoutTransaccionesPagoInput
   upsert?: Prisma.documentoDeudaUpsertWithoutTransaccionesPagoInput
+  disconnect?: Prisma.documentoDeudaWhereInput | boolean
+  delete?: Prisma.documentoDeudaWhereInput | boolean
   connect?: Prisma.documentoDeudaWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.documentoDeudaUpdateToOneWithWhereWithoutTransaccionesPagoInput, Prisma.documentoDeudaUpdateWithoutTransaccionesPagoInput>, Prisma.documentoDeudaUncheckedUpdateWithoutTransaccionesPagoInput>
 }
 
-export type documentoDeudaCreateWithoutTransaccionesPagoInput = {
-  sistemaOrigen: string
-  referenciaOrigen: string
+export type documentoDeudaCreateWithoutOrdenInput = {
+  sistemaOrigen: $Enums.ListadoOrigen
   identificadorCliente: string
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
+  transaccionesPago?: Prisma.transaccionPagoCreateNestedManyWithoutDocumentoInput
+}
+
+export type documentoDeudaUncheckedCreateWithoutOrdenInput = {
+  id?: number
+  sistemaOrigen: $Enums.ListadoOrigen
+  identificadorCliente: string
+  montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estado?: $Enums.EstadoDocumentoDeuda | null
+  tipoDocumento?: $Enums.TipoDocumentoDeuda | null
+  fechaEmision?: Date | string | null
+  transaccionesPago?: Prisma.transaccionPagoUncheckedCreateNestedManyWithoutDocumentoInput
+}
+
+export type documentoDeudaCreateOrConnectWithoutOrdenInput = {
+  where: Prisma.documentoDeudaWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+}
+
+export type documentoDeudaUpsertWithoutOrdenInput = {
+  update: Prisma.XOR<Prisma.documentoDeudaUpdateWithoutOrdenInput, Prisma.documentoDeudaUncheckedUpdateWithoutOrdenInput>
+  create: Prisma.XOR<Prisma.documentoDeudaCreateWithoutOrdenInput, Prisma.documentoDeudaUncheckedCreateWithoutOrdenInput>
+  where?: Prisma.documentoDeudaWhereInput
+}
+
+export type documentoDeudaUpdateToOneWithWhereWithoutOrdenInput = {
+  where?: Prisma.documentoDeudaWhereInput
+  data: Prisma.XOR<Prisma.documentoDeudaUpdateWithoutOrdenInput, Prisma.documentoDeudaUncheckedUpdateWithoutOrdenInput>
+}
+
+export type documentoDeudaUpdateWithoutOrdenInput = {
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
+  identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
+  montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
+  tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
+  fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  transaccionesPago?: Prisma.transaccionPagoUpdateManyWithoutDocumentoNestedInput
+}
+
+export type documentoDeudaUncheckedUpdateWithoutOrdenInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
+  identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
+  montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
+  tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
+  fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  transaccionesPago?: Prisma.transaccionPagoUncheckedUpdateManyWithoutDocumentoNestedInput
+}
+
+export type documentoDeudaCreateWithoutTransaccionesPagoInput = {
+  sistemaOrigen: $Enums.ListadoOrigen
+  identificadorCliente: string
+  montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estado?: $Enums.EstadoDocumentoDeuda | null
+  tipoDocumento?: $Enums.TipoDocumentoDeuda | null
+  fechaEmision?: Date | string | null
+  orden: Prisma.ordenDespachoCreateNestedOneWithoutDocumentoDeudaInput
 }
 
 export type documentoDeudaUncheckedCreateWithoutTransaccionesPagoInput = {
   id?: number
-  sistemaOrigen: string
-  referenciaOrigen: string
+  sistemaOrigen: $Enums.ListadoOrigen
+  ordenId: number
   identificadorCliente: string
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -526,20 +634,20 @@ export type documentoDeudaUpdateToOneWithWhereWithoutTransaccionesPagoInput = {
 }
 
 export type documentoDeudaUpdateWithoutTransaccionesPagoInput = {
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDocumentoDeudaNestedInput
 }
 
 export type documentoDeudaUncheckedUpdateWithoutTransaccionesPagoInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  sistemaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
-  referenciaOrigen?: Prisma.StringFieldUpdateOperationsInput | string
+  sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
+  ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   identificadorCliente?: Prisma.StringFieldUpdateOperationsInput | string
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -582,7 +690,7 @@ export type DocumentoDeudaCountOutputTypeCountTransaccionesPagoArgs<ExtArgs exte
 export type documentoDeudaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   sistemaOrigen?: boolean
-  referenciaOrigen?: boolean
+  ordenId?: boolean
   identificadorCliente?: boolean
   montoTotalBase?: boolean
   saldoPendienteBase?: boolean
@@ -590,37 +698,40 @@ export type documentoDeudaSelect<ExtArgs extends runtime.Types.Extensions.Intern
   tipoDocumento?: boolean
   fechaEmision?: boolean
   transaccionesPago?: boolean | Prisma.documentoDeuda$transaccionesPagoArgs<ExtArgs>
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentoDeudaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentoDeuda"]>
 
 export type documentoDeudaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   sistemaOrigen?: boolean
-  referenciaOrigen?: boolean
+  ordenId?: boolean
   identificadorCliente?: boolean
   montoTotalBase?: boolean
   saldoPendienteBase?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentoDeuda"]>
 
 export type documentoDeudaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   sistemaOrigen?: boolean
-  referenciaOrigen?: boolean
+  ordenId?: boolean
   identificadorCliente?: boolean
   montoTotalBase?: boolean
   saldoPendienteBase?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentoDeuda"]>
 
 export type documentoDeudaSelectScalar = {
   id?: boolean
   sistemaOrigen?: boolean
-  referenciaOrigen?: boolean
+  ordenId?: boolean
   identificadorCliente?: boolean
   montoTotalBase?: boolean
   saldoPendienteBase?: boolean
@@ -629,23 +740,29 @@ export type documentoDeudaSelectScalar = {
   fechaEmision?: boolean
 }
 
-export type documentoDeudaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sistemaOrigen" | "referenciaOrigen" | "identificadorCliente" | "montoTotalBase" | "saldoPendienteBase" | "estado" | "tipoDocumento" | "fechaEmision", ExtArgs["result"]["documentoDeuda"]>
+export type documentoDeudaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sistemaOrigen" | "ordenId" | "identificadorCliente" | "montoTotalBase" | "saldoPendienteBase" | "estado" | "tipoDocumento" | "fechaEmision", ExtArgs["result"]["documentoDeuda"]>
 export type documentoDeudaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaccionesPago?: boolean | Prisma.documentoDeuda$transaccionesPagoArgs<ExtArgs>
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentoDeudaCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type documentoDeudaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type documentoDeudaIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type documentoDeudaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
+}
+export type documentoDeudaIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
+}
 
 export type $documentoDeudaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "documentoDeuda"
   objects: {
     transaccionesPago: Prisma.$transaccionPagoPayload<ExtArgs>[]
+    orden: Prisma.$ordenDespachoPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    sistemaOrigen: string
-    referenciaOrigen: string
+    sistemaOrigen: $Enums.ListadoOrigen
+    ordenId: number
     identificadorCliente: string
     montoTotalBase: runtime.Decimal
     saldoPendienteBase: runtime.Decimal
@@ -1047,6 +1164,7 @@ readonly fields: documentoDeudaFieldRefs;
 export interface Prisma__documentoDeudaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   transaccionesPago<T extends Prisma.documentoDeuda$transaccionesPagoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documentoDeuda$transaccionesPagoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transaccionPagoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orden<T extends Prisma.ordenDespachoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ordenDespachoDefaultArgs<ExtArgs>>): Prisma.Prisma__ordenDespachoClient<runtime.Types.Result.GetResult<Prisma.$ordenDespachoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1077,8 +1195,8 @@ export interface Prisma__documentoDeudaClient<T, Null = never, ExtArgs extends r
  */
 export interface documentoDeudaFieldRefs {
   readonly id: Prisma.FieldRef<"documentoDeuda", 'Int'>
-  readonly sistemaOrigen: Prisma.FieldRef<"documentoDeuda", 'String'>
-  readonly referenciaOrigen: Prisma.FieldRef<"documentoDeuda", 'String'>
+  readonly sistemaOrigen: Prisma.FieldRef<"documentoDeuda", 'ListadoOrigen'>
+  readonly ordenId: Prisma.FieldRef<"documentoDeuda", 'Int'>
   readonly identificadorCliente: Prisma.FieldRef<"documentoDeuda", 'String'>
   readonly montoTotalBase: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
   readonly saldoPendienteBase: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
@@ -1337,6 +1455,10 @@ export type documentoDeudaCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many documentoDeudas.
    */
   data: Prisma.documentoDeudaCreateManyInput | Prisma.documentoDeudaCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documentoDeudaIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1407,6 +1529,10 @@ export type documentoDeudaUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * Limit how many documentoDeudas to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documentoDeudaIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -1,4 +1,9 @@
-import type { EstadoOrdenDespacho } from 'prisma/generated/prisma/enums';
+import type {
+  EstadoDocumentoDeuda,
+  EstadoOrdenDespacho,
+  TipoDocumentoDeuda,
+  TipoDeOrden,
+} from 'prisma/generated/prisma/enums';
 
 export interface LoteSearchResult {
   id: number;
@@ -58,6 +63,20 @@ export interface DetalleOrdenDetail {
   rechazos: DetalleRechazoOrdenDetail[];
 }
 
+export interface AnticipoDetail {
+  id: number;
+  montoEquivalenteBase: number;
+  fechaPago: string;
+  numeroReferencia: string | null;
+  metodoPagoDescripcion: string;
+}
+
+export interface DocumentoDeudaDetail {
+  id: number;
+  estado: EstadoDocumentoDeuda;
+  tipoDocumento: TipoDocumentoDeuda;
+}
+
 export interface OrdenDespachoDetail {
   id: number;
   numeroOrden: string;
@@ -74,5 +93,8 @@ export interface OrdenDespachoDetail {
   saldoNetoCobrar: number;
   montoFacturadoNeto: number;
   totalRechazado: number;
+  tipoOrden: TipoDeOrden;
+  anticipos: AnticipoDetail[];
+  documentoDeuda: DocumentoDeudaDetail | null;
   detalles: DetalleOrdenDetail[];
 }

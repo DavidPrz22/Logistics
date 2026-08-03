@@ -8,6 +8,7 @@ import { StatCard } from "../StatCard";
 import { PreparacionPanel } from "./PreparacionPanel";
 import { EnRutaPanel } from "./EnRutaPanel";
 import { LiquidadaPanel } from "./LiquidadaPanel";
+import { AnticiposCard } from "./AnticiposCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -62,16 +63,19 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <StatCard label="Líneas" value={detalles.length} />
         <StatCard label="Unidades" value={detalles.reduce((s, d) => s + d.cantidadEnviada, 0)} />
         <StatCard label="Facturado" value={`$${orden.totalOriginal.toFixed(2)}`} mono />
+        <StatCard label="Anticipado" value={`$${orden.totalAbonado.toFixed(2)}`} mono />
         <StatCard label="Neto a cobrar" value={`$${orden.saldoNetoCobrar.toFixed(2)}`} mono highlight />
       </div>
 
+      {orden.anticipos.length > 0 && <AnticiposCard anticipos={orden.anticipos} />}
+
       {orden.estado === "PREPARACION" && <PreparacionPanel ordenId={id} detalles={detalles} onDispatch={handleUpdateEstado} />}
       {orden.estado === "EN_RUTA" && <EnRutaPanel ordenId={id} detalles={detalles} />}
-      {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} />}
+      {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} documentoDeuda={orden.documentoDeuda} />}
     </div>
   );
 

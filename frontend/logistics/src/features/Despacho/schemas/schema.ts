@@ -74,6 +74,20 @@ export const detalleOrdenDetailSchema = z.object({
   rechazos: z.array(detalleRechazoOrdenSchema),
 });
 
+export const anticipoDetailSchema = z.object({
+  id: z.number(),
+  montoEquivalenteBase: z.number(),
+  metodoPagoDescripcion: z.string(),
+  fechaPago: z.string(),
+  numeroReferencia: z.string().nullable(),
+});
+
+export const documentoDeudaDetailSchema = z.object({
+  id: z.number(),
+  estado: z.enum(['PENDIENTE', 'PAGADO_PARCIAL', 'PAGADO_TOTAL', 'ANULADO']),
+  tipoDocumento: z.enum(['FACTURA', 'NOTA_CREDITO']),
+});
+
 export const ordenDespachoDetailSchema = z.object({
   id: z.number(),
   numeroOrden: z.string(),
@@ -90,12 +104,16 @@ export const ordenDespachoDetailSchema = z.object({
   totalAbonado: z.number(),
   montoFacturadoNeto: z.number(),
   totalRechazado: z.number(),
+  anticipos: z.array(anticipoDetailSchema),
+  documentoDeuda: documentoDeudaDetailSchema.nullable(),
   detalles: z.array(detalleOrdenDetailSchema),
 });
 
 export type DetalleRechazoOrden = z.infer<typeof detalleRechazoOrdenSchema>;
 export type DetalleOrdenDetail = z.infer<typeof detalleOrdenDetailSchema>;
 export type OrdenDespachoDetail = z.infer<typeof ordenDespachoDetailSchema>;
+export type AnticipoDetail = z.infer<typeof anticipoDetailSchema>;
+export type DocumentoDeudaDetail = z.infer<typeof documentoDeudaDetailSchema>;
 
 
 const detallesRechazoSchema = z.object({

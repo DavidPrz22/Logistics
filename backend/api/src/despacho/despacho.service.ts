@@ -6,7 +6,14 @@ import {
   DetalleOrdenDespachoODT,
   LiquidacionDespachoODT,
 } from './ODTs/despacho.odts';
-
+import {
+  EstadoOrdenDespacho,
+  EstadoDocumentoDeuda,
+  TipoDocumentoDeuda,
+  TipoDePago,
+  EstadoTransaccionPago,
+  ListadoOrigen,
+} from 'prisma/generated/prisma/enums';
 import type {
   LoteSearchResult,
   ListOrdenDespacho,
@@ -287,6 +294,7 @@ export class DespachoService {
         cliente: true,
         chofer: true,
         almacenTransito: true,
+        documentoDeuda: true,
         detalles: {
           include: {
             lote: {
@@ -313,6 +321,33 @@ export class DespachoService {
       throw new Error('Orden de despacho no encontrada');
     }
 
+    const anticipos = await this.prisma.transaccionPago.findMany({
+      where: {
+        ordenId: id,
+        tipoDePago: 'ANTICIPO',
+        estado: 'APROBADO',
+      },
+      include: {
+        metodoPago: true,
+      },
+    });
+
+    const anticiposData = anticipos.map((anticipo) => ({
+      id: anticipo.id,
+      montoEquivalenteBase: Number(anticipo.montoEquivalenteBase),
+      fechaPago: anticipo.fechaPago?.toISOString() ?? '',
+      metodoPagoDescripcion: anticipo.metodoPago?.descripcion ?? '',
+      numeroReferencia: anticipo.numeroReferencia ?? null,
+    }));
+
+    const documentoDeudaData = orden.documentoDeuda
+      ? {
+          id: orden.documentoDeuda.id,
+          estado: orden.documentoDeuda.estado ?? EstadoDocumentoDeuda.PENDIENTE,
+          tipoDocumento: orden.documentoDeuda.tipoDocumento ?? TipoDocumentoDeuda.FACTURA,
+        }
+      : null;
+
     return {
       id: orden.id,
       numeroOrden: orden.numeroOrden,
@@ -325,10 +360,13 @@ export class DespachoService {
       fechaSalida: orden.fechaSalida?.toISOString() ?? '',
       estado: orden.estado ?? 'PREPARACION',
       totalOriginal: Number(orden.totalOriginal ?? 0),
+      tipoOrden: orden.tipoOrden ?? 'NORMAL',
       totalAbonado: Number(orden.totalAbonado ?? 0),
       saldoNetoCobrar: Number(orden.saldoNetoCobrar ?? 0),
       montoFacturadoNeto: Number(orden.montoFacturadoNeto ?? 0),
       totalRechazado: Number(orden.totalRechazado ?? 0),
+      anticipos: anticiposData,
+      documentoDeuda: documentoDeudaData,
       detalles: orden.detalles.map((detalle) => ({
         id: detalle.id,
         ordenId: detalle.ordenId,
@@ -369,7 +407,7 @@ export class DespachoService {
       throw new Error('Orden de despacho no encontrada');
     }
 
-    if (orden.estado === 'PREPARACION') {
+    if (orden.estado === EstadoOrdenDespacho.PREPARACION) {
       if (orden.detalles.length === 0) {
         throw new Error('La orden no tiene detalles para despachar');
       }
@@ -398,7 +436,7 @@ export class DespachoService {
 
         await tx.ordenDespacho.update({
           where: { id },
-          data: { estado: 'EN_RUTA' },
+          data: { estado: EstadoOrdenDespacho.EN_RUTA },
         });
       });
 
@@ -414,12 +452,13 @@ export class DespachoService {
         where: { id },
         include: {
           detalles: true,
+          cliente: true,
         },
       });
       if (!orden) {
         throw new Error('Orden de despacho no encontrada');
       }
-      if (orden.estado === 'LIQUIDADA') {
+      if (orden.estado === EstadoOrdenDespacho.LIQUIDADA) {
         throw new Error('La orden ya está liquidada');
       }
       if (!orden.detalles || orden.detalles.length === 0) {
@@ -470,13 +509,70 @@ export class DespachoService {
           }
         }
       }
+
+      const anticipos = await tx.transaccionPago.findMany({
+        where: {
+          ordenId: id,
+          tipoDePago: TipoDePago.ANTICIPO,
+          estado: EstadoTransaccionPago.APROBADO,
+        },
+      });
+
+      const totalAnticipado = anticipos.reduce(
+        (sum, t) => sum + Number(t.montoEquivalenteBase),
+        0,
+      );
+
+      const montoFacturadoNeto = Number(orden.totalOriginal) - totalRechazado;
+      const saldoPendienteBase = montoFacturadoNeto - totalAnticipado;
+
+      let estadoDocumento: EstadoDocumentoDeuda;
+      if (saldoPendienteBase <= 0) {
+        estadoDocumento = EstadoDocumentoDeuda.PAGADO_TOTAL;
+      } else if (totalAnticipado > 0) {
+        estadoDocumento = EstadoDocumentoDeuda.PAGADO_PARCIAL;
+      } else {
+        estadoDocumento = EstadoDocumentoDeuda.PENDIENTE;
+      }
+
+      const divisaBase = await tx.divisa.findFirst({
+        where: { esMonedaBase: true },
+      });
+      if (!divisaBase) {
+        throw new Error('No se encontró moneda base configurada');
+      }
+
+      const documentoDeuda = await tx.documentoDeuda.create({
+        data: {
+          sistemaOrigen: ListadoOrigen.RUTA_LIQUIDADA,
+          ordenId: id,
+          identificadorCliente: String(orden.clienteId),
+          montoTotalBase: montoFacturadoNeto,
+          saldoPendienteBase: saldoPendienteBase,
+          estado: estadoDocumento,
+          tipoDocumento: TipoDocumentoDeuda.FACTURA,
+        },
+      });
+
+      if (anticipos.length > 0) {
+        await tx.transaccionPago.updateMany({
+          where: {
+            id: { in: anticipos.map((a) => a.id) },
+          },
+          data: {
+            documentoId: documentoDeuda.id,
+          },
+        });
+      }
+
       return tx.ordenDespacho.update({
         where: { id },
         data: {
-          estado: 'LIQUIDADA',
-          montoFacturadoNeto: Number(orden.totalOriginal) - totalRechazado,
-          saldoNetoCobrar: Number(orden.totalOriginal) - totalRechazado,
+          estado: EstadoOrdenDespacho.LIQUIDADA,
+          montoFacturadoNeto: montoFacturadoNeto,
+          saldoNetoCobrar: saldoPendienteBase,
           totalRechazado: totalRechazado,
+          totalAbonado: totalAnticipado,
         },
       });
     });

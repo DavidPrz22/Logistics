@@ -3,10 +3,12 @@ import {
   IsInt,
   IsNumber,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
+import { TipoDeOrden } from 'prisma/generated/prisma/enums';
 
 export class LoteSearchQueryODT {
   @IsOptional()
@@ -40,6 +42,9 @@ export class CreateOrdenODT {
 
   @IsInt()
   almacenTransitoId!: number;
+
+  @IsString()
+  tipoOrden!: TipoDeOrden;
 
   @IsNumber()
   totalFacturado!: number;
