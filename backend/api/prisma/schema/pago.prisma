@@ -19,6 +19,7 @@ model tasaCambio {
 
   divisaOrigen  divisa @relation("DivisaOrigen", fields: [divisaOrigenId], references: [id])
   divisaDestino divisa @relation("DivisaDestino", fields: [divisaDestinoId], references: [id])
+  tasasAplicadas transaccionPago[]
 }
 
 model metodoPago {
@@ -50,7 +51,7 @@ model documentoDeuda {
   id                   Int                    @id @default(autoincrement())
   sistemaOrigen        ListadoOrigen
   ordenId              Int                    @unique
-  identificadorCliente String
+  clienteId            Int
   montoTotalBase       Decimal               // En FACTURA: Monto positivo. En NOTA_CREDITO: Monto a descontar.
   saldoPendienteBase   Decimal               // Saldo vivo por cobrar
   estado               EstadoDocumentoDeuda?  @default(PENDIENTE)
@@ -59,6 +60,7 @@ model documentoDeuda {
   transaccionesPago    transaccionPago[]
 
   orden               ordenDespacho           @relation(fields: [ordenId], references: [id])
+  cliente             cliente                 @relation(fields: [clienteId], references: [id])
   @@unique([sistemaOrigen, ordenId])
 }
 
@@ -103,7 +105,7 @@ model transaccionPago {
   metodoPagoId         Int            
   divisaPagoId         Int            
   montoOrigen          Decimal
-  tasaAplicada         Decimal
+  tasaAplicadaId           Int
   montoEquivalenteBase Decimal
   numeroReferencia     String?
   estado               EstadoTransaccionPago? @default(APROBADO)
@@ -115,6 +117,7 @@ model transaccionPago {
   documento     documentoDeuda? @relation(fields: [documentoId], references: [id], onDelete: Restrict)
   metodoPago    metodoPago     @relation(fields: [metodoPagoId], references: [id])
   divisa        divisa         @relation(fields: [divisaPagoId], references: [id])
+  tasaAplicada  tasaCambio     @relation(fields: [tasaAplicadaId], references: [id])
   cuentaDestino cuentaDestino? @relation(fields: [cuentaDestinoId], references: [id], onDelete: Restrict)
   usuario       usuario        @relation(fields: [usuarioId], references: [id])
 }

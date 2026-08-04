@@ -4,4 +4,5 @@ model cliente {
   telefono        String?
   direccion       String?
   ordenesDespacho ordenDespacho[]
+  documentosDeuda documentoDeuda[]
 }

@@ -6,7 +6,7 @@ import { useOrdenDespachoDetail } from "../../hooks/queries/queries";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { LineaBorrador } from "../../types/types";
+import type { LineaBorrador, TipoDeOrden } from "../../types/types";
 import { HeaderForm } from "./HeaderForm";
 import { LineaBorradorAddRow } from "./LineaBorradorAddRow";
 import { LineaBorradorTable } from "./LineaBorradorTable";
@@ -64,6 +64,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       choferId: ordenDetail?.choferId ?? undefined,
       almacenTransitoId: ordenDetail?.almacenTransitoId,
       fechaSalida: ordenDetail?.fechaSalida ? new Date(ordenDetail.fechaSalida) : new Date(),
+      tipoOrden: (ordenDetail?.tipoOrden as TipoDeOrden) ?? 'DESPACHO_RUTA',
       totalFacturado: ordenDetail?.saldoNetoCobrar,
       detallesOrdenDespacho: [],
     }
@@ -90,6 +91,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
   const choferId = watch("choferId");
   const almacenTransitoId = watch("almacenTransitoId");
   const fechaSalida = watch("fechaSalida");
+  const tipoOrden = watch("tipoOrden");
 
   const onSubmit: SubmitHandler<OrdenDespacho> = async (data: OrdenDespacho) => {
     if (isEdit && ordenId) {
@@ -153,15 +155,18 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       />
 
       <HeaderForm
-        cliente={clienteId ? String(clienteId) : ""} 
-        chofer={choferId ? String(choferId) : ""} 
-        almacen={almacenTransitoId ? String(almacenTransitoId) : ""} 
+        cliente={clienteId ? String(clienteId) : ""}
+        chofer={choferId ? String(choferId) : ""}
+        almacen={almacenTransitoId ? String(almacenTransitoId) : ""}
         fecha={fechaSalida ? fechaSalida.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
+        tipoOrden={tipoOrden as TipoDeOrden}
         clientes={clientes} choferes={choferes} almacenes={almacenes}
+        isEdit={isEdit}
         onClienteChange={(v) => setValue("clienteId", Number(v), { shouldValidate: true })}
         onChoferChange={(v) => setValue("choferId", Number(v), { shouldValidate: true })}
         onAlmacenChange={(v) => setValue("almacenTransitoId", Number(v), { shouldValidate: true })}
         onFechaChange={(v) => setValue("fechaSalida", new Date(v), { shouldValidate: true })}
+        onTipoOrdenChange={(v) => setValue("tipoOrden", v, { shouldValidate: true })}
       />
 
       <Card className="p-6 space-y-4">
@@ -186,9 +191,10 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       <div className="flex justify-end gap-2">
         <Link to="/despachos" className="inline-flex items-center px-4 py-2 text-sm rounded-md border border-border hover:bg-muted">Cancelar</Link>
         <Button 
-          onClick={handleSubmit(onSubmit)} 
+          onClick={handleSubmit(onSubmit)}
+          size="lg"
           disabled={!isValid || isPending} 
-          className="bg-primary text-primary-foreground"
+          className="bg-primary text-primary-foreground cursor-pointer px-4 py-2"
         >
           {isPending ? (isEdit ? "Guardando..." : "Creando...") : (isEdit ? "Guardar cambios" : "Crear orden")}
         </Button>

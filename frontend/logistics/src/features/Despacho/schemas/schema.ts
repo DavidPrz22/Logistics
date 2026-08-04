@@ -9,12 +9,21 @@ export const detallesOrdenDespachoSchema = z.object({
 
 export const ordenDespachoSchema = z.object({
     clienteId: z.number().int().positive({ message: "ID de cliente inválido" }),
-    choferId: z.number().int().positive({ message: "ID de chofer inválido" }),
+    choferId: z.number().int().positive({ message: "ID de chofer inválido" }).optional(),
     fechaSalida: z.date(),
     almacenTransitoId: z.number().int().positive({ message: "ID de almacén inválido" }),
+    tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
     totalFacturado: z.number().positive({ message: "El total debe ser mayor a 0" }),
     detallesOrdenDespacho: z.array(detallesOrdenDespachoSchema).optional()
-})
+}).superRefine((data, ctx) => {
+    if (data.tipoOrden === 'DESPACHO_RUTA' && !data.choferId) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "El chofer es obligatorio para Despacho a Ruta",
+            path: ['choferId'],
+        });
+    }
+});
 
 export const loteSearchResultSchema = z.object({
   id: z.number(),
@@ -40,6 +49,7 @@ export const listOrdenDespachoSchema = z.object({
   choferNombre: z.string(),
   FechaSalida: z.string(),
   estado: z.enum(['PREPARACION', 'EN_RUTA', 'LIQUIDADA']),
+  tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
   totalOriginal: z.number(),
   saldoNetoCobrar: z.number(),
 });
@@ -99,6 +109,7 @@ export const ordenDespachoDetailSchema = z.object({
   almacenTransitoNombre: z.string(),
   fechaSalida: z.string(),
   estado: z.enum(['PREPARACION', 'EN_RUTA', 'LIQUIDADA']),
+  tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
   totalOriginal: z.number(),
   saldoNetoCobrar: z.number(),
   totalAbonado: z.number(),

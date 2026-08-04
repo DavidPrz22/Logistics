@@ -31,6 +31,7 @@ export interface ListOrdenDespacho {
   choferNombre: string;
   FechaSalida: string;
   estado: EstadoOrdenDespacho;
+  tipoOrden: TipoDeOrden;
   totalOriginal: number;
   saldoNetoCobrar: number;
 }

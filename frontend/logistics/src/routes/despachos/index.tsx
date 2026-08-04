@@ -6,6 +6,7 @@ const searchSchema = z.object({
   tab: z.string().catch("TODOS").default("TODOS"),
   q: z.string().catch("").default(""),
   chofer: z.string().catch("").default(""),
+  tipoOrden: z.string().catch("").default(""),
   desde: z.string().catch("").default(""),
   hasta: z.string().catch("").default(""),
 });
@@ -20,7 +21,7 @@ function DespachosList() {
   const navigate = Route.useNavigate();
 
   const setSearch = (patch: Partial<typeof search>) => navigate({ search: (prev: typeof search) => ({ ...prev, ...patch }) });
-  const clearFilters = () => navigate({ search: { tab: search.tab, q: "", chofer: "", desde: "", hasta: "" } });
+  const clearFilters = () => navigate({ search: { tab: search.tab, q: "", chofer: "", tipoOrden: "", desde: "", hasta: "" } });
   const onRowClick = (ordenId: number) => navigate({ to: "/despachos/$ordenId", params: { ordenId: String(ordenId) } });
 
   return <DespachoDashboard search={search} onSearchChange={setSearch} onClearFilters={clearFilters} onRowClick={onRowClick} />;

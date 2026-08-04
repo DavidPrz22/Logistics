@@ -9,6 +9,7 @@ import { PreparacionPanel } from "./PreparacionPanel";
 import { EnRutaPanel } from "./EnRutaPanel";
 import { LiquidadaPanel } from "./LiquidadaPanel";
 import { AnticiposCard } from "./AnticiposCard";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -27,10 +28,12 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
 
   const detalles = orden.detalles;
   const rechazos = detalles.flatMap((d) => d.rechazos);
+  const isMostrador = orden.tipoOrden === 'VENTA_MOSTRADOR';
 
   const handleUpdateEstado = async () => {
     await updateEstadoMutation(id);
   };
+
 
   const handleUpdateEntireForm = () => {
       navigate({
@@ -47,16 +50,19 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
       <PageHeader
         eyebrow={<span className="font-mono">{orden.numeroOrden}</span> as unknown as string}
         title={orden.clienteNombre}
-        subtitle={`Chofer: ${orden.choferNombre ?? "—"} · Tránsito: ${orden.almacenTransitoNombre} · Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
+        subtitle={`${isMostrador ? '' : `Chofer: ${orden.choferNombre ?? '—'} · `}Tránsito: ${orden.almacenTransitoNombre} · Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
         actions={
           <div className="flex items-center gap-3">
             {
               orden.estado === "PREPARACION" && (
               <Button className="cursor-pointer" variant="outline" onClick={() => handleUpdateEntireForm()}>
-                <Edit className="size-4" /> 
+                <Edit className="size-4" />
                 Editar
               </Button>
             )}
+            <Badge variant={isMostrador ? "default" : "secondary"} className="text-xs">
+              {isMostrador ? "Mostrador" : "Ruta"}
+            </Badge>
             <EstadoBadge estado={orden.estado} />
             <Link to="/despachos" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> Lista</Link>
           </div>
@@ -73,8 +79,8 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
 
       {orden.anticipos.length > 0 && <AnticiposCard anticipos={orden.anticipos} />}
 
-      {orden.estado === "PREPARACION" && <PreparacionPanel ordenId={id} detalles={detalles} onDispatch={handleUpdateEstado} />}
-      {orden.estado === "EN_RUTA" && <EnRutaPanel ordenId={id} detalles={detalles} />}
+      {orden.estado === "PREPARACION" && <PreparacionPanel ordenId={id} detalles={detalles} tipoOrden={orden.tipoOrden} onDispatch={handleUpdateEstado} />}
+      {orden.estado === "EN_RUTA" && !isMostrador && <EnRutaPanel ordenId={id} detalles={detalles} />}
       {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} documentoDeuda={orden.documentoDeuda} />}
     </div>
   );

@@ -1,9 +1,9 @@
 import {
   IsArray,
+  IsEnum,
   IsInt,
   IsNumber,
   IsOptional,
-  IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -34,8 +34,9 @@ export class CreateOrdenODT {
   @IsInt()
   clienteId!: number;
 
+  @IsOptional()
   @IsInt()
-  choferId!: number;
+  choferId?: number;
 
   @Type(() => Date)
   fechaSalida!: Date;
@@ -43,7 +44,7 @@ export class CreateOrdenODT {
   @IsInt()
   almacenTransitoId!: number;
 
-  @IsString()
+  @IsEnum(TipoDeOrden)
   tipoOrden!: TipoDeOrden;
 
   @IsNumber()

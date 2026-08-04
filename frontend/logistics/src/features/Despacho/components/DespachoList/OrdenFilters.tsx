@@ -14,15 +14,30 @@ interface OrdenFiltersProps {
 }
 
 export function OrdenFilters({ search, choferes, onSearchChange, onClearFilters }: OrdenFiltersProps) {
-  const hasFilters = search.q || search.chofer || search.desde || search.hasta;
+  const hasFilters = search.q || search.chofer || search.tipoOrden || search.desde || search.hasta;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
       <div className="md:col-span-2">
         <label className="text-xs uppercase tracking-wider text-muted-foreground">Buscar cliente / número</label>
         <div className="relative mt-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input value={search.q} onChange={(e) => onSearchChange({ q: e.target.value })} placeholder="Supermercado Nacional…" className="pl-9" />
+        </div>
+      </div>
+      <div>
+        <label className="text-xs uppercase tracking-wider text-muted-foreground">Tipo de orden</label>
+        <div className="mt-1">
+          <Combobox
+            items={[
+              { value: "", label: "Todos los tipos" },
+              { value: "DESPACHO_RUTA", label: "Despacho a Ruta" },
+              { value: "VENTA_MOSTRADOR", label: "Venta en Mostrador" },
+            ]}
+            value={search.tipoOrden}
+            onChange={(v) => onSearchChange({ tipoOrden: v })}
+            placeholder="Todos los tipos"
+          />
         </div>
       </div>
       <div>
@@ -47,7 +62,7 @@ export function OrdenFilters({ search, choferes, onSearchChange, onClearFilters 
         </div>
       </div>
       {hasFilters && (
-        <Button variant="ghost" size="sm" onClick={onClearFilters} className="justify-self-start md:col-span-4">
+        <Button variant="ghost" size="sm" onClick={onClearFilters} className="justify-self-start md:col-span-5">
           <X className="size-4 mr-1" /> Limpiar filtros
         </Button>
       )}

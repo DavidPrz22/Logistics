@@ -1,5 +1,7 @@
 import type { RechazoSchema } from "../schemas/schema";
 
+export type TipoDeOrden = 'DESPACHO_RUTA' | 'VENTA_MOSTRADOR';
+
 export interface LineaBorrador {
   key: string;
   id?: number;
@@ -45,6 +47,7 @@ export interface OrdenSearchParams {
   tab: string;
   q: string;
   chofer: string;
+  tipoOrden: string;
   desde: string;
   hasta: string;
 }

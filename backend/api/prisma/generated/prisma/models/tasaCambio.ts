@@ -238,6 +238,7 @@ export type tasaCambioWhereInput = {
   fechaVigencia?: Prisma.DateTimeNullableFilter<"tasaCambio"> | Date | string | null
   divisaOrigen?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
   divisaDestino?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
+  tasasAplicadas?: Prisma.TransaccionPagoListRelationFilter
 }
 
 export type tasaCambioOrderByWithRelationInput = {
@@ -249,6 +250,7 @@ export type tasaCambioOrderByWithRelationInput = {
   fechaVigencia?: Prisma.SortOrderInput | Prisma.SortOrder
   divisaOrigen?: Prisma.divisaOrderByWithRelationInput
   divisaDestino?: Prisma.divisaOrderByWithRelationInput
+  tasasAplicadas?: Prisma.transaccionPagoOrderByRelationAggregateInput
 }
 
 export type tasaCambioWhereUniqueInput = Prisma.AtLeast<{
@@ -263,6 +265,7 @@ export type tasaCambioWhereUniqueInput = Prisma.AtLeast<{
   fechaVigencia?: Prisma.DateTimeNullableFilter<"tasaCambio"> | Date | string | null
   divisaOrigen?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
   divisaDestino?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
+  tasasAplicadas?: Prisma.TransaccionPagoListRelationFilter
 }, "id">
 
 export type tasaCambioOrderByWithAggregationInput = {
@@ -297,6 +300,7 @@ export type tasaCambioCreateInput = {
   fechaVigencia?: Date | string | null
   divisaOrigen: Prisma.divisaCreateNestedOneWithoutTasasOrigenInput
   divisaDestino: Prisma.divisaCreateNestedOneWithoutTasasDestinoInput
+  tasasAplicadas?: Prisma.transaccionPagoCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioUncheckedCreateInput = {
@@ -306,6 +310,7 @@ export type tasaCambioUncheckedCreateInput = {
   tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: string | null
   fechaVigencia?: Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioUpdateInput = {
@@ -314,6 +319,7 @@ export type tasaCambioUpdateInput = {
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   divisaOrigen?: Prisma.divisaUpdateOneRequiredWithoutTasasOrigenNestedInput
   divisaDestino?: Prisma.divisaUpdateOneRequiredWithoutTasasDestinoNestedInput
+  tasasAplicadas?: Prisma.transaccionPagoUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioUncheckedUpdateInput = {
@@ -323,6 +329,7 @@ export type tasaCambioUncheckedUpdateInput = {
   tasa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioCreateManyInput = {
@@ -398,6 +405,11 @@ export type tasaCambioSumOrderByAggregateInput = {
   divisaOrigenId?: Prisma.SortOrder
   divisaDestinoId?: Prisma.SortOrder
   tasa?: Prisma.SortOrder
+}
+
+export type TasaCambioScalarRelationFilter = {
+  is?: Prisma.tasaCambioWhereInput
+  isNot?: Prisma.tasaCambioWhereInput
 }
 
 export type tasaCambioCreateNestedManyWithoutDivisaOrigenInput = {
@@ -484,11 +496,26 @@ export type tasaCambioUncheckedUpdateManyWithoutDivisaDestinoNestedInput = {
   deleteMany?: Prisma.tasaCambioScalarWhereInput | Prisma.tasaCambioScalarWhereInput[]
 }
 
+export type tasaCambioCreateNestedOneWithoutTasasAplicadasInput = {
+  create?: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedCreateWithoutTasasAplicadasInput>
+  connectOrCreate?: Prisma.tasaCambioCreateOrConnectWithoutTasasAplicadasInput
+  connect?: Prisma.tasaCambioWhereUniqueInput
+}
+
+export type tasaCambioUpdateOneRequiredWithoutTasasAplicadasNestedInput = {
+  create?: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedCreateWithoutTasasAplicadasInput>
+  connectOrCreate?: Prisma.tasaCambioCreateOrConnectWithoutTasasAplicadasInput
+  upsert?: Prisma.tasaCambioUpsertWithoutTasasAplicadasInput
+  connect?: Prisma.tasaCambioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.tasaCambioUpdateToOneWithWhereWithoutTasasAplicadasInput, Prisma.tasaCambioUpdateWithoutTasasAplicadasInput>, Prisma.tasaCambioUncheckedUpdateWithoutTasasAplicadasInput>
+}
+
 export type tasaCambioCreateWithoutDivisaOrigenInput = {
   tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: string | null
   fechaVigencia?: Date | string | null
   divisaDestino: Prisma.divisaCreateNestedOneWithoutTasasDestinoInput
+  tasasAplicadas?: Prisma.transaccionPagoCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioUncheckedCreateWithoutDivisaOrigenInput = {
@@ -497,6 +524,7 @@ export type tasaCambioUncheckedCreateWithoutDivisaOrigenInput = {
   tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: string | null
   fechaVigencia?: Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioCreateOrConnectWithoutDivisaOrigenInput = {
@@ -513,6 +541,7 @@ export type tasaCambioCreateWithoutDivisaDestinoInput = {
   origenTasa?: string | null
   fechaVigencia?: Date | string | null
   divisaOrigen: Prisma.divisaCreateNestedOneWithoutTasasOrigenInput
+  tasasAplicadas?: Prisma.transaccionPagoCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioUncheckedCreateWithoutDivisaDestinoInput = {
@@ -521,6 +550,7 @@ export type tasaCambioUncheckedCreateWithoutDivisaDestinoInput = {
   tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: string | null
   fechaVigencia?: Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedCreateNestedManyWithoutTasaAplicadaInput
 }
 
 export type tasaCambioCreateOrConnectWithoutDivisaDestinoInput = {
@@ -576,6 +606,56 @@ export type tasaCambioUpdateManyWithWhereWithoutDivisaDestinoInput = {
   data: Prisma.XOR<Prisma.tasaCambioUpdateManyMutationInput, Prisma.tasaCambioUncheckedUpdateManyWithoutDivisaDestinoInput>
 }
 
+export type tasaCambioCreateWithoutTasasAplicadasInput = {
+  tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
+  origenTasa?: string | null
+  fechaVigencia?: Date | string | null
+  divisaOrigen: Prisma.divisaCreateNestedOneWithoutTasasOrigenInput
+  divisaDestino: Prisma.divisaCreateNestedOneWithoutTasasDestinoInput
+}
+
+export type tasaCambioUncheckedCreateWithoutTasasAplicadasInput = {
+  id?: number
+  divisaOrigenId: number
+  divisaDestinoId: number
+  tasa: runtime.Decimal | runtime.DecimalJsLike | number | string
+  origenTasa?: string | null
+  fechaVigencia?: Date | string | null
+}
+
+export type tasaCambioCreateOrConnectWithoutTasasAplicadasInput = {
+  where: Prisma.tasaCambioWhereUniqueInput
+  create: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedCreateWithoutTasasAplicadasInput>
+}
+
+export type tasaCambioUpsertWithoutTasasAplicadasInput = {
+  update: Prisma.XOR<Prisma.tasaCambioUpdateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedUpdateWithoutTasasAplicadasInput>
+  create: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedCreateWithoutTasasAplicadasInput>
+  where?: Prisma.tasaCambioWhereInput
+}
+
+export type tasaCambioUpdateToOneWithWhereWithoutTasasAplicadasInput = {
+  where?: Prisma.tasaCambioWhereInput
+  data: Prisma.XOR<Prisma.tasaCambioUpdateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedUpdateWithoutTasasAplicadasInput>
+}
+
+export type tasaCambioUpdateWithoutTasasAplicadasInput = {
+  tasa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  divisaOrigen?: Prisma.divisaUpdateOneRequiredWithoutTasasOrigenNestedInput
+  divisaDestino?: Prisma.divisaUpdateOneRequiredWithoutTasasDestinoNestedInput
+}
+
+export type tasaCambioUncheckedUpdateWithoutTasasAplicadasInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  divisaOrigenId?: Prisma.IntFieldUpdateOperationsInput | number
+  divisaDestinoId?: Prisma.IntFieldUpdateOperationsInput | number
+  tasa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type tasaCambioCreateManyDivisaOrigenInput = {
   id?: number
   divisaDestinoId: number
@@ -597,6 +677,7 @@ export type tasaCambioUpdateWithoutDivisaOrigenInput = {
   origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   divisaDestino?: Prisma.divisaUpdateOneRequiredWithoutTasasDestinoNestedInput
+  tasasAplicadas?: Prisma.transaccionPagoUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioUncheckedUpdateWithoutDivisaOrigenInput = {
@@ -605,6 +686,7 @@ export type tasaCambioUncheckedUpdateWithoutDivisaOrigenInput = {
   tasa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioUncheckedUpdateManyWithoutDivisaOrigenInput = {
@@ -620,6 +702,7 @@ export type tasaCambioUpdateWithoutDivisaDestinoInput = {
   origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   divisaOrigen?: Prisma.divisaUpdateOneRequiredWithoutTasasOrigenNestedInput
+  tasasAplicadas?: Prisma.transaccionPagoUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioUncheckedUpdateWithoutDivisaDestinoInput = {
@@ -628,6 +711,7 @@ export type tasaCambioUncheckedUpdateWithoutDivisaDestinoInput = {
   tasa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   origenTasa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tasasAplicadas?: Prisma.transaccionPagoUncheckedUpdateManyWithoutTasaAplicadaNestedInput
 }
 
 export type tasaCambioUncheckedUpdateManyWithoutDivisaDestinoInput = {
@@ -639,6 +723,35 @@ export type tasaCambioUncheckedUpdateManyWithoutDivisaDestinoInput = {
 }
 
 
+/**
+ * Count Type TasaCambioCountOutputType
+ */
+
+export type TasaCambioCountOutputType = {
+  tasasAplicadas: number
+}
+
+export type TasaCambioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tasasAplicadas?: boolean | TasaCambioCountOutputTypeCountTasasAplicadasArgs
+}
+
+/**
+ * TasaCambioCountOutputType without action
+ */
+export type TasaCambioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TasaCambioCountOutputType
+   */
+  select?: Prisma.TasaCambioCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TasaCambioCountOutputType without action
+ */
+export type TasaCambioCountOutputTypeCountTasasAplicadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.transaccionPagoWhereInput
+}
+
 
 export type tasaCambioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -649,6 +762,8 @@ export type tasaCambioSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   fechaVigencia?: boolean
   divisaOrigen?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
   divisaDestino?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
+  tasasAplicadas?: boolean | Prisma.tasaCambio$tasasAplicadasArgs<ExtArgs>
+  _count?: boolean | Prisma.TasaCambioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tasaCambio"]>
 
 export type tasaCambioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -686,6 +801,8 @@ export type tasaCambioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type tasaCambioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   divisaOrigen?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
   divisaDestino?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
+  tasasAplicadas?: boolean | Prisma.tasaCambio$tasasAplicadasArgs<ExtArgs>
+  _count?: boolean | Prisma.TasaCambioCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type tasaCambioIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   divisaOrigen?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
@@ -701,6 +818,7 @@ export type $tasaCambioPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     divisaOrigen: Prisma.$divisaPayload<ExtArgs>
     divisaDestino: Prisma.$divisaPayload<ExtArgs>
+    tasasAplicadas: Prisma.$transaccionPagoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1105,6 +1223,7 @@ export interface Prisma__tasaCambioClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   divisaOrigen<T extends Prisma.divisaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.divisaDefaultArgs<ExtArgs>>): Prisma.Prisma__divisaClient<runtime.Types.Result.GetResult<Prisma.$divisaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   divisaDestino<T extends Prisma.divisaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.divisaDefaultArgs<ExtArgs>>): Prisma.Prisma__divisaClient<runtime.Types.Result.GetResult<Prisma.$divisaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tasasAplicadas<T extends Prisma.tasaCambio$tasasAplicadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tasaCambio$tasasAplicadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transaccionPagoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1536,6 +1655,30 @@ export type tasaCambioDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many tasaCambios to delete.
    */
   limit?: number
+}
+
+/**
+ * tasaCambio.tasasAplicadas
+ */
+export type tasaCambio$tasasAplicadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the transaccionPago
+   */
+  select?: Prisma.transaccionPagoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the transaccionPago
+   */
+  omit?: Prisma.transaccionPagoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.transaccionPagoInclude<ExtArgs> | null
+  where?: Prisma.transaccionPagoWhereInput
+  orderBy?: Prisma.transaccionPagoOrderByWithRelationInput | Prisma.transaccionPagoOrderByWithRelationInput[]
+  cursor?: Prisma.transaccionPagoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransaccionPagoScalarFieldEnum | Prisma.TransaccionPagoScalarFieldEnum[]
 }
 
 /**

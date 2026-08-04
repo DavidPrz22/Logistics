@@ -209,6 +209,7 @@ export type clienteWhereInput = {
   telefono?: Prisma.StringNullableFilter<"cliente"> | string | null
   direccion?: Prisma.StringNullableFilter<"cliente"> | string | null
   ordenesDespacho?: Prisma.OrdenDespachoListRelationFilter
+  documentosDeuda?: Prisma.DocumentoDeudaListRelationFilter
 }
 
 export type clienteOrderByWithRelationInput = {
@@ -217,6 +218,7 @@ export type clienteOrderByWithRelationInput = {
   telefono?: Prisma.SortOrderInput | Prisma.SortOrder
   direccion?: Prisma.SortOrderInput | Prisma.SortOrder
   ordenesDespacho?: Prisma.ordenDespachoOrderByRelationAggregateInput
+  documentosDeuda?: Prisma.documentoDeudaOrderByRelationAggregateInput
 }
 
 export type clienteWhereUniqueInput = Prisma.AtLeast<{
@@ -228,6 +230,7 @@ export type clienteWhereUniqueInput = Prisma.AtLeast<{
   telefono?: Prisma.StringNullableFilter<"cliente"> | string | null
   direccion?: Prisma.StringNullableFilter<"cliente"> | string | null
   ordenesDespacho?: Prisma.OrdenDespachoListRelationFilter
+  documentosDeuda?: Prisma.DocumentoDeudaListRelationFilter
 }, "id">
 
 export type clienteOrderByWithAggregationInput = {
@@ -257,6 +260,7 @@ export type clienteCreateInput = {
   telefono?: string | null
   direccion?: string | null
   ordenesDespacho?: Prisma.ordenDespachoCreateNestedManyWithoutClienteInput
+  documentosDeuda?: Prisma.documentoDeudaCreateNestedManyWithoutClienteInput
 }
 
 export type clienteUncheckedCreateInput = {
@@ -265,6 +269,7 @@ export type clienteUncheckedCreateInput = {
   telefono?: string | null
   direccion?: string | null
   ordenesDespacho?: Prisma.ordenDespachoUncheckedCreateNestedManyWithoutClienteInput
+  documentosDeuda?: Prisma.documentoDeudaUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type clienteUpdateInput = {
@@ -272,6 +277,7 @@ export type clienteUpdateInput = {
   telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordenesDespacho?: Prisma.ordenDespachoUpdateManyWithoutClienteNestedInput
+  documentosDeuda?: Prisma.documentoDeudaUpdateManyWithoutClienteNestedInput
 }
 
 export type clienteUncheckedUpdateInput = {
@@ -280,6 +286,7 @@ export type clienteUncheckedUpdateInput = {
   telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordenesDespacho?: Prisma.ordenDespachoUncheckedUpdateManyWithoutClienteNestedInput
+  documentosDeuda?: Prisma.documentoDeudaUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type clienteCreateManyInput = {
@@ -350,10 +357,25 @@ export type clienteUpdateOneRequiredWithoutOrdenesDespachoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.clienteUpdateToOneWithWhereWithoutOrdenesDespachoInput, Prisma.clienteUpdateWithoutOrdenesDespachoInput>, Prisma.clienteUncheckedUpdateWithoutOrdenesDespachoInput>
 }
 
+export type clienteCreateNestedOneWithoutDocumentosDeudaInput = {
+  create?: Prisma.XOR<Prisma.clienteCreateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedCreateWithoutDocumentosDeudaInput>
+  connectOrCreate?: Prisma.clienteCreateOrConnectWithoutDocumentosDeudaInput
+  connect?: Prisma.clienteWhereUniqueInput
+}
+
+export type clienteUpdateOneRequiredWithoutDocumentosDeudaNestedInput = {
+  create?: Prisma.XOR<Prisma.clienteCreateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedCreateWithoutDocumentosDeudaInput>
+  connectOrCreate?: Prisma.clienteCreateOrConnectWithoutDocumentosDeudaInput
+  upsert?: Prisma.clienteUpsertWithoutDocumentosDeudaInput
+  connect?: Prisma.clienteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.clienteUpdateToOneWithWhereWithoutDocumentosDeudaInput, Prisma.clienteUpdateWithoutDocumentosDeudaInput>, Prisma.clienteUncheckedUpdateWithoutDocumentosDeudaInput>
+}
+
 export type clienteCreateWithoutOrdenesDespachoInput = {
   nombre: string
   telefono?: string | null
   direccion?: string | null
+  documentosDeuda?: Prisma.documentoDeudaCreateNestedManyWithoutClienteInput
 }
 
 export type clienteUncheckedCreateWithoutOrdenesDespachoInput = {
@@ -361,6 +383,7 @@ export type clienteUncheckedCreateWithoutOrdenesDespachoInput = {
   nombre: string
   telefono?: string | null
   direccion?: string | null
+  documentosDeuda?: Prisma.documentoDeudaUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type clienteCreateOrConnectWithoutOrdenesDespachoInput = {
@@ -383,6 +406,7 @@ export type clienteUpdateWithoutOrdenesDespachoInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentosDeuda?: Prisma.documentoDeudaUpdateManyWithoutClienteNestedInput
 }
 
 export type clienteUncheckedUpdateWithoutOrdenesDespachoInput = {
@@ -390,6 +414,53 @@ export type clienteUncheckedUpdateWithoutOrdenesDespachoInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentosDeuda?: Prisma.documentoDeudaUncheckedUpdateManyWithoutClienteNestedInput
+}
+
+export type clienteCreateWithoutDocumentosDeudaInput = {
+  nombre: string
+  telefono?: string | null
+  direccion?: string | null
+  ordenesDespacho?: Prisma.ordenDespachoCreateNestedManyWithoutClienteInput
+}
+
+export type clienteUncheckedCreateWithoutDocumentosDeudaInput = {
+  id?: number
+  nombre: string
+  telefono?: string | null
+  direccion?: string | null
+  ordenesDespacho?: Prisma.ordenDespachoUncheckedCreateNestedManyWithoutClienteInput
+}
+
+export type clienteCreateOrConnectWithoutDocumentosDeudaInput = {
+  where: Prisma.clienteWhereUniqueInput
+  create: Prisma.XOR<Prisma.clienteCreateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedCreateWithoutDocumentosDeudaInput>
+}
+
+export type clienteUpsertWithoutDocumentosDeudaInput = {
+  update: Prisma.XOR<Prisma.clienteUpdateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedUpdateWithoutDocumentosDeudaInput>
+  create: Prisma.XOR<Prisma.clienteCreateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedCreateWithoutDocumentosDeudaInput>
+  where?: Prisma.clienteWhereInput
+}
+
+export type clienteUpdateToOneWithWhereWithoutDocumentosDeudaInput = {
+  where?: Prisma.clienteWhereInput
+  data: Prisma.XOR<Prisma.clienteUpdateWithoutDocumentosDeudaInput, Prisma.clienteUncheckedUpdateWithoutDocumentosDeudaInput>
+}
+
+export type clienteUpdateWithoutDocumentosDeudaInput = {
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ordenesDespacho?: Prisma.ordenDespachoUpdateManyWithoutClienteNestedInput
+}
+
+export type clienteUncheckedUpdateWithoutDocumentosDeudaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ordenesDespacho?: Prisma.ordenDespachoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 
@@ -399,10 +470,12 @@ export type clienteUncheckedUpdateWithoutOrdenesDespachoInput = {
 
 export type ClienteCountOutputType = {
   ordenesDespacho: number
+  documentosDeuda: number
 }
 
 export type ClienteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ordenesDespacho?: boolean | ClienteCountOutputTypeCountOrdenesDespachoArgs
+  documentosDeuda?: boolean | ClienteCountOutputTypeCountDocumentosDeudaArgs
 }
 
 /**
@@ -422,6 +495,13 @@ export type ClienteCountOutputTypeCountOrdenesDespachoArgs<ExtArgs extends runti
   where?: Prisma.ordenDespachoWhereInput
 }
 
+/**
+ * ClienteCountOutputType without action
+ */
+export type ClienteCountOutputTypeCountDocumentosDeudaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documentoDeudaWhereInput
+}
+
 
 export type clienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -429,6 +509,7 @@ export type clienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   telefono?: boolean
   direccion?: boolean
   ordenesDespacho?: boolean | Prisma.cliente$ordenesDespachoArgs<ExtArgs>
+  documentosDeuda?: boolean | Prisma.cliente$documentosDeudaArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cliente"]>
 
@@ -456,6 +537,7 @@ export type clienteSelectScalar = {
 export type clienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "telefono" | "direccion", ExtArgs["result"]["cliente"]>
 export type clienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ordenesDespacho?: boolean | Prisma.cliente$ordenesDespachoArgs<ExtArgs>
+  documentosDeuda?: boolean | Prisma.cliente$documentosDeudaArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type clienteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -465,6 +547,7 @@ export type $clientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "cliente"
   objects: {
     ordenesDespacho: Prisma.$ordenDespachoPayload<ExtArgs>[]
+    documentosDeuda: Prisma.$documentoDeudaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -866,6 +949,7 @@ readonly fields: clienteFieldRefs;
 export interface Prisma__clienteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ordenesDespacho<T extends Prisma.cliente$ordenesDespachoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cliente$ordenesDespachoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ordenDespachoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documentosDeuda<T extends Prisma.cliente$documentosDeudaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cliente$documentosDeudaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentoDeudaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1311,6 +1395,30 @@ export type cliente$ordenesDespachoArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.OrdenDespachoScalarFieldEnum | Prisma.OrdenDespachoScalarFieldEnum[]
+}
+
+/**
+ * cliente.documentosDeuda
+ */
+export type cliente$documentosDeudaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documentoDeuda
+   */
+  select?: Prisma.documentoDeudaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documentoDeuda
+   */
+  omit?: Prisma.documentoDeudaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documentoDeudaInclude<ExtArgs> | null
+  where?: Prisma.documentoDeudaWhereInput
+  orderBy?: Prisma.documentoDeudaOrderByWithRelationInput | Prisma.documentoDeudaOrderByWithRelationInput[]
+  cursor?: Prisma.documentoDeudaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentoDeudaScalarFieldEnum | Prisma.DocumentoDeudaScalarFieldEnum[]
 }
 
 /**

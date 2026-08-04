@@ -15,8 +15,7 @@ export const createOrdenDespacho = async (data: OrdenDespacho): Promise<{ messag
 export const updateOrden = async (ordenId: number, bodydata: OrdenDespacho): Promise<{ message: string }> => {
     try {
         const { data } = await apiClient.put<{ message: string }>(
-            `despacho/orden-despacho/${ordenId}`,
-            { bodydata }
+            `despacho/orden-despacho/${ordenId}`, bodydata
         );
         return data;
     } catch (error) {
@@ -83,7 +82,7 @@ export const fetchOrdenDespachoDetail = async (id: number): Promise<OrdenDespach
 };
 
 export const registrarLiquidacion = async (id: number, bodydata: LiquidacionSchema ): Promise<{message: string}> => {
-    console.log(bodydata)
+
     try {
         const { data } = await apiClient.patch(`despacho/orden-despacho/${id}/liquidar`,  bodydata);
         return data;

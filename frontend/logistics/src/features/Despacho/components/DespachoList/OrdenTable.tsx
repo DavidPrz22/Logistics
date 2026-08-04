@@ -2,6 +2,7 @@ import type { EstadoOrden } from "@/types/types";
 import type { ListOrdenDespacho } from "../../schemas/schema";
 
 import { EstadoBadge } from "@/components/shared/estado-badge";
+import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface OrdenTableProps {
@@ -16,6 +17,7 @@ export function OrdenTable({ ordenes, onRowClick }: OrdenTableProps) {
         <TableHeader className="bg-secondary/60">
           <TableRow>
             <TableHead>Número</TableHead>
+            <TableHead>Tipo</TableHead>
             <TableHead>Cliente</TableHead>
             <TableHead>Chofer</TableHead>
             <TableHead>Salida</TableHead>
@@ -26,7 +28,7 @@ export function OrdenTable({ ordenes, onRowClick }: OrdenTableProps) {
         </TableHeader>
         <TableBody>
           {ordenes.length === 0 && (
-            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-12">Sin órdenes que coincidan con los filtros.</TableCell></TableRow>
+            <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-12">Sin órdenes que coincidan con los filtros.</TableCell></TableRow>
           )}
           {ordenes.map((o) => (
             <TableRow
@@ -35,6 +37,11 @@ export function OrdenTable({ ordenes, onRowClick }: OrdenTableProps) {
               className="cursor-pointer hover:bg-muted/40"
             >
               <TableCell className="font-mono font-semibold">{o.numeroOrden}</TableCell>
+              <TableCell>
+                <Badge variant={o.tipoOrden === 'VENTA_MOSTRADOR' ? "default" : "secondary"} className="text-xs">
+                  {o.tipoOrden === 'VENTA_MOSTRADOR' ? "Mostrador" : "Ruta"}
+                </Badge>
+              </TableCell>
               <TableCell>{o.clienteNombre}</TableCell>
               <TableCell className="text-muted-foreground">{o.choferNombre}</TableCell>
               <TableCell className="text-muted-foreground tabular-nums">{new Date(o.FechaSalida).toLocaleDateString("es-DO")}</TableCell>

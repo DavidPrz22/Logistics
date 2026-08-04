@@ -13,6 +13,7 @@ import {
   TipoDePago,
   EstadoTransaccionPago,
   ListadoOrigen,
+  TipoDeOrden,
 } from 'prisma/generated/prisma/enums';
 import type {
   LoteSearchResult,
@@ -280,6 +281,7 @@ export class DespachoService {
       choferNombre: orden.chofer?.nombre || '',
       FechaSalida: orden.fechaSalida?.toISOString() || '',
       estado: orden.estado || 'PREPARACION',
+      tipoOrden: orden.tipoOrden,
       totalOriginal: Number(orden.totalOriginal ?? 0),
       saldoNetoCobrar: Number(orden.saldoNetoCobrar ?? 0),
     }));
@@ -344,7 +346,8 @@ export class DespachoService {
       ? {
           id: orden.documentoDeuda.id,
           estado: orden.documentoDeuda.estado ?? EstadoDocumentoDeuda.PENDIENTE,
-          tipoDocumento: orden.documentoDeuda.tipoDocumento ?? TipoDocumentoDeuda.FACTURA,
+          tipoDocumento:
+            orden.documentoDeuda.tipoDocumento ?? TipoDocumentoDeuda.FACTURA,
         }
       : null;
 
@@ -408,6 +411,12 @@ export class DespachoService {
     }
 
     if (orden.estado === EstadoOrdenDespacho.PREPARACION) {
+      if (orden.tipoOrden === TipoDeOrden.VENTA_MOSTRADOR) {
+        throw new Error(
+          'Las órdenes de Venta en Mostrador no pueden despacharse a EN_RUTA. Deben liquidarse directamente desde PREPARACIÓN.',
+        );
+      }
+
       if (orden.detalles.length === 0) {
         throw new Error('La orden no tiene detalles para despachar');
       }
@@ -544,9 +553,12 @@ export class DespachoService {
 
       const documentoDeuda = await tx.documentoDeuda.create({
         data: {
-          sistemaOrigen: ListadoOrigen.RUTA_LIQUIDADA,
+          sistemaOrigen:
+            orden.tipoOrden === TipoDeOrden.VENTA_MOSTRADOR
+              ? ListadoOrigen.VENTA_MOSTRADOR
+              : ListadoOrigen.RUTA_LIQUIDADA,
           ordenId: id,
-          identificadorCliente: String(orden.clienteId),
+          clienteId: orden.clienteId,
           montoTotalBase: montoFacturadoNeto,
           saldoPendienteBase: saldoPendienteBase,
           estado: estadoDocumento,

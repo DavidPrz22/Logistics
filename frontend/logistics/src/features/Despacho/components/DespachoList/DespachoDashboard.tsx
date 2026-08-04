@@ -24,6 +24,7 @@ export function DespachoDashboard({ search, onSearchChange, onClearFilters, onRo
   const filtered = useMemo(() => {
     return ordenes.filter((o) => {
       if (search.tab !== "TODOS" && o.estado !== search.tab) return false;
+      if (search.tipoOrden && o.tipoOrden !== search.tipoOrden) return false;
       if (search.chofer && o.choferNombre !== search.chofer) return false;
       if (search.q) {
         const q = search.q.toLowerCase();
