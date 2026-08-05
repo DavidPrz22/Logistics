@@ -34,4 +34,9 @@ export class CoreService {
   findAllMotivoRechazo() {
     return this.prisma.motivoRechazo.findMany();
   }
+
+   updateTasasCambio() {
+
+    return 'updateTasasCambio';
+  }
 }

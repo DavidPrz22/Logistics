@@ -10,6 +10,11 @@
     "esMonedaBase": false
   },
   {
+    "codigo": "USDT",
+    "nombre": "Tether USD",
+    "esMonedaBase": false
+  },
+  {
     "codigo": "EUR",
     "nombre": "Euro",
     "esMonedaBase": false

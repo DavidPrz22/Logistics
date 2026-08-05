@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { CoreService } from './core.service';
 
 @Controller('core')
@@ -38,5 +38,10 @@ export class CoreController {
   @Get('motivo-rechazo')
   findAllMotivoRechazo() {
     return this.coreService.findAllMotivoRechazo();
+  }
+
+  @Post('tasas-cambio')
+  updateTasasCambio() {
+    return this.coreService.updateTasasCambio();
   }
 }
