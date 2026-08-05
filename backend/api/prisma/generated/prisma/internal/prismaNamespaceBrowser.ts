@@ -61,6 +61,7 @@ export const ModelName = {
   detalleRechazoOrden: 'detalleRechazoOrden',
   motivoRechazo: 'motivoRechazo',
   divisa: 'divisa',
+  registroTasas: 'registroTasas',
   tasaCambio: 'tasaCambio',
   metodoPago: 'metodoPago',
   documentoDeuda: 'documentoDeuda',
@@ -205,12 +206,21 @@ export const DivisaScalarFieldEnum = {
 export type DivisaScalarFieldEnum = (typeof DivisaScalarFieldEnum)[keyof typeof DivisaScalarFieldEnum]
 
 
+export const RegistroTasasScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  createdAt: 'createdAt'
+} as const
+
+export type RegistroTasasScalarFieldEnum = (typeof RegistroTasasScalarFieldEnum)[keyof typeof RegistroTasasScalarFieldEnum]
+
+
 export const TasaCambioScalarFieldEnum = {
   id: 'id',
   divisaOrigenId: 'divisaOrigenId',
   divisaDestinoId: 'divisaDestinoId',
   tasa: 'tasa',
-  origenTasa: 'origenTasa',
+  registroTasasId: 'registroTasasId',
   fechaVigencia: 'fechaVigencia'
 } as const
 

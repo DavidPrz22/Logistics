@@ -394,6 +394,7 @@ export const ModelName = {
   detalleRechazoOrden: 'detalleRechazoOrden',
   motivoRechazo: 'motivoRechazo',
   divisa: 'divisa',
+  registroTasas: 'registroTasas',
   tasaCambio: 'tasaCambio',
   metodoPago: 'metodoPago',
   documentoDeuda: 'documentoDeuda',
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "almacen" | "chofer" | "cliente" | "lote" | "movimientoInventario" | "ordenDespacho" | "detalleOrden" | "detalleRechazoOrden" | "motivoRechazo" | "divisa" | "tasaCambio" | "metodoPago" | "documentoDeuda" | "cuentaDestino" | "transaccionPago" | "producto" | "varianteProducto" | "usuario"
+    modelProps: "almacen" | "chofer" | "cliente" | "lote" | "movimientoInventario" | "ordenDespacho" | "detalleOrden" | "detalleRechazoOrden" | "motivoRechazo" | "divisa" | "registroTasas" | "tasaCambio" | "metodoPago" | "documentoDeuda" | "cuentaDestino" | "transaccionPago" | "producto" | "varianteProducto" | "usuario"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1158,6 +1159,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.divisaCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DivisaCountAggregateOutputType> | number
+        }
+      }
+    }
+    registroTasas: {
+      payload: Prisma.$registroTasasPayload<ExtArgs>
+      fields: Prisma.registroTasasFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.registroTasasFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.registroTasasFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        findFirst: {
+          args: Prisma.registroTasasFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.registroTasasFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        findMany: {
+          args: Prisma.registroTasasFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>[]
+        }
+        create: {
+          args: Prisma.registroTasasCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        createMany: {
+          args: Prisma.registroTasasCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.registroTasasCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>[]
+        }
+        delete: {
+          args: Prisma.registroTasasDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        update: {
+          args: Prisma.registroTasasUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        deleteMany: {
+          args: Prisma.registroTasasDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.registroTasasUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.registroTasasUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>[]
+        }
+        upsert: {
+          args: Prisma.registroTasasUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registroTasasPayload>
+        }
+        aggregate: {
+          args: Prisma.RegistroTasasAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRegistroTasas>
+        }
+        groupBy: {
+          args: Prisma.registroTasasGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RegistroTasasGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.registroTasasCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RegistroTasasCountAggregateOutputType> | number
         }
       }
     }
@@ -1910,12 +1985,21 @@ export const DivisaScalarFieldEnum = {
 export type DivisaScalarFieldEnum = (typeof DivisaScalarFieldEnum)[keyof typeof DivisaScalarFieldEnum]
 
 
+export const RegistroTasasScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  createdAt: 'createdAt'
+} as const
+
+export type RegistroTasasScalarFieldEnum = (typeof RegistroTasasScalarFieldEnum)[keyof typeof RegistroTasasScalarFieldEnum]
+
+
 export const TasaCambioScalarFieldEnum = {
   id: 'id',
   divisaOrigenId: 'divisaOrigenId',
   divisaDestinoId: 'divisaDestinoId',
   tasa: 'tasa',
-  origenTasa: 'origenTasa',
+  registroTasasId: 'registroTasasId',
   fechaVigencia: 'fechaVigencia'
 } as const
 
@@ -2268,6 +2352,7 @@ export type GlobalOmitConfig = {
   detalleRechazoOrden?: Prisma.detalleRechazoOrdenOmit
   motivoRechazo?: Prisma.motivoRechazoOmit
   divisa?: Prisma.divisaOmit
+  registroTasas?: Prisma.registroTasasOmit
   tasaCambio?: Prisma.tasaCambioOmit
   metodoPago?: Prisma.metodoPagoOmit
   documentoDeuda?: Prisma.documentoDeudaOmit

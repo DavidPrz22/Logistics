@@ -22,16 +22,17 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 ## 3. Requerimientos Frontend y Estructura de Rutas (Next.js / React)
 
 ## FLUJO:
-  - Seleccionas Documento u Orden
-  - Recibes el montoTotalBase, saldoPendienteBase y mostrar estaos montos en la interfaz
-  - Opciones para campos de pago como metodo de pago, divisa, cuenta destino como selects
-  - Un campo para numeroDeRefencia si el metodo de pago lo requiere
-  - Un campo para fecha de pago con un componente datepicker
-  - Si la divisa es distinta de la divisa base, mostrar una equivalencia en la interfaz (convertir) 
-  - En el input para colocar cantidad de pago, hacer que el default sea el saldo pendiente
-  
+
+- Seleccionas Documento u Orden
+- Recibes el montoTotalBase, saldoPendienteBase y mostrar estaos montos en la interfaz
+- Opciones para campos de pago como metodo de pago, divisa, cuenta destino como selects
+- Un campo para numeroDeRefencia si el metodo de pago lo requiere
+- Un campo para fecha de pago con un componente datepicker
+- Si la divisa es distinta de la divisa base, mostrar una equivalencia en la interfaz (convertir)
+- En el input para colocar cantidad de pago, hacer que el default sea el saldo pendiente
 
 ### 3.1. Vista Principal: `/pagos` (Historial y Búsqueda)
+
 - **Tabla de Transacciones de Pago:**
   - Columnas: ID / Referencia, Fecha, Cliente / Orden / Factura, Tipo de Pago (`ANTICIPO` / `COBRO_FACTURA`), Método de Pago, Monto Origen (con Divisa), Monto Equip. Base, Estado (`APROBADO`, `ANULADO`), Acciones.
 - **Filtros Avanzados:**
@@ -50,11 +51,12 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 ---
 
 ### 3.2. Formulario de Pago Anticipado: `/pagos/crear/anticipado`
+
 - **Objetivo:** Registrar un abono previo a la emisión de la factura fiscal para compras en proceso.
 - **Componentes y Campos:**
   - **Selector de Orden (Combobox con búsqueda live):** Muestra órdenes en estado `PREPARACION` o `EN_RUTA`. Retorna información del cliente, monto estimado de la orden y anticipos ya registrados.
   - **Método de Pago:** Select (`EFECTIVO`, `TRANSFERENCIA`, `PAGO_MOVIL`, `ZELLE`, etc.).
-  - **Divisa de Pago y Tasa de Cambio:** Selector de divisa (`USD`, `VES`, `EUR`) con precarga de la `tasaCambio` vigente 
+  - **Divisa de Pago y Tasa de Cambio:** Selector de divisa (`USD`, `VES`, `EUR`) con precarga de la `tasaCambio` vigente
   - **Monto Origen:** Input numérico.
   - **Monto Equivalente Base (Calculado):** $montoOrigen \times tasaAplicada$.
   - **Número de Referencia:** Requerido si el método lo exige (`requiereReferencia = true`).
@@ -68,6 +70,7 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 ---
 
 ### 3.3. Formulario de Cobro de Factura: `/pagos/crear/factura`
+
 - **Objetivo:** Registrar el cobro parcial o total de una factura (`documentoDeuda`) ya emitida.
 - **Componentes y Campos:**
   - **Selector de Factura (Combobox con búsqueda live):** Muestra facturas (`tipoDocumento = FACTURA`) cuyos estados **no** sean `ANULADO` ni `PAGADO_TOTAL`.
@@ -85,6 +88,7 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 ---
 
 ### 3.4. Vista de Detalle: `/pagos/[id]`
+
 - Visualización completa de los datos del pago.
 - Badge con estado de la transacción (`APROBADO`, `ANULADO`).
 - Tarjetas informativas con los montos en moneda original y moneda base.
@@ -125,30 +129,31 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 
 ## 5. Diseño de API REST (NestJS - `PagosController` & `PagosService`)
 
-| Método | Endpoint | Descripción | Query / Body Params |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/pagos` | Lista paginada de transacciones | Query: `page`, `limit`, `search`, `estado`, `tipoDePago`, `desde`, `hasta` |
-| `GET` | `/pagos/:id` | Obtener detalle de una transacción | Param: `id` |
-| `POST` | `/pagos/anticipado` | Registrar pago anticipado | Body: `CrearPagoAnticipadoDto` |
-| `POST` | `/pagos/factura` | Registrar cobro de factura | Body: `CrearCobroFacturaDto` |
-| `POST` | `/pagos/:id/anular` | Anular una transacción de pago | Param: `id`, Body: `{ motivo: string }` |
-| `GET` | `/pagos/ordenes-pendientes` | Obtener órdenes elegibles para anticipo | Query: `search` |
-| `GET` | `/pagos/facturas-pendientes` | Obtener facturas elegibles para cobro | Query: `search` |
+| Método | Endpoint                     | Descripción                             | Query / Body Params                                                        |
+| :----- | :--------------------------- | :-------------------------------------- | :------------------------------------------------------------------------- |
+| `GET`  | `/pagos`                     | Lista paginada de transacciones         | Query: `page`, `limit`, `search`, `estado`, `tipoDePago`, `desde`, `hasta` |
+| `GET`  | `/pagos/:id`                 | Obtener detalle de una transacción      | Param: `id`                                                                |
+| `POST` | `/pagos/anticipado`          | Registrar pago anticipado               | Body: `CrearPagoAnticipadoDto`                                             |
+| `POST` | `/pagos/factura`             | Registrar cobro de factura              | Body: `CrearCobroFacturaDto`                                               |
+| `POST` | `/pagos/:id/anular`          | Anular una transacción de pago          | Param: `id`, Body: `{ motivo: string }`                                    |
+| `GET`  | `/pagos/ordenes-pendientes`  | Obtener órdenes elegibles para anticipo | Query: `search`                                                            |
+| `GET`  | `/pagos/facturas-pendientes` | Obtener facturas elegibles para cobro   | Query: `search`                                                            |
 
 ---
 
 ## 6. Esquemas de Validación (Zod DTOs)
 
 ### 6.1. Schema Pago Anticipado (`CrearPagoAnticipadoSchema`)
+
 ```typescript
 import { z } from 'zod';
 
 export const CrearPagoAnticipadoSchema = z.object({
-  ordenId: z.number().int({ message: "La orden es requerida" }),
-  metodoPagoId: z.number().int({ message: "El método de pago es requerido" }),
-  divisaPagoId: z.number().int({ message: "La divisa es requerida" }),
-  montoOrigen: z.number().positive({ message: "El monto debe ser mayor a 0" }),
-  tasaAplicada: z.number().positive({ message: "La tasa debe ser mayor a 0" }),
+  ordenId: z.number().int({ message: 'La orden es requerida' }),
+  metodoPagoId: z.number().int({ message: 'El método de pago es requerido' }),
+  divisaPagoId: z.number().int({ message: 'La divisa es requerida' }),
+  montoOrigen: z.number().positive({ message: 'El monto debe ser mayor a 0' }),
+  tasaAplicada: z.number().positive({ message: 'La tasa debe ser mayor a 0' }),
   numeroReferencia: z.string().optional(),
   cuentaDestinoId: z.number().int().optional(),
   fechaPago: z.coerce.date().default(() => new Date()),
@@ -156,15 +161,18 @@ export const CrearPagoAnticipadoSchema = z.object({
 ```
 
 ### 6.2. Schema Cobro de Factura (`CrearCobroFacturaSchema`)
+
 ```typescript
 import { z } from 'zod';
 
 export const CrearCobroFacturaSchema = z.object({
-  documentoId: z.number().int({ message: "El documento de deuda es requerido" }),
-  metodoPagoId: z.number().int({ message: "El método de pago es requerido" }),
-  divisaPagoId: z.number().int({ message: "La divisa es requerida" }),
-  montoOrigen: z.number().positive({ message: "El monto debe ser mayor a 0" }),
-  tasaAplicada: z.number().positive({ message: "La tasa debe ser mayor a 0" }),
+  documentoId: z
+    .number()
+    .int({ message: 'El documento de deuda es requerido' }),
+  metodoPagoId: z.number().int({ message: 'El método de pago es requerido' }),
+  divisaPagoId: z.number().int({ message: 'La divisa es requerida' }),
+  montoOrigen: z.number().positive({ message: 'El monto debe ser mayor a 0' }),
+  tasaAplicada: z.number().positive({ message: 'La tasa debe ser mayor a 0' }),
   numeroReferencia: z.string().optional(),
   cuentaDestinoId: z.number().int().optional(),
   fechaPago: z.coerce.date().default(() => new Date()),
@@ -181,4 +189,3 @@ export const CrearCobroFacturaSchema = z.object({
    - Al anular una `transaccionPago` (`estado = ANULADO`), si estaba vinculada a un `documentoDeuda`, el monto equivalente se debe reincorporar al `saldoPendienteBase` y el estado de la factura se recalcula (`PAGADO_PARCIAL` o `PENDIENTE`).
 3. **Idempotencia y Referencias Duplicadas:**
    - Validar que no se registren dos pagos con el mismo `numeroReferencia` para el mismo `metodoPagoId` en transacciones activas (`APROBADO`).
-

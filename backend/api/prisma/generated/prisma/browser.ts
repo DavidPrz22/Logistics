@@ -68,6 +68,11 @@ export type motivoRechazo = Prisma.motivoRechazoModel
  */
 export type divisa = Prisma.divisaModel
 /**
+ * Model registroTasas
+ * 
+ */
+export type registroTasas = Prisma.registroTasasModel
+/**
  * Model tasaCambio
  * 
  */

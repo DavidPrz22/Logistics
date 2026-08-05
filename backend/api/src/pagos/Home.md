@@ -9,6 +9,7 @@ El objetivo de este componente es gestionar las tasas de cambio de divisas utili
 ## 2. Requerimientos Funcionales
 
 ### 2.1. Acceso en Home Principal
+
 - **Botón Tasa del Día:** En la barra superior o cabecera del Home (`index/home`), se muestra un botón destacado que indica la tasa activa actual. Al hacer clic, despliega el **Modal de Tasas de Cambio**.
 - **Filtro por Fecha:** Dentro del modal, un selector (`DatePicker` / `<input type="date">`) permite consultar el registro de tasas de cambio aplicables a una fecha específica.
 - **Tabla Informativa:** Visualiza las divisas configuradas, su tasa original, tasa vigente (sobreescrita o directa), origen y última actualización.
@@ -20,6 +21,7 @@ El objetivo de este componente es gestionar las tasas de cambio de divisas utili
   - Un botón "Actualizar" / "Guardar Cambios" valida que los valores sean numéricos y mayores a cero, envía los cambios al backend y bloquea nuevamente los inputs mostrando los datos actualizados.
 
 ### 2.2. Acceso en Home de Pagos
+
 - **Botón "Actualizar Tasa":** Ubicado en el dashboard/home del módulo de Pagos.
 - Al hacer clic, dispara la sincronización/recarga de datos de tasa de cambio en la base de datos (obteniendo el valor oficial o recalculando la vigencia diaria).
 
@@ -32,14 +34,14 @@ El objetivo de este componente es gestionar las tasas de cambio de divisas utili
 ```prisma
 model tasaCambio {
   id               Int       @id @default(autoincrement())
-  divisaOrigenId   Int       
-  divisaDestinoId  Int       
+  divisaOrigenId   Int
+  divisaDestinoId  Int
   tasaOriginal     Decimal   @db.Decimal(18, 4) // Tasa oficial / origen original
   tasaModificada   Decimal?  @db.Decimal(18, 4) // Tasa sobreescrita por el usuario (si aplica)
   tasa             Decimal   @db.Decimal(18, 4) // Tasa efectiva a aplicar (calculada: tasaModificada ?? tasaOriginal)
   esModificada     Boolean   @default(false)    // Flag de sobreescritura manual
   origenTasa       String?                      // Ej: "BCV", "MANUAL", "API_EXTERNA"
-  fechaVigencia    DateTime  @default(now()) 
+  fechaVigencia    DateTime  @default(now())
   creadoEn         DateTime  @default(now())
   actualizadoEn    DateTime  @updatedAt
   usuarioId        Int?                         // Usuario que realizó la última modificación manual
@@ -57,18 +59,19 @@ model tasaCambio {
 
 ## 4. Diseño de API REST (NestJS - `pagos.controller.ts`)
 
-| Método | Endpoint | Descripción | Body / Query Params |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/pagos/tasas-cambio/hoy` | Obtiene la tasa de cambio activa para la fecha actual | `?divisaOrigenId=&divisaDestinoId=` |
-| `GET` | `/pagos/tasas-cambio` | Obtiene el historial de tasas filtrado por fecha | `?fecha=YYYY-MM-DD` |
-| `PATCH` | `/pagos/tasas-cambio/:id/override` | Modifica/sobreescribe manualmente una tasa manteniendo la original | `{ tasaModificada: number, usuarioId: number }` |
-| `POST` | `/pagos/tasas-cambio/actualizar-oficial` | Sincroniza/actualiza la tasa de cambio oficial en BD (Botón Pagos) | `{ origen?: string }` |
+| Método  | Endpoint                                 | Descripción                                                        | Body / Query Params                             |
+| :------ | :--------------------------------------- | :----------------------------------------------------------------- | :---------------------------------------------- |
+| `GET`   | `/pagos/tasas-cambio/hoy`                | Obtiene la tasa de cambio activa para la fecha actual              | `?divisaOrigenId=&divisaDestinoId=`             |
+| `GET`   | `/pagos/tasas-cambio`                    | Obtiene el historial de tasas filtrado por fecha                   | `?fecha=YYYY-MM-DD`                             |
+| `PATCH` | `/pagos/tasas-cambio/:id/override`       | Modifica/sobreescribe manualmente una tasa manteniendo la original | `{ tasaModificada: number, usuarioId: number }` |
+| `POST`  | `/pagos/tasas-cambio/actualizar-oficial` | Sincroniza/actualiza la tasa de cambio oficial en BD (Botón Pagos) | `{ origen?: string }`                           |
 
 ---
 
 ## 5. Especificaciones de UI / UX
 
 ### 5.1. Modal de Tasa de Cambio (Home)
+
 - **Header:** Título "Tasa de Cambio del Día", Selector de Fecha (`date`), Botón de Cerrar (`X`).
 - **Body - Tabla de Tasas:**
   - **Columnas:** `Divisa Origen` | `Divisa Destino` | `Tasa Oficial` | `Tasa Vigente` | `Origen` | `Última Modificación`
@@ -79,9 +82,10 @@ model tasaCambio {
 - **Footer:** Botón `[Cerrar]` / `[Actualizar Base de Datos]`.
 
 ### 5.2. Botón "Actualizar Tasa" (Pagos Home)
+
 - Botón secundario con icono de refresco 🔄.
 - Al ejecutarse:
-  1. Muestra estado *Loading* / Deshabilitado.
+  1. Muestra estado _Loading_ / Deshabilitado.
   2. Llama a `POST /pagos/tasas-cambio/actualizar-oficial`.
   3. Muestra una notificación Toast de éxito ("Tasas de cambio actualizadas correctamente") o error.
 

@@ -9,16 +9,24 @@ model divisa {
   cuentasDestino    cuentaDestino[]
 }
 
+model registroTasas {
+  id          Int          @id @default(autoincrement())
+  nombre      String?
+  createdAt   DateTime     @default(now())
+  tasasCambio tasaCambio[]
+}
+
 model tasaCambio {
   id              Int       @id @default(autoincrement())
   divisaOrigenId  Int       
   divisaDestinoId Int       
   tasa            Decimal
-  origenTasa      String?
+  registroTasasId Int
   fechaVigencia   DateTime? @default(now()) 
 
   divisaOrigen  divisa @relation("DivisaOrigen", fields: [divisaOrigenId], references: [id])
   divisaDestino divisa @relation("DivisaDestino", fields: [divisaDestinoId], references: [id])
+  registroTasas registroTasas @relation(fields: [registroTasasId], references: [id])
   tasasAplicadas transaccionPago[]
 }
 
