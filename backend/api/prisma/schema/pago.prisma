@@ -9,6 +9,14 @@ model divisa {
   cuentasDestino    cuentaDestino[]
 }
 
+enum FuenteTasaCambio {
+  BCV
+  BINANCE_P2P
+  BYBIT_P2P
+  PARALELO
+  ZELLE
+}
+
 model registroTasas {
   id          Int          @id @default(autoincrement())
   nombre      String?
@@ -21,12 +29,14 @@ model tasaCambio {
   divisaOrigenId  Int       
   divisaDestinoId Int       
   tasa            Decimal
+  tasaMoficada    Decimal?
   registroTasasId Int
+  fuente          FuenteTasaCambio @default(PARALELO)
   fechaVigencia   DateTime? @default(now()) 
 
   divisaOrigen  divisa @relation("DivisaOrigen", fields: [divisaOrigenId], references: [id])
   divisaDestino divisa @relation("DivisaDestino", fields: [divisaDestinoId], references: [id])
-  registroTasas registroTasas @relation(fields: [registroTasasId], references: [id])
+  registroTasas registroTasas @relation(fields: [registroTasasId], references: [id], onDelete: Cascade)
   tasasAplicadas transaccionPago[]
 }
 

@@ -28,3 +28,25 @@ export interface TasaCambioMontosVEResponse {
     sources_count: number;
   };
 }
+
+interface P2PAd {
+  price: string;
+  minSingleTransAmount: string;
+  maxSingleTransAmount: string;
+}
+
+interface Advertiser {
+  nickName: string;
+}
+
+interface P2PAdWrapper {
+  adv: P2PAd;
+  advertiser: Advertiser;
+}
+
+export interface BinanceP2PResponse {
+  code: string;
+  message: string | null;
+  data: P2PAdWrapper[];
+  success: boolean;
+}

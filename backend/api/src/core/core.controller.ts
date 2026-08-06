@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Param, ParseIntPipe } from '@nestjs/common';
 import { CoreService } from './core.service';
 
 @Controller('core')
@@ -28,6 +28,16 @@ export class CoreController {
   @Get('tasas-cambio')
   findAllTasasCambio() {
     return this.coreService.findAllTasasCambio();
+  }
+
+  @Get('registro-tasas')
+  findAllRegistroTasas() {
+    return this.coreService.findAllRegistroTasas();
+  }
+
+  @Get('registro-tasas/:id/tasas-cambio')
+  findTasasCambioByRegistroId(@Param('id', ParseIntPipe) id: number) {
+    return this.coreService.findTasasCambioByRegistroId(id);
   }
 
   @Get('metodos-pago')

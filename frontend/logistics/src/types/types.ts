@@ -6,7 +6,7 @@ export interface Cliente { id: number; nombre: string; telefono: string | null; 
 export interface Chofer { id: number; nombre: string; licenciaConducir: string; telefono: string | null; }
 export interface Almacen { id: number; nombre: string; tipo: TipoAlmacen; }
 export interface Divisa { id: number; codigo: string; nombre: string; esMonedaBase: boolean | null; }
-export interface TasaCambio { id: number; divisaOrigenId: number; divisaDestinoId: number; tasa: number; origenTasa: string | null; fechaVigencia: string | null; divisaOrigen: Divisa; divisaDestino: Divisa; }
+export interface TasaCambio { id: number; divisaOrigenId: number; divisaDestinoId: number; tasa: number; tasaMoficada: number | null; registroTasasId: number; fuente: 'BCV' | 'BINANCE_P2P' | 'BYBIT_P2P' | 'PARALELO'; fechaVigencia: string | null; divisaOrigen: Divisa; divisaDestino: Divisa; }
 export interface MetodoPago { id: number; codigo: string; descripcion: string; requiereReferencia: boolean | null; }
 export interface MotivoRechazo { id: number; codigo: string; descripcion: string; requiere_merma: boolean; }
 export interface Producto { id: number; nombre: string; }

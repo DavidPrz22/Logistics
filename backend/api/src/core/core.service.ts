@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { FuenteTasaCambio } from 'prisma/generated/prisma/enums';
 import { PrismaService } from '../prisma/prisma.service';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import {
   TasaCambioMontosVEResponse,
   DolarApiResponse,
+  TasaCambioItem,
+  BinanceP2PResponse,
 } from './type/core.types';
+
 @Injectable()
 export class CoreService {
   constructor(
@@ -35,6 +39,19 @@ export class CoreService {
     });
   }
 
+  findAllRegistroTasas() {
+    return this.prisma.registroTasas.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  findTasasCambioByRegistroId(registroTasasId: number) {
+    return this.prisma.tasaCambio.findMany({
+      where: { registroTasasId },
+      include: { divisaOrigen: true, divisaDestino: true },
+    });
+  }
+
   findAllMetodosPago() {
     return this.prisma.metodoPago.findMany();
   }
@@ -53,7 +70,7 @@ export class CoreService {
     });
   }
 
-  private async fetchMontosVeRates() {
+  private async fetchMontosVeRates(): Promise<TasaCambioItem[]> {
     try {
       const response = await axios.get<TasaCambioMontosVEResponse>(
         'https://api.montosve.com/v1/fx/rates',
@@ -88,7 +105,45 @@ export class CoreService {
     }
   }
 
+  private async fetchBinanceRates() {
+    const payload = {
+      asset: 'USDT',
+      fiat: 'USD',
+      merchantCheck: false,
+      page: 1,
+      payTypes: ['Zelle'],
+      // 1. Filtrar por comerciantes verificados (como hace la app por defecto)
+      publisherType: 'merchant',
+      // 2. Simular el monto exacto que buscas en la app (ejemplo: 100 USD)
+      transAmount: '100',
+      // 3. Filtrar por comerciantes que operan con usuarios de Venezuela
+      countries: ['VE'],
+      rows: 5,
+      tradeType: 'BUY',
+    };
+    try {
+      const response = await axios.post<BinanceP2PResponse>(
+        'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search',
+        payload,
+        {
+          headers: {
+            Accept: '*/*',
+            'Content-Type': 'application/json',
+            'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            Lang: 'en',
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching from bianance data:', error);
+      return null;
+    }
+  }
+
   async updateTasasCambio() {
+    const roundToFour = (num: number | string) => Number(Number(num).toFixed(4));
     const divisaMap = await this.getDivisaMap();
     const combinedTasasCambioList: {
       divisaOrigenId: number;
@@ -96,12 +151,13 @@ export class CoreService {
       tasa: number;
       registroTasasId: number;
       fechaVigencia: Date;
+      fuente: FuenteTasaCambio;
     }[] = [];
 
     // Creamos el evento de registro (sesión)
     const registro = await this.prisma.registroTasas.create({
       data: {
-        nombre: `Tasas de Cambio - ${new Date().toISOString()}`,
+        nombre: `Tasas de Cambio - ${new Date().toISOString().split('T')[0]}`,
       },
     });
 
@@ -114,14 +170,54 @@ export class CoreService {
 
       const divisaOrigenId = divisaMap[divisaOrigenCodigo];
       const divisaDestinoId = divisaMap[divisaDestinoCodigo];
+      const marketUpper = item.market.toUpperCase();
+
+      // Validate that the market string matches a valid enum value
+      if (
+        !(Object.values(FuenteTasaCambio) as string[]).includes(marketUpper)
+      ) {
+        console.warn(`Unrecognized market source: ${marketUpper}`);
+        continue;
+      }
+
+      const fuente = marketUpper as FuenteTasaCambio;
 
       if (divisaOrigenId && divisaDestinoId) {
         combinedTasasCambioList.push({
           divisaOrigenId,
           divisaDestinoId,
-          tasa: item.rate,
+          tasa: roundToFour(item.rate),
           registroTasasId: registro.id,
+          fuente,
           fechaVigencia: new Date(item.updated_at),
+        });
+      }
+    }
+
+    // Fetch and process Binance
+    const binanceData = await this.fetchBinanceRates();
+    if (binanceData?.success && binanceData.data.length > 0) {
+      const divisaOrigenId = divisaMap['USD'];
+      const divisaDestinoId = divisaMap['VES'];
+
+      if (divisaOrigenId && divisaDestinoId) {
+        const usdtRate =
+          montosVeData.find((item) => item.currency_pair === 'USDT/VES')
+            ?.rate || 0;
+        console.log( binanceData.data.length);
+        const zelleTotalRate = binanceData.data.reduce(
+          (total, item) => total + parseFloat(item.adv.price),
+          0,
+        );
+        const zelleAverageRate = zelleTotalRate / binanceData.data.length;
+        const zelleRate = usdtRate / zelleAverageRate;
+        combinedTasasCambioList.push({
+          divisaOrigenId,
+          divisaDestinoId,
+          tasa: roundToFour(zelleRate),
+          fuente: FuenteTasaCambio.ZELLE,
+          registroTasasId: registro.id,
+          fechaVigencia: new Date(),
         });
       }
     }
@@ -136,7 +232,8 @@ export class CoreService {
         combinedTasasCambioList.push({
           divisaOrigenId,
           divisaDestinoId,
-          tasa: dolarApiData.promedio,
+          tasa: roundToFour(dolarApiData.promedio),
+          fuente: 'PARALELO',
           registroTasasId: registro.id,
           fechaVigencia: new Date(dolarApiData.fechaActualizacion),
         });

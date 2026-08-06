@@ -22,7 +22,9 @@ async function main() {
       const result = await prisma.motivoRechazo.create({
         data: motivo,
       });
-      console.log(`Created motivoRechazo: ${result.codigo} - ${result.descripcion} (ID: ${result.id})`);
+      console.log(
+        `Created motivoRechazo: ${result.codigo} - ${result.descripcion} (ID: ${result.id})`,
+      );
     } catch (error) {
       if (error.code === 'P2002') {
         console.log(`Skipping duplicate: ${motivo.codigo}`);

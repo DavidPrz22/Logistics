@@ -32,10 +32,18 @@ export const tasaCambioSchema = z.object({
   divisaOrigenId: z.number(),
   divisaDestinoId: z.number(),
   tasa: z.number(),
-  origenTasa: z.string().nullable(),
+  tasaMoficada: z.number().nullable(),
+  registroTasasId: z.number(),
+  fuente: z.enum(['BCV', 'BINANCE_P2P', 'BYBIT_P2P', 'PARALELO']),
   fechaVigencia: z.string().nullable(),
   divisaOrigen: divisaSchema,
   divisaDestino: divisaSchema,
+});
+
+export const registroTasasSchema = z.object({
+  id: z.number(),
+  nombre: z.string().nullable(),
+  createdAt: z.string(),
 });
 
 export const metodoPagoSchema = z.object({
@@ -59,3 +67,4 @@ export type Divisa = z.infer<typeof divisaSchema>;
 export type TasaCambio = z.infer<typeof tasaCambioSchema>;
 export type MetodoPago = z.infer<typeof metodoPagoSchema>;
 export type MotivoRechazo = z.infer<typeof motivosRechazoSchema>;
+export type RegistroTasas = z.infer<typeof registroTasasSchema>;
