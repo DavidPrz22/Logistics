@@ -8,7 +8,9 @@ import {
   DolarApiResponse,
   TasaCambioItem,
   BinanceP2PResponse,
+  UpdateTasasCambioResponse,
 } from './type/core.types';
+import { UpdateTasasCambioODT } from './ODTs/core.odts';
 
 @Injectable()
 export class CoreService {
@@ -143,7 +145,8 @@ export class CoreService {
   }
 
   async updateTasasCambio() {
-    const roundToFour = (num: number | string) => Number(Number(num).toFixed(4));
+    const roundToFour = (num: number | string) =>
+      Number(Number(num).toFixed(4));
     const divisaMap = await this.getDivisaMap();
     const combinedTasasCambioList: {
       divisaOrigenId: number;
@@ -204,7 +207,7 @@ export class CoreService {
         const usdtRate =
           montosVeData.find((item) => item.currency_pair === 'USDT/VES')
             ?.rate || 0;
-        console.log( binanceData.data.length);
+
         const zelleTotalRate = binanceData.data.reduce(
           (total, item) => total + parseFloat(item.adv.price),
           0,
@@ -251,5 +254,34 @@ export class CoreService {
         where: { id: registro.id },
       });
     }
+  }
+
+  async updateTasasCambioByRegistroId(
+    registroTasasId: number,
+    data: UpdateTasasCambioODT,
+  ): Promise<UpdateTasasCambioResponse> {
+    const registro = await this.prisma.registroTasas.findUnique({
+      where: { id: registroTasasId },
+    });
+
+    if (!registro) {
+      throw new Error(
+        `Registro de tasas con id ${registroTasasId} no encontrado`,
+      );
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      for (const tasa of data.tasas) {
+        await tx.tasaCambio.update({
+          where: { id: tasa.id },
+          data: { tasaMoficada: tasa.tasaModificada },
+        });
+      }
+    });
+
+    return {
+      message: 'Tasas de cambio actualizadas exitosamente',
+      updatedCount: data.tasas.length,
+    };
   }
 }

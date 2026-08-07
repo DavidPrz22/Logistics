@@ -50,3 +50,8 @@ export interface BinanceP2PResponse {
   data: P2PAdWrapper[];
   success: boolean;
 }
+
+export interface UpdateTasasCambioResponse {
+  message: string;
+  updatedCount: number;
+}

@@ -1,5 +1,6 @@
 import apiClient from "@/api/client";
 import type { RegistroTasas, TasaCambio } from "@/types/zodType";
+import type { UpdateTasasCambio } from "../schemas/schema";
 
 export const generarTasaCambio = async () => {
   try {
@@ -27,6 +28,19 @@ export const fetchTasasCambioByRegistro = async (registroId: number): Promise<Ta
     return data;
   } catch (error) {
     console.error("Error fetching tasas de cambio by registro:", error);
+    throw error;
+  }
+};
+
+export const updateTasasCambio = async (registroId: number, data: UpdateTasasCambio): Promise<{ message: string; updatedCount: number }> => {
+  try {
+    const { data: responseData } = await apiClient.patch<{ message: string; updatedCount: number }>(
+      `core/registro-tasas/${registroId}/tasas-cambio`,
+      data
+    );
+    return responseData;
+  } catch (error) {
+    console.error("Error updating tasas de cambio:", error);
     throw error;
   }
 };

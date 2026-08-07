@@ -1,5 +1,14 @@
-import { Controller, Get, Post, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  ParseIntPipe,
+  Body,
+} from '@nestjs/common';
 import { CoreService } from './core.service';
+import { UpdateTasasCambioODT } from './ODTs/core.odts';
 
 @Controller('core')
 export class CoreController {
@@ -53,5 +62,13 @@ export class CoreController {
   @Post('tasas-cambio')
   updateTasasCambio() {
     return this.coreService.updateTasasCambio();
+  }
+
+  @Patch('registro-tasas/:id/tasas-cambio')
+  updateTasasCambioByRegistroId(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateTasasCambioODT,
+  ) {
+    return this.coreService.updateTasasCambioByRegistroId(id, data);
   }
 }
