@@ -13,7 +13,9 @@ import { FindAllFacturasODT } from './ODTs/factuacion.odts';
 export class FacturacionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(query?: FindAllFacturasODT): Promise<PaginatedDocumentosResponse> {
+  async findAll(
+    query?: FindAllFacturasODT,
+  ): Promise<PaginatedDocumentosResponse> {
     const page = Math.max(1, Number(query?.page) || 1);
     const requestedLimit = Number(query?.limit) || 50;
     const limit = Math.min(50, Math.max(1, requestedLimit));
@@ -79,7 +81,9 @@ export class FacturacionService {
     }));
 
     if (query?.fecha && query.fecha.trim() !== '') {
-      data = data.filter((doc) => doc.fechaEmision.startsWith(query.fecha!.trim()));
+      data = data.filter((doc) =>
+        doc.fechaEmision.startsWith(query.fecha!.trim()),
+      );
     }
 
     const totalPages = Math.max(1, Math.ceil(total / limit));

@@ -19,49 +19,52 @@ El módulo interactúa principalmente con los siguientes modelos y enums de Pris
 
 ---
 
-
 ## 2.2🔄 Secuencia del Flujo de Pago
 
 ### 1. Selección e Inicialización del Documento
-* **Selección del Origen:** El usuario selecciona el documento u orden de venta a procesar.
-* **Carga de Datos Iniciales:**
-  * Visualización e inicialización en la interfaz del `montoTotalBase` (en divisa base, ej. VES).
-  * Visualización del `saldoPendienteBase` (en divisa base).
-  * Despliegue del estado actual del documento u orden.
+
+- **Selección del Origen:** El usuario selecciona el documento u orden de venta a procesar.
+- **Carga de Datos Iniciales:**
+  - Visualización e inicialización en la interfaz del `montoTotalBase` (en divisa base, ej. VES).
+  - Visualización del `saldoPendienteBase` (en divisa base).
+  - Despliegue del estado actual del documento u orden.
 
 ### 2. Configuración de Parámetros de Pago
-* **Monto por Defecto:** El campo de entrada para la cantidad del pago toma automáticamente como valor inicial por defecto el `saldoPendienteBase`.
-* **Selectores de Configuración:**
-  * **Método de pago:** Componente *select* con las opciones disponibles (ej. Transferencia, Efectivo, Punto de venta, Pago móvil).
-  * **Divisa de pago:** Componente *select* para la moneda con la que cancela el cliente (ej. USD, VES).
-  * **Cuenta destino:** Componente *select* para elegir la caja o cuenta bancaria receptora.
-* **Fecha de Transacción:** Campo de fecha integrado con un componente `datepicker`.
+
+- **Monto por Defecto:** El campo de entrada para la cantidad del pago toma automáticamente como valor inicial por defecto el `saldoPendienteBase`.
+- **Selectores de Configuración:**
+  - **Método de pago:** Componente _select_ con las opciones disponibles (ej. Transferencia, Efectivo, Punto de venta, Pago móvil).
+  - **Divisa de pago:** Componente _select_ para la moneda con la que cancela el cliente (ej. USD, VES).
+  - **Cuenta destino:** Componente _select_ para elegir la caja o cuenta bancaria receptora.
+- **Fecha de Transacción:** Campo de fecha integrado con un componente `datepicker`.
 
 ### 3. Evaluación Dinámica y Conversión en Tiempo Real
-* **Visibilidad Dinámica de Referencia:**
-  * El campo `numeroDeReferencia` se evalúa dinámicamente según el método de pago elegido:
-    * Si el método lo requiere (ej. transferencia, pago móvil), el campo se habilita/muestra.
-    * Si el método no lo necesita (ej. efectivo), el campo desaparece dinámicamente de la interfaz.
-* **Cálculo y Conversión en Tiempo Real:**
-  * Al ingresar o modificar la cantidad de pago, la divisa o la tasa de cambio seleccionada, el sistema muestra inmediatamente la conversión basada en la tasa utilizada.
-  * **Desglose en la interfaz:**
-    * Moneda base: **VES**
-    * Moneda de pago: **USD**
-    * Cantidad de pago en USD: **10 USD**
-    * Tasa aplicada: **123 VES/USD**
-    * Cantidad equivalente en moneda base: **1,230 VES**
-    * Visualización del impacto: Monto convertido en moneda base restado al total/saldo pendiente.
+
+- **Visibilidad Dinámica de Referencia:**
+  - El campo `numeroDeReferencia` se evalúa dinámicamente según el método de pago elegido:
+    - Si el método lo requiere (ej. transferencia, pago móvil), el campo se habilita/muestra.
+    - Si el método no lo necesita (ej. efectivo), el campo desaparece dinámicamente de la interfaz.
+- **Cálculo y Conversión en Tiempo Real:**
+  - Al ingresar o modificar la cantidad de pago, la divisa o la tasa de cambio seleccionada, el sistema muestra inmediatamente la conversión basada en la tasa utilizada.
+  - **Desglose en la interfaz:**
+    - Moneda base: **VES**
+    - Moneda de pago: **USD**
+    - Cantidad de pago en USD: **10 USD**
+    - Tasa aplicada: **123 VES/USD**
+    - Cantidad equivalente en moneda base: **1,230 VES**
+    - Visualización del impacto: Monto convertido en moneda base restado al total/saldo pendiente.
 
 ### 4. Registro y Consolidación del Pago
-* **Confirmación:** El usuario confirma y registra la transacción con todos los parámetros consolidados:
-  * Método de pago.
-  * Divisa utilizada.
-  * Tasa de cambio aplicada.
-  * Monto cancelado (en divisa de pago y su equivalente base).
-  * Cuenta destino.
-  * Fecha seleccionada.
-  * Número de referencia (si aplica).
-* **Actualización de Saldos:** El sistema recalcula el saldo restante del documento y actualiza su estado.
+
+- **Confirmación:** El usuario confirma y registra la transacción con todos los parámetros consolidados:
+  - Método de pago.
+  - Divisa utilizada.
+  - Tasa de cambio aplicada.
+  - Monto cancelado (en divisa de pago y su equivalente base).
+  - Cuenta destino.
+  - Fecha seleccionada.
+  - Número de referencia (si aplica).
+- **Actualización de Saldos:** El sistema recalcula el saldo restante del documento y actualiza su estado.
 
 ### 3.1. Vista Principal: `/pagos` (Historial y Búsqueda)
 

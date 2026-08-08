@@ -1,34 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { useERP } from "@/lib/erp-store";
-import { useAlmacenes, useClientes, useChoferes } from "@/hooks/queries/queries";
 import { Card } from "@/components/ui/card";
-import { EstadoBadge } from "@/components/shared/estado-badge";
-import { Truck, Boxes, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Truck, } from "lucide-react";
 import { ModalTasasCambio } from "@/features/Dashboard/components/ModalTasasCambio";
 import { GenerarTasasButton } from "@/features/Dashboard/components/GenerarTasasButton";
 export const Route = createFileRoute("/")({ component: Panel });
 
 function Panel() {
-  const ordenes = useERP((s) => s.ordenes);
-  const lotes = useERP((s) => s.lotes);
-  const { data: almacenes = [] } = useAlmacenes();
-  const { data: clientes = [] } = useClientes();
-  const { data: choferes = [] } = useChoferes();
-
-  const enRuta = ordenes.filter((o) => o.estado === "EN_RUTA").length;
-  const prep = ordenes.filter((o) => o.estado === "PREPARACION").length;
-  const liq = ordenes.filter((o) => o.estado === "LIQUIDADA").length;
-  const stockMerma = lotes.filter((l) => almacenes.find((a) => a.id === l.almacen_id)?.tipo === "MERMA").reduce((s, l) => s + l.stock_actual, 0);
-
-  const stats = [
-    { label: "En preparación", value: prep, icon: Boxes, tone: "text-[color:var(--status-prep)]" },
-    { label: "En ruta", value: enRuta, icon: Truck, tone: "text-[color:var(--status-ruta)]" },
-    { label: "Liquidadas", value: liq, icon: CheckCircle2, tone: "text-[color:var(--status-liq)]" },
-    { label: "Unidades en merma", value: stockMerma, icon: AlertTriangle, tone: "text-destructive" },
-  ];
-
-  const recientes = [...ordenes].sort((a, b) => b.id - a.id).slice(0, 6);
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
@@ -49,17 +27,7 @@ function Panel() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <Card key={s.label} className="p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">{s.label}</div>
-                <div className="text-3xl font-bold mt-2 tabular-nums">{s.value}</div>
-              </div>
-              <s.icon className={`size-6 ${s.tone}`} />
-            </div>
-          </Card>
-        ))}
+
       </div>
 
       <Card className="p-6">
@@ -68,19 +36,7 @@ function Panel() {
           <Link to="/despachos" className="text-sm text-muted-foreground hover:text-foreground">Ver todas →</Link>
         </div>
         <div className="divide-y divide-border">
-          {recientes.map((o) => (
-            <Link key={o.id} to="/despachos/$ordenId" params={{ ordenId: String(o.id) }} className="flex items-center justify-between py-3 hover:bg-muted/40 -mx-2 px-2 rounded">
-              <div className="flex items-center gap-4">
-                <div className="font-mono text-sm font-semibold">{o.numero_orden}</div>
-                <div className="text-sm text-muted-foreground">{clientes.find((c) => c.id === o.cliente_id)?.nombre}</div>
-                <div className="text-xs text-muted-foreground">· {choferes.find((c) => c.id === o.chofer_id)?.nombre ?? "Sin chofer"}</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-sm font-mono tabular-nums">${o.saldo_neto_cobrar.toFixed(2)}</div>
-                <EstadoBadge estado={o.estado} />
-              </div>
-            </Link>
-          ))}
+
         </div>
       </Card>
     </div>

@@ -2,7 +2,7 @@ import { DocumentoHeader } from "./DocumentoHeader";
 import { DocumentoBadges } from "./DocumentoBadges";
 import { DocumentoStats } from "./DocumentoStats";
 import { PagosTable } from "./PagosTable";
-import { money } from "@/features/Facturacion/lib/helpers";
+
 import type { DocumentoDeudaDetalleType } from "@/features/Facturacion/schemas/schemas";
 
 interface DocumentoDetalleViewProps {
@@ -20,9 +20,9 @@ export function DocumentoDetalleView({ doc }: DocumentoDetalleViewProps) {
         numeroOrden={doc.numeroOrden}
       />
       <DocumentoStats
-        montoTotalBase={money(doc.montoTotalBase)}
-        totalAbonado={money(doc.totalAbonado)}
-        saldoPendienteBase={money(doc.saldoPendienteBase)}
+        montoTotalBase={doc.montoTotalBase}
+        totalAbonado={doc.totalAbonado}
+        saldoPendienteBase={doc.saldoPendienteBase}
       />
       <PagosTable transacciones={doc.transaccionesPago} />
     </div>

@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 
-import { Truck, Package, ClipboardList, LayoutDashboard, Boxes, Warehouse } from "lucide-react";
+import { Truck, Package, LayoutDashboard, Warehouse, Receipt, CreditCardIcon } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -90,9 +90,10 @@ function AppSidebar() {
   const items = [
     { to: "/", label: "Panel", icon: LayoutDashboard, exact: true },
     { to: "/despachos", label: "Despachos", icon: Truck },
-    { to: "/inventario/stock", label: "Stock", icon: Boxes },
-    { to: "/inventario/kardex", label: "Kardex", icon: ClipboardList },
+    { to: "/facturacion", label: "Facturación", icon: Receipt },
+    { to: "/pagos", label: "Pagos", icon: CreditCardIcon },
   ];
+
   return (
     <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col">
       <div className="px-5 py-6 border-b border-sidebar-border">

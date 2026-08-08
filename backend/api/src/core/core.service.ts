@@ -95,7 +95,6 @@ export class CoreService {
     });
   }
 
-
   private async getDivisaMap() {
     return this.prisma.divisa.findMany().then((divisas) => {
       const map: Record<string, number> = {};

@@ -89,7 +89,6 @@ export class CoreController {
     return this.coreService.findAllCuentasDestino();
   }
 
-
   @Post('tasas-cambio')
   updateTasasCambio() {
     return this.coreService.updateTasasCambio();

@@ -1,6 +1,9 @@
 import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { EstadoDocumentoDeuda, TipoDocumentoDeuda } from 'prisma/generated/prisma/enums';
+import {
+  EstadoDocumentoDeuda,
+  TipoDocumentoDeuda,
+} from 'prisma/generated/prisma/enums';
 
 export class FindAllFacturasODT {
   @IsOptional()

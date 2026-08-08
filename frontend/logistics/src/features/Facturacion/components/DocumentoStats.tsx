@@ -1,16 +1,16 @@
 import { Card } from "@/components/ui/card";
 
 interface DocumentoStatsProps {
-  montoTotalBase: string;
-  totalAbonado: string;
-  saldoPendienteBase: string;
+  montoTotalBase: number;
+  totalAbonado: number;
+  saldoPendienteBase: number;
 }
 
-function Stat({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+function Stat({ label, value, strong }: { label: string; value: number; strong?: boolean }) {
   return (
     <Card className="p-5">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className={`mt-2 font-mono tabular-nums ${strong ? "text-3xl font-bold" : "text-2xl font-semibold"}`}>{value}</div>
+      <div className={`mt-2 font-mono tabular-nums ${strong ? "text-3xl font-bold" : "text-2xl font-semibold"}`}>{value} Bs.</div>
     </Card>
   );
 }

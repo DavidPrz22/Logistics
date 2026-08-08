@@ -19,7 +19,7 @@ export function DocumentoHeader({ doc }: DocumentoHeaderProps) {
         <div className="flex items-center gap-3">
           {doc.estado !== "ANULADO" && doc.saldoPendienteBase > 0 && doc.tipoDocumento === "FACTURA" && (
             <Button size="sm">
-              <Link to="/pagos/crear/factura" search={{ documentoId: String(doc.id) }}>
+              <Link to="/pagos/crear/factura" search={{ documentoId: String(doc.id) }} className="inline-flex items-center gap-1 px-3">
                 <HandCoins className="size-4" /> Registrar cobro
               </Link>
             </Button>

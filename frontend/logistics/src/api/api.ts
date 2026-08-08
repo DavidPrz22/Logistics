@@ -133,7 +133,7 @@ export const fetchTiposOperacion = async (): Promise<TipoOperacionPagoType[]> =>
     } catch (error) {
         console.error("Error fetching tipos operacion:", error);
         throw error;
-    }g
+    }
 };
 
 export const fetchCuentasDestino = async (): Promise<CuentaDestino[]> => {
