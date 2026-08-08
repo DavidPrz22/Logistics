@@ -1,13 +1,14 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { FacturacionService } from './facturacion.service';
+import { FindAllFacturasODT } from './ODTs/factuacion.odts';
 
 @Controller('facturas')
 export class FacturacionController {
   constructor(private readonly facturacionService: FacturacionService) {}
 
   @Get()
-  findAll() {
-    return this.facturacionService.findAll();
+  findAll(@Query() query?: FindAllFacturasODT) {
+    return this.facturacionService.findAll(query);
   }
 
   @Get(':id')
@@ -15,4 +16,3 @@ export class FacturacionController {
     return this.facturacionService.findOne(id);
   }
 }
-

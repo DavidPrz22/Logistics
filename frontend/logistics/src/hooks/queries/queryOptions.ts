@@ -13,8 +13,6 @@ import {
   fetchTiposPago,
   fetchTiposOperacion,
   fetchCuentasDestino,
-  fetchFacturas,
-  fetchFacturaDetalle,
 } from '@/api/api';
 
 export const almacenesQueryOptions = queryOptions({
@@ -95,16 +93,5 @@ export const cuentasDestinoQueryOptions = queryOptions({
   staleTime: Infinity,
 });
 
-export const facturasQueryOptions = queryOptions({
-  queryKey: ['facturas'],
-  queryFn: fetchFacturas,
-});
-
-export const facturaDetalleQueryOptions = (id: number) =>
-  queryOptions({
-    queryKey: ['facturas', id],
-    queryFn: () => fetchFacturaDetalle(id),
-    enabled: !!id,
-  });
 
 

@@ -18,6 +18,16 @@ export const documentoDeudaListadoSchema = z.object({
   fechaEmision: z.string(),
 });
 
+export const paginatedDocumentosSchema = z.object({
+  data: z.array(documentoDeudaListadoSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    limit: z.number(),
+    totalPages: z.number(),
+  }),
+});
+
 export const pagosVinculadosDocumentoSchema = z.object({
   id: z.number(),
   documentoId: z.number().nullable(),
@@ -50,9 +60,11 @@ export const documentoDeudaDetalleSchema = z.object({
 });
 
 export type DocumentoDeudaListadoType = z.infer<typeof documentoDeudaListadoSchema>;
+export type PaginatedDocumentosType = z.infer<typeof paginatedDocumentosSchema>;
 export type DocumentoDeudaDetalleType = z.infer<typeof documentoDeudaDetalleSchema>;
 export type PagosVinculadosDocumentoType = z.infer<typeof pagosVinculadosDocumentoSchema>;
 
 export type DocumentoDeudaListado = DocumentoDeudaListadoType;
+export type PaginatedDocumentos = PaginatedDocumentosType;
 export type DocumentoDeudaDetalle = DocumentoDeudaDetalleType;
 export type PagosVinculadosDocumento = PagosVinculadosDocumentoType;

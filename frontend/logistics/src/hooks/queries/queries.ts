@@ -13,8 +13,6 @@ import {
   tiposPagoQueryOptions,
   tiposOperacionQueryOptions,
   cuentasDestinoQueryOptions,
-  facturasQueryOptions,
-  facturaDetalleQueryOptions,
 } from './queryOptions';
 
 export const useAlmacenes = () => useQuery(almacenesQueryOptions);
@@ -43,11 +41,6 @@ export const useTiposPago = () => useQuery(tiposPagoQueryOptions);
 export const useTiposOperacion = () => useQuery(tiposOperacionQueryOptions);
 
 export const useCuentasDestino = () => useQuery(cuentasDestinoQueryOptions);
-
-export const useFacturas = () => useQuery(facturasQueryOptions);
-
-export const useFacturaDetalle = (id: number) =>
-  useQuery(facturaDetalleQueryOptions(id));
 
 
 

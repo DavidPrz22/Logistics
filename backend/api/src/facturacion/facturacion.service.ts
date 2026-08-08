@@ -1,27 +1,71 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
   DocumentoDeudaListado,
+  PaginatedDocumentosResponse,
   DocumentoDeudaDetalle,
   PagosVinculadosDocumento,
 } from './types/facturacion.types';
+import { FindAllFacturasODT } from './ODTs/factuacion.odts';
 
 @Injectable()
 export class FacturacionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<DocumentoDeudaListado[]> {
-    const documentos = await this.prisma.documentoDeuda.findMany({
-      include: {
-        orden: true,
-        cliente: true,
-      },
-      orderBy: {
-        id: 'desc',
-      },
-    });
+  async findAll(query?: FindAllFacturasODT): Promise<PaginatedDocumentosResponse> {
+    const page = Math.max(1, Number(query?.page) || 1);
+    const requestedLimit = Number(query?.limit) || 50;
+    const limit = Math.min(50, Math.max(1, requestedLimit));
+    const skip = (page - 1) * limit;
 
-    return documentos.map((doc) => ({
+    const where: Prisma.documentoDeudaWhereInput = {};
+
+    if (query?.estado) {
+      where.estado = query.estado;
+    }
+
+    if (query?.tipo) {
+      where.tipoDocumento = query.tipo;
+    }
+
+    if (query?.q && query.q.trim() !== '') {
+      const q = query.q.trim();
+      where.OR = [
+        {
+          cliente: {
+            nombre: {
+              contains: q,
+            },
+          },
+        },
+        {
+          orden: {
+            numeroOrden: {
+              contains: q,
+            },
+          },
+        },
+      ];
+    }
+
+    const [total, documentos] = await Promise.all([
+      this.prisma.documentoDeuda.count({ where }),
+      this.prisma.documentoDeuda.findMany({
+        where,
+        include: {
+          orden: true,
+          cliente: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+    ]);
+
+    let data: DocumentoDeudaListado[] = documentos.map((doc) => ({
       id: doc.id,
       sistemaOrigen: doc.sistemaOrigen,
       numeroOrden: doc.orden.numeroOrden,
@@ -33,6 +77,22 @@ export class FacturacionService {
         ? doc.fechaEmision.toISOString()
         : new Date().toISOString(),
     }));
+
+    if (query?.fecha && query.fecha.trim() !== '') {
+      data = data.filter((doc) => doc.fechaEmision.startsWith(query.fecha!.trim()));
+    }
+
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+      },
+    };
   }
 
   async findOne(id: number): Promise<DocumentoDeudaDetalle> {
@@ -52,7 +112,7 @@ export class FacturacionService {
     });
 
     if (!doc) {
-      throw new NotFoundException(`Documento de deuda con ID ${id} no encontrado`);
+      throw new NotFoundException('Documento de deuda no encontrado');
     }
 
     const transaccionesPago: PagosVinculadosDocumento[] =

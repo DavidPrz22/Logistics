@@ -17,6 +17,16 @@ export interface DocumentoDeudaListado {
   fechaEmision: string;
 }
 
+export interface PaginatedDocumentosResponse {
+  data: DocumentoDeudaListado[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
 export interface PagosVinculadosDocumento {
   id: number;
   documentoId: number | null;

@@ -17,6 +17,7 @@ import { Route as DespachosIndexRouteImport } from './routes/despachos/index'
 import { Route as InventarioStockRouteImport } from './routes/inventario/stock'
 import { Route as InventarioKardexRouteImport } from './routes/inventario/kardex'
 import { Route as DespachosCrearRouteImport } from './routes/despachos/crear'
+import { Route as FacturacionDocumentoIdIndexRouteImport } from './routes/facturacion/$documentoId/index'
 import { Route as DespachosOrdenIdIndexRouteImport } from './routes/despachos/$ordenId/index'
 import { Route as DespachosOrdenIdEditRouteImport } from './routes/despachos/$ordenId/edit'
 
@@ -60,6 +61,12 @@ const DespachosCrearRoute = DespachosCrearRouteImport.update({
   path: '/crear',
   getParentRoute: () => DespachosRouteRoute,
 } as any)
+const FacturacionDocumentoIdIndexRoute =
+  FacturacionDocumentoIdIndexRouteImport.update({
+    id: '/facturacion/$documentoId/',
+    path: '/facturacion/$documentoId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DespachosOrdenIdIndexRoute = DespachosOrdenIdIndexRouteImport.update({
   id: '/$ordenId/',
   path: '/$ordenId/',
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/facturacion/': typeof FacturacionIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
+  '/facturacion/$documentoId/': typeof FacturacionDocumentoIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,6 +101,7 @@ export interface FileRoutesByTo {
   '/facturacion': typeof FacturacionIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/despachos/$ordenId': typeof DespachosOrdenIdIndexRoute
+  '/facturacion/$documentoId': typeof FacturacionDocumentoIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,6 +115,7 @@ export interface FileRoutesById {
   '/facturacion/': typeof FacturacionIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
+  '/facturacion/$documentoId/': typeof FacturacionDocumentoIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/facturacion/'
     | '/despachos/$ordenId/edit'
     | '/despachos/$ordenId/'
+    | '/facturacion/$documentoId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/facturacion'
     | '/despachos/$ordenId/edit'
     | '/despachos/$ordenId'
+    | '/facturacion/$documentoId'
   id:
     | '__root__'
     | '/'
@@ -143,6 +155,7 @@ export interface FileRouteTypes {
     | '/facturacion/'
     | '/despachos/$ordenId/edit'
     | '/despachos/$ordenId/'
+    | '/facturacion/$documentoId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +163,7 @@ export interface RootRouteChildren {
   DespachosRouteRoute: typeof DespachosRouteRouteWithChildren
   InventarioRouteRoute: typeof InventarioRouteRouteWithChildren
   FacturacionIndexRoute: typeof FacturacionIndexRoute
+  FacturacionDocumentoIdIndexRoute: typeof FacturacionDocumentoIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -210,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DespachosCrearRouteImport
       parentRoute: typeof DespachosRouteRoute
     }
+    '/facturacion/$documentoId/': {
+      id: '/facturacion/$documentoId/'
+      path: '/facturacion/$documentoId'
+      fullPath: '/facturacion/$documentoId/'
+      preLoaderRoute: typeof FacturacionDocumentoIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/despachos/$ordenId/': {
       id: '/despachos/$ordenId/'
       path: '/$ordenId'
@@ -264,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   DespachosRouteRoute: DespachosRouteRouteWithChildren,
   InventarioRouteRoute: InventarioRouteRouteWithChildren,
   FacturacionIndexRoute: FacturacionIndexRoute,
+  FacturacionDocumentoIdIndexRoute: FacturacionDocumentoIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
