@@ -59,6 +59,37 @@ export class CoreController {
     return this.coreService.findAllMotivoRechazo();
   }
 
+  @Get('estados-facturas')
+  getEstadosFacturas() {
+    return this.coreService.getEstadosFacturas();
+  }
+
+  @Get('estados-transacciones-pago')
+  getEstadosTransaccionesPago() {
+    return this.coreService.getEstadosTransaccionesPago();
+  }
+
+  @Get('tipos-documento')
+  getTiposDocumento() {
+    return this.coreService.getTiposDocumento();
+  }
+
+  @Get('tipos-pago')
+  getTiposPago() {
+    return this.coreService.getTiposPago();
+  }
+
+  @Get('tipos-operacion')
+  getTiposOperacion() {
+    return this.coreService.getTiposOperacion();
+  }
+
+  @Get('cuentas-destino')
+  findAllCuentasDestino() {
+    return this.coreService.findAllCuentasDestino();
+  }
+
+
   @Post('tasas-cambio')
   updateTasasCambio() {
     return this.coreService.updateTasasCambio();

@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { FuenteTasaCambio } from 'prisma/generated/prisma/enums';
+import {
+  FuenteTasaCambio,
+  EstadoDocumentoDeuda,
+  EstadoTransaccionPago,
+  TipoDocumentoDeuda,
+  TipoDePago,
+  TipoOperacionPago,
+} from 'prisma/generated/prisma/enums';
 import { PrismaService } from '../prisma/prisma.service';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
@@ -61,6 +68,33 @@ export class CoreService {
   findAllMotivoRechazo() {
     return this.prisma.motivoRechazo.findMany();
   }
+
+  getEstadosFacturas() {
+    return Object.values(EstadoDocumentoDeuda);
+  }
+
+  getEstadosTransaccionesPago() {
+    return Object.values(EstadoTransaccionPago);
+  }
+
+  getTiposDocumento() {
+    return Object.values(TipoDocumentoDeuda);
+  }
+
+  getTiposPago() {
+    return Object.values(TipoDePago);
+  }
+
+  getTiposOperacion() {
+    return Object.values(TipoOperacionPago);
+  }
+
+  findAllCuentasDestino() {
+    return this.prisma.cuentaDestino.findMany({
+      include: { divisa: true },
+    });
+  }
+
 
   private async getDivisaMap() {
     return this.prisma.divisa.findMany().then((divisas) => {

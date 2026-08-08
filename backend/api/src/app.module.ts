@@ -6,6 +6,7 @@ import { CoreModule } from './core/core.module';
 import { DespachoModule } from './despacho/despacho.module';
 import { PagosModule } from './pagos/pagos.module';
 import { ConfigModule } from '@nestjs/config';
+import { FacturacionModule } from './facturacion/facturacion.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -13,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     CoreModule,
     DespachoModule,
     PagosModule,
+    FacturacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

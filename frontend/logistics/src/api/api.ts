@@ -1,6 +1,19 @@
 import apiClient from "./client";
-import type { Almacen, Chofer, Cliente, Divisa, TasaCambio, MetodoPago, MotivoRechazo } from "@/types/zodType";
-
+import type {
+  Almacen,
+  Chofer,
+  Cliente,
+  Divisa,
+  TasaCambio,
+  MetodoPago,
+  MotivoRechazo,
+  CuentaDestino,
+  EstadoDocumentoDeudaType,
+  EstadoTransaccionPagoType,
+  TipoDocumentoDeudaType,
+  TipoDePagoType,
+  TipoOperacionPagoType,
+} from "@/types/zodType";
 
 
 export const fetchAlmacenes = async (): Promise<Almacen[]> => {
@@ -70,6 +83,66 @@ export const fetchMotivosRechazo = async (): Promise<MotivoRechazo[]> => {
         return data;
     } catch (error) {
         console.error("Error fetching motivos de pago:", error);
+        throw error;
+    }
+};
+
+export const fetchEstadosFacturas = async (): Promise<EstadoDocumentoDeudaType[]> => {
+    try {
+        const { data } = await apiClient.get<EstadoDocumentoDeudaType[]>('core/estados-facturas');
+        return data;
+    } catch (error) {
+        console.error("Error fetching estados facturas:", error);
+        throw error;
+    }
+};
+
+export const fetchEstadosTransaccionesPago = async (): Promise<EstadoTransaccionPagoType[]> => {
+    try {
+        const { data } = await apiClient.get<EstadoTransaccionPagoType[]>('core/estados-transacciones-pago');
+        return data;
+    } catch (error) {
+        console.error("Error fetching estados transacciones pago:", error);
+        throw error;
+    }
+};
+
+export const fetchTiposDocumento = async (): Promise<TipoDocumentoDeudaType[]> => {
+    try {
+        const { data } = await apiClient.get<TipoDocumentoDeudaType[]>('core/tipos-documento');
+        return data;
+    } catch (error) {
+        console.error("Error fetching tipos documento:", error);
+        throw error;
+    }
+};
+
+export const fetchTiposPago = async (): Promise<TipoDePagoType[]> => {
+    try {
+        const { data } = await apiClient.get<TipoDePagoType[]>('core/tipos-pago');
+        return data;
+    } catch (error) {
+        console.error("Error fetching tipos pago:", error);
+        throw error;
+    }
+};
+
+export const fetchTiposOperacion = async (): Promise<TipoOperacionPagoType[]> => {
+    try {
+        const { data } = await apiClient.get<TipoOperacionPagoType[]>('core/tipos-operacion');
+        return data;
+    } catch (error) {
+        console.error("Error fetching tipos operacion:", error);
+        throw error;
+    }
+};
+
+export const fetchCuentasDestino = async (): Promise<CuentaDestino[]> => {
+    try {
+        const { data } = await apiClient.get<CuentaDestino[]>('core/cuentas-destino');
+        return data;
+    } catch (error) {
+        console.error("Error fetching cuentas destino:", error);
         throw error;
     }
 };
