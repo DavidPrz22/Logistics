@@ -96,6 +96,7 @@ function DocumentoDetalle() {
               </TableRow>
             </TableHeader>
             <TableBody>
+              // PAGOS VINCULADOS TO THE DOCUMENT TO BE REPLACED WITH THE INCOMMING DATA FROM THE API CALL TO FETCH PAYMENTS FOR THIS DOCUMENT
               {pagos.length === 0 && (
                 <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground py-10">Sin pagos registrados para este documento.</TableCell></TableRow>
               )}

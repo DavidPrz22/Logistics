@@ -23,13 +23,13 @@ export class FacturacionService {
 
     return documentos.map((doc) => ({
       id: doc.id,
-      sistema_origen: doc.sistemaOrigen,
-      numero_orden: doc.orden.numeroOrden,
-      identificador_cliente: doc.cliente.nombre,
-      monto_total_base: Number(doc.montoTotalBase),
+      sistemaOrigen: doc.sistemaOrigen,
+      numeroOrden: doc.orden.numeroOrden,
+      identificadorCliente: doc.cliente.nombre,
+      montoTotalBase: Number(doc.montoTotalBase),
       estado: doc.estado ?? 'PENDIENTE',
-      tipo_documento: doc.tipoDocumento ?? 'FACTURA',
-      fecha_emision: doc.fechaEmision
+      tipoDocumento: doc.tipoDocumento ?? 'FACTURA',
+      fechaEmision: doc.fechaEmision
         ? doc.fechaEmision.toISOString()
         : new Date().toISOString(),
     }));
@@ -55,39 +55,39 @@ export class FacturacionService {
       throw new NotFoundException(`Documento de deuda con ID ${id} no encontrado`);
     }
 
-    const transacciones_pago: PagosVinculadosDocumento[] =
+    const transaccionesPago: PagosVinculadosDocumento[] =
       doc.transaccionesPago.map((pago) => ({
         id: pago.id,
-        documento_id: pago.documentoId,
-        orden_id: pago.ordenId,
-        tipo_de_pago: pago.tipoDePago,
-        metodo_pago: pago.metodoPago.descripcion,
-        divisa_pago: pago.divisa.codigo,
-        monto_origen: Number(pago.montoOrigen),
-        numero_referencia: pago.numeroReferencia || undefined,
+        documentoId: pago.documentoId,
+        ordenId: pago.ordenId,
+        tipoDePago: pago.tipoDePago,
+        metodoPago: pago.metodoPago.descripcion,
+        divisaPago: pago.divisa.codigo,
+        montoOrigen: Number(pago.montoOrigen),
+        numeroReferencia: pago.numeroReferencia || undefined,
         estado: pago.estado ?? 'APROBADO',
-        fecha_pago: pago.fechaPago
+        fechaPago: pago.fechaPago
           ? pago.fechaPago.toISOString()
           : new Date().toISOString(),
-        cuenta_destino_id: pago.cuentaDestinoId,
-        cuenta_destino: pago.cuentaDestino?.nombre ?? '',
+        cuentaDestinoId: pago.cuentaDestinoId,
+        cuentaDestino: pago.cuentaDestino?.nombre ?? '',
       }));
 
     return {
       id: doc.id,
-      sistema_origen: doc.sistemaOrigen,
-      orden_id: doc.ordenId,
-      numero_orden: doc.orden.numeroOrden,
-      identificador_cliente: doc.cliente.nombre,
-      monto_total_base: Number(doc.montoTotalBase),
-      saldo_pendiente_base: Number(doc.saldoPendienteBase),
+      sistemaOrigen: doc.sistemaOrigen,
+      ordenId: doc.ordenId,
+      numeroOrden: doc.orden.numeroOrden,
+      identificadorCliente: doc.cliente.nombre,
+      montoTotalBase: Number(doc.montoTotalBase),
+      saldoPendienteBase: Number(doc.saldoPendienteBase),
+      totalAbonado: Number(doc.orden?.totalAbonado ?? 0),
       estado: doc.estado ?? 'PENDIENTE',
-      tipo_documento: doc.tipoDocumento ?? 'FACTURA',
-      fecha_emision: doc.fechaEmision
+      tipoDocumento: doc.tipoDocumento ?? 'FACTURA',
+      fechaEmision: doc.fechaEmision
         ? doc.fechaEmision.toISOString()
         : new Date().toISOString(),
-      transacciones_pago,
+      transaccionesPago,
     };
   }
 }
-

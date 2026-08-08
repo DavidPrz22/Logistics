@@ -79,6 +79,7 @@ function FacturacionList() {
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Estado</label>
           <div className="mt-1">
             <Combobox
+            // DATA TO BE REPLACED WITH API CALL TO FETCH STATES FROM BACKEND
               items={[
                 { value: "", label: "Todos los estados" },
                 { value: "PENDIENTE", label: "Pendiente" },
@@ -96,6 +97,7 @@ function FacturacionList() {
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Tipo de documento</label>
           <div className="mt-1">
             <Combobox
+            // DATA TO BE REPLACED WITH API CALL TO FETCH STATES FROM BACKEND
               items={[
                 { value: "", label: "Todos los tipos" },
                 { value: "FACTURA", label: "Factura" },
@@ -119,6 +121,7 @@ function FacturacionList() {
       </div>
 
       <div className="rounded-lg border border-border bg-card overflow-hidden">
+      {/* TABLE THAT SHOW ALL DATA FOR DOCUMENTS*/}
         <Table>
           <TableHeader className="bg-secondary/60">
             <TableRow>

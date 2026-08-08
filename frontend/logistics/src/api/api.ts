@@ -15,7 +15,6 @@ import type {
   TipoOperacionPagoType,
 } from "@/types/zodType";
 
-
 export const fetchAlmacenes = async (): Promise<Almacen[]> => {
     try {
         const { data } = await apiClient.get<Almacen[]>('core/almacenes');
@@ -134,7 +133,7 @@ export const fetchTiposOperacion = async (): Promise<TipoOperacionPagoType[]> =>
     } catch (error) {
         console.error("Error fetching tipos operacion:", error);
         throw error;
-    }
+    }g
 };
 
 export const fetchCuentasDestino = async (): Promise<CuentaDestino[]> => {
@@ -146,3 +145,4 @@ export const fetchCuentasDestino = async (): Promise<CuentaDestino[]> => {
         throw error;
     }
 };
+
