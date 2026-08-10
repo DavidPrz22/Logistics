@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/cinzel";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -109,6 +110,8 @@
   --sidebar-ring: oklch(0.72 0.17 55);
 
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Geist Variable",ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-cinzel: 'Cinzel Variable', serif;
 }
 
 .dark {
@@ -159,6 +162,14 @@
 
   .font-mono {
     font-family: var(--font-mono);
+  }
+
+  .font-cinzel {
+    font-family: var(--font-cinzel);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
   }
 }
 

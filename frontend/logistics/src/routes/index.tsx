@@ -36,7 +36,7 @@ function Panel() {
           <Link to="/despachos" className="text-sm text-muted-foreground hover:text-foreground">Ver todas →</Link>
         </div>
         <div className="divide-y divide-border">
-
+          
         </div>
       </Card>
     </div>
