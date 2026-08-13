@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import type { DetalleOrdenDetail, DetallesOrdenDespacho } from "../../schemas/schema";
 import type { TipoDeOrden } from "../../types/types";
+import type { TasaCambio } from "@/types/zodType";
 import { DetallesTable } from "../DetallesTable";
 import { EditorLineasDialog } from "./EditorLineasDialog";
 import { LiquidacionForm } from "./LiquidacionForm";
@@ -14,10 +15,11 @@ interface PreparacionPanelProps {
   ordenId: number;
   detalles: DetalleOrdenDetail[];
   tipoOrden: TipoDeOrden;
+  tasaCambio?: TasaCambio | null;
   onDispatch: () => Promise<void>;
 }
 
-export function PreparacionPanel({ ordenId, detalles, tipoOrden, onDispatch }: PreparacionPanelProps) {
+export function PreparacionPanel({ ordenId, detalles, tipoOrden, tasaCambio, onDispatch }: PreparacionPanelProps) {
   const [editing, setEditing] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [liquidando, setLiquidando] = useState(false);
@@ -69,7 +71,7 @@ export function PreparacionPanel({ ordenId, detalles, tipoOrden, onDispatch }: P
             )}
           </div>
         </div>
-        <DetallesTable detalles={detalles} showSubtotal />
+        <DetallesTable detalles={detalles} showSubtotal tasaCambio={tasaCambio} />
         {!canDispatch && (
           <div className="p-4 border-t border-border bg-secondary/40 text-sm text-muted-foreground flex items-center gap-2">
             <AlertTriangle className="size-4 text-accent" />
@@ -80,7 +82,7 @@ export function PreparacionPanel({ ordenId, detalles, tipoOrden, onDispatch }: P
         )}
       </Card>
 
-      {editing && <EditorLineasDialog initial={detalles} onClose={() => setEditing(false)} onSave={handleSaveLineas} />}
+      {editing && <EditorLineasDialog initial={detalles} tasaCambio={tasaCambio} onClose={() => setEditing(false)} onSave={handleSaveLineas} />}
 
       {!isMostrador && (
         <Dialog open={confirm} onOpenChange={setConfirm}>

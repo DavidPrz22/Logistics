@@ -21,17 +21,20 @@ model ordenDespacho {
   fechaSalida            DateTime?      @default(now()) 
   estado                 EstadoOrdenDespacho? @default(PREPARACION)
 
-  tasaCambioId         Int
+  tasaCambioId           Int?
+  tasaCambioValor        Decimal?             // Snapshot numérico de la tasa usada en la orden
   tipoOrden              TipoDeOrden
   ///
   // CAMPOS FINANCIEROS
-  totalOriginal          Decimal?             @default(0.00) // Valor bruto enviado a ruta
+  totalOriginal          Decimal?             @default(0.00) // Valor bruto enviado a ruta (USD)
+  totalOriginalVes       Decimal?             @default(0.00) // Valor bruto enviado a ruta (VES)
   totalRechazado         Decimal?             @default(0.00) // Suma de (cantidadRechazada * precioUnitario)
-  montoFacturadoNeto     Decimal?             @default(0.00) // totalOriginal - totalRechazado (Mercancía entregada/aceptada)
+  montoFacturadoNeto     Decimal?             @default(0.00) // totalOriginal - totalRechazado (Mercancía entregada/aceptada USD)
+  montoFacturadoNetoVes  Decimal?             @default(0.00) // Mercancía entregada/aceptada en VES
   totalAbonado           Decimal?             @default(0.00) // Suma de cobros recibidos
   saldoNetoCobrar        Decimal?             @default(0.00) // montoFacturadoNeto - totalAbonado
   
-  tasaCambio             tasaCambio     @relation(fields: [tasaCambioId], references: [id])
+  tasaCambio             tasaCambio?          @relation(fields: [tasaCambioId], references: [id])
   cliente                cliente        @relation(fields: [clienteId], references: [id])
   chofer                 chofer?        @relation(fields: [choferId], references: [id])
   almacenTransito        almacen        @relation(fields: [almacenTransitoId], references: [id], onDelete: Restrict)
@@ -44,7 +47,9 @@ model detalleOrden {
   ordenId            Int            
   loteId             Int            
   cantidadEnviada    Int            
-  precioUnitario     Decimal
+  precioUnitario     Decimal        // Precio unitario en USD
+  precioUnitarioVes  Decimal?       // Snapshot precio unitario en VES
+  subtotalVes        Decimal?       // Subtotal en VES al momento de la orden
   
   orden              ordenDespacho  @relation(fields: [ordenId], references: [id], onDelete: Cascade)
   lote               lote           @relation(fields: [loteId], references: [id], onDelete: Restrict)

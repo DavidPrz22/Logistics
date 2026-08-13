@@ -57,6 +57,8 @@ export interface DetalleOrdenDetail {
   numeroLote: string;
   cantidadEnviada: number;
   precioUnitario: number;
+  precioUnitarioVes: number | null;
+  subtotalVes: number | null;
   sku: string;
   stockActualLote: number;
   varianteNombre: string;
@@ -78,6 +80,13 @@ export interface DocumentoDeudaDetail {
   tipoDocumento: TipoDocumentoDeuda;
 }
 
+export interface TasaCambioInfo {
+  origen: string;
+  destino: string;
+  tasa: number;
+  fecha: string;
+}
+
 export interface OrdenDespachoDetail {
   id: number;
   numeroOrden: string;
@@ -89,10 +98,15 @@ export interface OrdenDespachoDetail {
   almacenTransitoNombre: string;
   fechaSalida: string;
   estado: EstadoOrdenDespacho;
+  tasaCambioId: number | null;
+  tasaCambioValor: number | null;
+  tasaCambioInfo: TasaCambioInfo | null;
   totalOriginal: number;
+  totalOriginalVes: number;
   totalAbonado: number;
   saldoNetoCobrar: number;
   montoFacturadoNeto: number;
+  montoFacturadoNetoVes: number;
   totalRechazado: number;
   tipoOrden: TipoDeOrden;
   anticipos: AnticipoDetail[];

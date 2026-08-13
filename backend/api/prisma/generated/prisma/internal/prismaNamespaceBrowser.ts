@@ -151,10 +151,13 @@ export const OrdenDespachoScalarFieldEnum = {
   fechaSalida: 'fechaSalida',
   estado: 'estado',
   tasaCambioId: 'tasaCambioId',
+  tasaCambioValor: 'tasaCambioValor',
   tipoOrden: 'tipoOrden',
   totalOriginal: 'totalOriginal',
+  totalOriginalVes: 'totalOriginalVes',
   totalRechazado: 'totalRechazado',
   montoFacturadoNeto: 'montoFacturadoNeto',
+  montoFacturadoNetoVes: 'montoFacturadoNetoVes',
   totalAbonado: 'totalAbonado',
   saldoNetoCobrar: 'saldoNetoCobrar'
 } as const
@@ -167,7 +170,9 @@ export const DetalleOrdenScalarFieldEnum = {
   ordenId: 'ordenId',
   loteId: 'loteId',
   cantidadEnviada: 'cantidadEnviada',
-  precioUnitario: 'precioUnitario'
+  precioUnitario: 'precioUnitario',
+  precioUnitarioVes: 'precioUnitarioVes',
+  subtotalVes: 'subtotalVes'
 } as const
 
 export type DetalleOrdenScalarFieldEnum = (typeof DetalleOrdenScalarFieldEnum)[keyof typeof DetalleOrdenScalarFieldEnum]
@@ -246,7 +251,10 @@ export const DocumentoDeudaScalarFieldEnum = {
   ordenId: 'ordenId',
   clienteId: 'clienteId',
   montoTotalBase: 'montoTotalBase',
+  montoTotalVes: 'montoTotalVes',
   saldoPendienteBase: 'saldoPendienteBase',
+  saldoPendienteVes: 'saldoPendienteVes',
+  tasaEmisionValor: 'tasaEmisionValor',
   estado: 'estado',
   tipoDocumento: 'tipoDocumento',
   fechaEmision: 'fechaEmision'
@@ -274,7 +282,9 @@ export const TransaccionPagoScalarFieldEnum = {
   divisaPagoId: 'divisaPagoId',
   montoOrigen: 'montoOrigen',
   tasaAplicadaId: 'tasaAplicadaId',
+  tasaAplicadaValor: 'tasaAplicadaValor',
   montoEquivalenteBase: 'montoEquivalenteBase',
+  montoCalculadoVes: 'montoCalculadoVes',
   numeroReferencia: 'numeroReferencia',
   estado: 'estado',
   tipoOperacion: 'tipoOperacion',

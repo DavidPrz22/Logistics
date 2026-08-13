@@ -10,10 +10,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Trash2 } from "lucide-react";
 import type { DetalleOrdenDetail, LoteSearchResult } from "../../schemas/schema";
 import { detallesOrdenDespachoSchema, type DetallesOrdenDespacho } from "../../schemas/schema";
+import type { TasaCambio } from "@/types/zodType";
 import { LineaBorradorAddRow } from "../DespachoCreate/LineaBorradorAddRow";
 
 interface EditorLineasDialogProps {
   initial: DetalleOrdenDetail[];
+  tasaCambio?: TasaCambio | null;
   onClose: () => void;
   onSave?: (lineas: DetallesOrdenDespacho[], totalFacturado: number) => void;
 }
@@ -29,8 +31,10 @@ interface LineaDisplay {
   stock_actual: number;
 }
 
-export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDialogProps) {
+export function EditorLineasDialog({ initial, tasaCambio, onClose, onSave }: EditorLineasDialogProps) {
 
+  const tasaValor = tasaCambio ? Number(tasaCambio.tasa) : 0;
+  const showVES = tasaValor > 0;
 
   const [loteInfoMap, setLoteInfoMap] = useState<Map<number, LineaDisplay>>(
     () => new Map(initial.map(d => [d.loteId, {
@@ -50,6 +54,8 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
         loteId: d.loteId,
         cantidadEnviada: d.cantidadEnviada,
         precioUnitario: d.precioUnitario,
+        precioUnitarioVes: d.precioUnitarioVes ?? undefined,
+        subtotalVes: d.subtotalVes ?? undefined,
       })),
     },
   });
@@ -65,6 +71,8 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
     (s, l) => s + (Number(l?.cantidadEnviada) || 0) * (Number(l?.precioUnitario) || 0),
     0
   );
+
+  const totalVes = showVES ? total * tasaValor : 0;
 
   const disabledLotes = (lineas || []).map((l) => l?.loteId).filter(Boolean) as number[];
 
@@ -124,14 +132,16 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
                   <TableHead className="w-32">Lote</TableHead>
                   <TableHead className="w-28">Cantidad</TableHead>
                   <TableHead className="w-32">Precio unit.</TableHead>
+                  {showVES && <TableHead className="w-32">Precio VES</TableHead>}
                   <TableHead className="text-right w-32">Subtotal</TableHead>
+                  {showVES && <TableHead className="text-right w-32">Subtotal VES</TableHead>}
                   <TableHead className="w-12" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {fields.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={showVES ? 9 : 7} className="text-center text-muted-foreground py-8">
                       Sin líneas.
                     </TableCell>
                   </TableRow>
@@ -143,6 +153,8 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
                   const cantidad = Number(linea?.cantidadEnviada) || 0;
                   const precio = Number(linea?.precioUnitario) || 0;
                   const subtotal = cantidad * precio;
+                  const precioVes = showVES ? Math.round(precio * tasaValor * 100) / 100 : 0;
+                  const subtotalVes = showVES ? Math.round(cantidad * precioVes * 100) / 100 : 0;
 
                   return (
                     <TableRow key={field.id}>
@@ -169,7 +181,9 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
                           className="h-8 font-mono"
                         />
                       </TableCell>
+                      {showVES && <TableCell className="font-mono tabular-nums text-muted-foreground">Bs. {precioVes.toFixed(2)}</TableCell>}
                       <TableCell className="text-right font-mono tabular-nums">${subtotal.toFixed(2)}</TableCell>
+                      {showVES && <TableCell className="text-right font-mono tabular-nums text-muted-foreground">Bs. {subtotalVes.toFixed(2)}</TableCell>}
                       <TableCell>
                         <Button type="button" size="icon" variant="ghost" onClick={() => remove(idx)}>
                           <Trash2 className="size-4 text-destructive" />
@@ -183,9 +197,16 @@ export function EditorLineasDialog({ initial, onClose, onSave }: EditorLineasDia
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-border mt-4">
-            <div className="text-right">
-              <div className="text-xs uppercase text-muted-foreground">Total facturado</div>
-              <div className="text-2xl font-bold font-mono tabular-nums">${total.toFixed(2)}</div>
+            <div className="text-right space-y-1">
+              <div>
+                <div className="text-xs uppercase text-muted-foreground">Total facturado</div>
+                <div className="text-2xl font-bold font-mono tabular-nums">${total.toFixed(2)}</div>
+              </div>
+              {showVES && (
+                <div className="text-sm font-mono tabular-nums text-muted-foreground">
+                  Bs. {totalVes.toFixed(2)}
+                </div>
+              )}
             </div>
           </div>
 

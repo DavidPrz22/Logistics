@@ -326,11 +326,18 @@ export class CoreService {
       return [];
     }
 
-    const fechaInicio = new Date(fecha);
-    fechaInicio.setHours(0, 0, 0, 0);
+    // Parse 'YYYY-MM-DD' or ISO date string into UTC start and end bounds
+    let fechaInicio: Date;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+      const [year, month, day] = fecha.split('-').map(Number);
+      fechaInicio = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+    } else {
+      fechaInicio = new Date(fecha);
+      fechaInicio.setUTCHours(0, 0, 0, 0);
+    }
 
     const fechaFin = new Date(fechaInicio);
-    fechaFin.setDate(fechaFin.getDate() + 1);
+    fechaFin.setUTCDate(fechaFin.getUTCDate() + 1);
 
     const registros = await this.prisma.registroTasas.findMany({
       where: {

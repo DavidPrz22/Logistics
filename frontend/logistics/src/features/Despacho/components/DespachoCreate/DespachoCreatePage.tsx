@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { LineaBorrador, TipoDeOrden } from "../../types/types";
+import type { TasaCambio } from "@/types/zodType";
 import { HeaderForm } from "./HeaderForm";
 import { LineaBorradorAddRow } from "./LineaBorradorAddRow";
 import { LineaBorradorTable } from "./LineaBorradorTable";
@@ -33,6 +34,8 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
   const shouldLoadDetail = isEdit && !!ordenId;
   const { data: ordenDetail, isLoading: isLoadingDetail } = useOrdenDespachoDetail(ordenId ?? 0, { enabled: shouldLoadDetail });
 
+  const [tasaCambio, setTasaCambio] = useState<TasaCambio | null>(null);
+
   const [lineas, setLineas] = useState<LineaBorrador[]>(
     ordenDetail ? ordenDetail.detalles.map(d => ({
         key: crypto.randomUUID(),
@@ -44,6 +47,8 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
         stock_actual: d.stockActualLote,
         cantidad: d.cantidadEnviada,
         precio: d.precioUnitario,
+        precioUnitarioVes: d.precioUnitarioVes ?? undefined,
+        subtotalVes: d.subtotalVes ?? undefined,
       })): []);
 
   const { mutateAsync: createOrdenMutation, isPending: isCreatePending } = useCreateOrdenDespachoMutation();
@@ -66,6 +71,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       fechaSalida: ordenDetail?.fechaSalida ? new Date(ordenDetail.fechaSalida) : new Date(),
       tipoOrden: (ordenDetail?.tipoOrden as TipoDeOrden) ?? 'DESPACHO_RUTA',
       totalFacturado: ordenDetail?.saldoNetoCobrar,
+      tasaCambioId: ordenDetail?.tasaCambioId ?? undefined,
       detallesOrdenDespacho: [],
     }
   });
@@ -75,7 +81,9 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
         id: l.id || undefined,
         loteId: l.lote_id,
         cantidadEnviada: Number(l.cantidad),
-        precioUnitario: Number(l.precio)
+        precioUnitario: Number(l.precio),
+        precioUnitarioVes: l.precioUnitarioVes,
+        subtotalVes: l.subtotalVes,
     }));
   
     setValue("detallesOrdenDespacho", detallesFormateados, { shouldValidate: true });
@@ -92,6 +100,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
   const almacenTransitoId = watch("almacenTransitoId");
   const fechaSalida = watch("fechaSalida");
   const tipoOrden = watch("tipoOrden");
+  const tasaCambioId = watch("tasaCambioId");
 
   const onSubmit: SubmitHandler<OrdenDespacho> = async (data: OrdenDespacho) => {
     if (isEdit && ordenId) {
@@ -160,6 +169,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
         almacen={almacenTransitoId ? String(almacenTransitoId) : ""}
         fecha={fechaSalida ? fechaSalida.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
         tipoOrden={tipoOrden as TipoDeOrden}
+        tasaCambioId={tasaCambioId ?? null}
         clientes={clientes} choferes={choferes} almacenes={almacenes}
         isEdit={isEdit}
         onClienteChange={(v) => setValue("clienteId", Number(v), { shouldValidate: true })}
@@ -167,6 +177,10 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
         onAlmacenChange={(v) => setValue("almacenTransitoId", Number(v), { shouldValidate: true })}
         onFechaChange={(v) => setValue("fechaSalida", new Date(v), { shouldValidate: true })}
         onTipoOrdenChange={(v) => setValue("tipoOrden", v, { shouldValidate: true })}
+        onTasaCambioSelect={(tasa) => {
+          setTasaCambio(tasa);
+          setValue("tasaCambioId", tasa?.id ?? 0, { shouldValidate: true });
+        }}
       />
 
       <Card className="p-6 space-y-4">
@@ -177,13 +191,20 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
 
         <LineaBorradorAddRow onSelectLote={handleSelectLote} disabledLotes={disabledLotes} />
 
-        <LineaBorradorTable lineas={lineas} onUpdateLinea={updateLinea} onRemoveLinea={removeLinea} />
+        <LineaBorradorTable lineas={lineas} tasaCambio={tasaCambio} onUpdateLinea={updateLinea} onRemoveLinea={removeLinea} />
 
         <div className="flex items-center justify-between pt-2 border-t border-border">
           <div className="flex items-start gap-2 text-xs text-muted-foreground max-w-md"><Info className="size-4 shrink-0 mt-0.5" /> {isEdit ? "Guarda los cambios para actualizar la orden." : 'El botón "Despachar" en el detalle se activa solo cuando hay al menos una línea.'}</div>
-          <div className="text-right">
-            <div className="text-xs uppercase text-muted-foreground">Total facturado</div>
-            <div className="text-2xl font-bold font-mono tabular-nums">${total.toFixed(2)}</div>
+          <div className="text-right space-y-1">
+            <div>
+              <div className="text-xs uppercase text-muted-foreground">Total facturado</div>
+              <div className="text-2xl font-bold font-mono tabular-nums">${total.toFixed(2)}</div>
+            </div>
+            {tasaCambio && (
+              <div className="text-sm font-mono tabular-nums text-muted-foreground">
+                Bs. {(total * Number(tasaCambio.tasa)).toFixed(2)}
+              </div>
+            )}
           </div>
         </div>
       </Card>

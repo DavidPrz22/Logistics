@@ -226,13 +226,6 @@ export type EnumEstadoOrdenDespachoNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel> | $Enums.EstadoOrdenDespacho | null
 }
 
-export type EnumTipoDeOrdenFilter<$PrismaModel = never> = {
-  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
-  in?: $Enums.TipoDeOrden[]
-  notIn?: $Enums.TipoDeOrden[]
-  not?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel> | $Enums.TipoDeOrden
-}
-
 export type DecimalNullableFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | null
@@ -244,6 +237,13 @@ export type DecimalNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
+export type EnumTipoDeOrdenFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
+  in?: $Enums.TipoDeOrden[]
+  notIn?: $Enums.TipoDeOrden[]
+  not?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel> | $Enums.TipoDeOrden
+}
+
 export type EnumEstadoOrdenDespachoNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EstadoOrdenDespacho | Prisma.EnumEstadoOrdenDespachoFieldRefInput<$PrismaModel> | null
   in?: $Enums.EstadoOrdenDespacho[] | null
@@ -252,16 +252,6 @@ export type EnumEstadoOrdenDespachoNullableWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel>
-}
-
-export type EnumTipoDeOrdenWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
-  in?: $Enums.TipoDeOrden[]
-  notIn?: $Enums.TipoDeOrden[]
-  not?: Prisma.NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel> | $Enums.TipoDeOrden
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
 }
 
 export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -278,6 +268,16 @@ export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type EnumTipoDeOrdenWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
+  in?: $Enums.TipoDeOrden[]
+  notIn?: $Enums.TipoDeOrden[]
+  not?: Prisma.NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel> | $Enums.TipoDeOrden
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
 }
 
 export type DecimalFilter<$PrismaModel = never> = {
@@ -685,13 +685,6 @@ export type NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel = never> = 
   not?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel> | $Enums.EstadoOrdenDespacho | null
 }
 
-export type NestedEnumTipoDeOrdenFilter<$PrismaModel = never> = {
-  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
-  in?: $Enums.TipoDeOrden[]
-  notIn?: $Enums.TipoDeOrden[]
-  not?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel> | $Enums.TipoDeOrden
-}
-
 export type NestedDecimalNullableFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | null
@@ -703,6 +696,13 @@ export type NestedDecimalNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
+export type NestedEnumTipoDeOrdenFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
+  in?: $Enums.TipoDeOrden[]
+  notIn?: $Enums.TipoDeOrden[]
+  not?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel> | $Enums.TipoDeOrden
+}
+
 export type NestedEnumEstadoOrdenDespachoNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EstadoOrdenDespacho | Prisma.EnumEstadoOrdenDespachoFieldRefInput<$PrismaModel> | null
   in?: $Enums.EstadoOrdenDespacho[] | null
@@ -711,16 +711,6 @@ export type NestedEnumEstadoOrdenDespachoNullableWithAggregatesFilter<$PrismaMod
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEstadoOrdenDespachoNullableFilter<$PrismaModel>
-}
-
-export type NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
-  in?: $Enums.TipoDeOrden[]
-  notIn?: $Enums.TipoDeOrden[]
-  not?: Prisma.NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel> | $Enums.TipoDeOrden
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
 }
 
 export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -737,6 +727,16 @@ export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipoDeOrden | Prisma.EnumTipoDeOrdenFieldRefInput<$PrismaModel>
+  in?: $Enums.TipoDeOrden[]
+  notIn?: $Enums.TipoDeOrden[]
+  not?: Prisma.NestedEnumTipoDeOrdenWithAggregatesFilter<$PrismaModel> | $Enums.TipoDeOrden
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipoDeOrdenFilter<$PrismaModel>
 }
 
 export type NestedDecimalFilter<$PrismaModel = never> = {

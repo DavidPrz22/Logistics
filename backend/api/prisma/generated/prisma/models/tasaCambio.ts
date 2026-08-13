@@ -411,9 +411,9 @@ export type tasaCambioUncheckedUpdateManyInput = {
   fechaVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type TasaCambioScalarRelationFilter = {
-  is?: Prisma.tasaCambioWhereInput
-  isNot?: Prisma.tasaCambioWhereInput
+export type TasaCambioNullableScalarRelationFilter = {
+  is?: Prisma.tasaCambioWhereInput | null
+  isNot?: Prisma.tasaCambioWhereInput | null
 }
 
 export type TasaCambioListRelationFilter = {
@@ -483,10 +483,12 @@ export type tasaCambioCreateNestedOneWithoutTasasOrdenesInput = {
   connect?: Prisma.tasaCambioWhereUniqueInput
 }
 
-export type tasaCambioUpdateOneRequiredWithoutTasasOrdenesNestedInput = {
+export type tasaCambioUpdateOneWithoutTasasOrdenesNestedInput = {
   create?: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasOrdenesInput, Prisma.tasaCambioUncheckedCreateWithoutTasasOrdenesInput>
   connectOrCreate?: Prisma.tasaCambioCreateOrConnectWithoutTasasOrdenesInput
   upsert?: Prisma.tasaCambioUpsertWithoutTasasOrdenesInput
+  disconnect?: Prisma.tasaCambioWhereInput | boolean
+  delete?: Prisma.tasaCambioWhereInput | boolean
   connect?: Prisma.tasaCambioWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.tasaCambioUpdateToOneWithWhereWithoutTasasOrdenesInput, Prisma.tasaCambioUpdateWithoutTasasOrdenesInput>, Prisma.tasaCambioUncheckedUpdateWithoutTasasOrdenesInput>
 }
@@ -627,10 +629,12 @@ export type tasaCambioCreateNestedOneWithoutTasasAplicadasInput = {
   connect?: Prisma.tasaCambioWhereUniqueInput
 }
 
-export type tasaCambioUpdateOneRequiredWithoutTasasAplicadasNestedInput = {
+export type tasaCambioUpdateOneWithoutTasasAplicadasNestedInput = {
   create?: Prisma.XOR<Prisma.tasaCambioCreateWithoutTasasAplicadasInput, Prisma.tasaCambioUncheckedCreateWithoutTasasAplicadasInput>
   connectOrCreate?: Prisma.tasaCambioCreateOrConnectWithoutTasasAplicadasInput
   upsert?: Prisma.tasaCambioUpsertWithoutTasasAplicadasInput
+  disconnect?: Prisma.tasaCambioWhereInput | boolean
+  delete?: Prisma.tasaCambioWhereInput | boolean
   connect?: Prisma.tasaCambioWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.tasaCambioUpdateToOneWithWhereWithoutTasasAplicadasInput, Prisma.tasaCambioUpdateWithoutTasasAplicadasInput>, Prisma.tasaCambioUncheckedUpdateWithoutTasasAplicadasInput>
 }

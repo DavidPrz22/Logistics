@@ -12,6 +12,8 @@ export interface LineaBorrador {
   stock_actual: number;
   cantidad: number | string;
   precio: number | string;
+  precioUnitarioVes?: number;
+  subtotalVes?: number;
 }
 
 export type LiquidacionRowData = {
@@ -40,6 +42,8 @@ export interface EditorLinea {
   lote_id: number;
   cantidad_enviada: number;
   precio_unitario: number;
+  precioUnitarioVes?: number;
+  subtotalVes?: number;
   key: string;
 }
 

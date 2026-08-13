@@ -11,6 +11,7 @@ import { LiquidadaPanel } from "./LiquidadaPanel";
 import { AnticiposCard } from "./AnticiposCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "@tanstack/react-router";
 
 interface DespachoDetailsPageProps {
@@ -77,11 +78,35 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
         <StatCard label="Neto a cobrar" value={`$${orden.saldoNetoCobrar.toFixed(2)}`} mono highlight />
       </div>
 
+      {orden.tasaCambioInfo && (
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs uppercase text-muted-foreground">Tasa de cambio aplicada</div>
+              <div className="text-sm font-medium mt-1">
+                {orden.tasaCambioInfo.origen} → {orden.tasaCambioInfo.destino}: {orden.tasaCambioInfo.tasa.toFixed(2)}
+              </div>
+              {orden.tasaCambioInfo.fecha && (
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Fecha: {new Date(orden.tasaCambioInfo.fecha).toLocaleDateString()}
+                </div>
+              )}
+            </div>
+            <div className="text-right">
+              <div className="text-xs uppercase text-muted-foreground">Total VES</div>
+              <div className="text-lg font-bold font-mono tabular-nums">
+                Bs. {orden.totalOriginalVes.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {orden.anticipos.length > 0 && <AnticiposCard anticipos={orden.anticipos} />}
 
-      {orden.estado === "PREPARACION" && <PreparacionPanel ordenId={id} detalles={detalles} tipoOrden={orden.tipoOrden} onDispatch={handleUpdateEstado} />}
+      {orden.estado === "PREPARACION" && <PreparacionPanel ordenId={id} detalles={detalles} tipoOrden={orden.tipoOrden} tasaCambio={orden.tasaCambioInfo ? { id: orden.tasaCambioId!, divisaOrigenId: 0, divisaDestinoId: 0, tasa: orden.tasaCambioInfo.tasa, tasaMoficada: null, registroTasasId: 0, fuente: 'PARALELO', fechaVigencia: orden.tasaCambioInfo.fecha, divisaOrigen: { id: 0, codigo: orden.tasaCambioInfo.origen, nombre: '', esMonedaBase: false }, divisaDestino: { id: 0, codigo: orden.tasaCambioInfo.destino, nombre: '', esMonedaBase: false } } : null} onDispatch={handleUpdateEstado} />}
       {orden.estado === "EN_RUTA" && !isMostrador && <EnRutaPanel ordenId={id} detalles={detalles} />}
-      {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} documentoDeuda={orden.documentoDeuda} />}
+      {orden.estado === "LIQUIDADA" && <LiquidadaPanel detalles={detalles} rechazos={rechazos} documentoDeuda={orden.documentoDeuda} tasaCambio={orden.tasaCambioInfo ? { id: orden.tasaCambioId!, divisaOrigenId: 0, divisaDestinoId: 0, tasa: orden.tasaCambioInfo.tasa, tasaMoficada: null, registroTasasId: 0, fuente: 'PARALELO', fechaVigencia: orden.tasaCambioInfo.fecha, divisaOrigen: { id: 0, codigo: orden.tasaCambioInfo.origen, nombre: '', esMonedaBase: false }, divisaDestino: { id: 0, codigo: orden.tasaCambioInfo.destino, nombre: '', esMonedaBase: false } } : null} />}
     </div>
   );
 

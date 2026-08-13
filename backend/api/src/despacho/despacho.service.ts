@@ -74,25 +74,52 @@ export class DespachoService {
   async createOrdenDespacho(
     ordenData: CreateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, totalFacturado, ...ordenFields } = ordenData;
+    const { detallesOrdenDespacho, totalFacturado, tasaCambioId, ...ordenFields } = ordenData;
 
     const numeroOrden = `OD-${Date.now()}`;
+
+    const tasaCambio = await this.prisma.tasaCambio.findUnique({
+      where: { id: tasaCambioId },
+      include: {
+        divisaOrigen: true,
+        divisaDestino: true,
+      },
+    });
+
+    if (!tasaCambio) {
+      throw new Error('Tasa de cambio no encontrada');
+    }
+
+    const tasaValor = Number(tasaCambio.tasa);
+
+    const detallesConVes = detallesOrdenDespacho?.map((detalle) => {
+      const precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+      const subtotalVes = Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
+      return {
+        loteId: detalle.loteId,
+        cantidadEnviada: detalle.cantidadEnviada,
+        precioUnitario: detalle.precioUnitario,
+        precioUnitarioVes,
+        subtotalVes,
+      };
+    }) ?? [];
+
+    const totalOriginalVes = detallesConVes.reduce((sum, d) => sum + d.subtotalVes, 0);
 
     try {
       await this.prisma.ordenDespacho.create({
         data: {
           ...ordenFields,
+          tasaCambioId,
+          tasaCambioValor: tasaValor,
           totalOriginal: totalFacturado,
+          totalOriginalVes,
           saldoNetoCobrar: totalFacturado,
           montoFacturadoNeto: totalFacturado,
+          montoFacturadoNetoVes: totalOriginalVes,
           numeroOrden,
           detalles: {
-            create:
-              detallesOrdenDespacho?.map((detalle) => ({
-                loteId: detalle.loteId,
-                cantidadEnviada: detalle.cantidadEnviada,
-                precioUnitario: detalle.precioUnitario,
-              })) ?? [],
+            create: detallesConVes,
           },
         },
       });
@@ -111,6 +138,17 @@ export class DespachoService {
     totalFacturado: number,
   ): Promise<{ message: string }> {
     try {
+      const orden = await this.prisma.ordenDespacho.findUnique({
+        where: { id: ordenId },
+        select: { tasaCambioValor: true },
+      });
+
+      if (!orden || !orden.tasaCambioValor) {
+        throw new Error('Orden no encontrada o sin tasa de cambio configurada');
+      }
+
+      const tasaValor = Number(orden.tasaCambioValor);
+
       const existingDetalles = await this.prisma.detalleOrden.findMany({
         where: { ordenId },
         select: { id: true },
@@ -125,15 +163,22 @@ export class DespachoService {
           loteId: number;
           cantidadEnviada: number;
           precioUnitario: number;
+          precioUnitarioVes: number;
+          subtotalVes: number;
         };
       }[] = [];
       const createOperations: {
         loteId: number;
         cantidadEnviada: number;
         precioUnitario: number;
+        precioUnitarioVes: number;
+        subtotalVes: number;
       }[] = [];
 
       for (const detalle of detallesOrdenDespacho ?? []) {
+        const precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+        const subtotalVes = Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
+
         if (detalle.id) {
           incomingIds.add(detalle.id);
           updateOperations.push({
@@ -142,6 +187,8 @@ export class DespachoService {
               loteId: detalle.loteId,
               cantidadEnviada: detalle.cantidadEnviada,
               precioUnitario: detalle.precioUnitario,
+              precioUnitarioVes,
+              subtotalVes,
             },
           });
         } else {
@@ -149,11 +196,16 @@ export class DespachoService {
             loteId: detalle.loteId,
             cantidadEnviada: detalle.cantidadEnviada,
             precioUnitario: detalle.precioUnitario,
+            precioUnitarioVes,
+            subtotalVes,
           });
         }
       }
 
       const deleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
+
+      const totalOriginalVes = createOperations.reduce((sum, d) => sum + d.subtotalVes, 0) +
+        updateOperations.reduce((sum, op) => sum + op.data.subtotalVes, 0);
 
       await this.prisma.ordenDespacho.update({
         where: { id: ordenId },
@@ -165,8 +217,10 @@ export class DespachoService {
               deleteIds.length > 0 ? [{ id: { in: deleteIds } }] : undefined,
           },
           totalOriginal: totalFacturado,
+          totalOriginalVes,
           saldoNetoCobrar: totalFacturado,
           montoFacturadoNeto: totalFacturado,
+          montoFacturadoNetoVes: totalOriginalVes,
         },
       });
 
@@ -186,9 +240,23 @@ export class DespachoService {
     id: number,
     data: UpdateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, totalFacturado, ...ordenFields } = data;
+    const { detallesOrdenDespacho, totalFacturado, tasaCambioId, ...ordenFields } = data;
 
     try {
+      let tasaValor: number | null = null;
+
+      if (tasaCambioId) {
+        const tasaCambio = await this.prisma.tasaCambio.findUnique({
+          where: { id: tasaCambioId },
+        });
+
+        if (!tasaCambio) {
+          throw new Error('Tasa de cambio no encontrada');
+        }
+
+        tasaValor = Number(tasaCambio.tasa);
+      }
+
       const existingDetalles = await this.prisma.detalleOrden.findMany({
         where: { ordenId: id },
         select: { id: true },
@@ -203,31 +271,44 @@ export class DespachoService {
           loteId: number;
           cantidadEnviada: number;
           precioUnitario: number;
+          precioUnitarioVes?: number;
+          subtotalVes?: number;
         };
       }[] = [];
       const createOperations: {
         loteId: number;
         cantidadEnviada: number;
         precioUnitario: number;
+        precioUnitarioVes?: number;
+        subtotalVes?: number;
       }[] = [];
 
       for (const detalle of detallesOrdenDespacho ?? []) {
+        const detalleData: {
+          loteId: number;
+          cantidadEnviada: number;
+          precioUnitario: number;
+          precioUnitarioVes?: number;
+          subtotalVes?: number;
+        } = {
+          loteId: detalle.loteId,
+          cantidadEnviada: detalle.cantidadEnviada,
+          precioUnitario: detalle.precioUnitario,
+        };
+
+        if (tasaValor !== null) {
+          detalleData.precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+          detalleData.subtotalVes = Math.round(detalle.cantidadEnviada * detalleData.precioUnitarioVes * 100) / 100;
+        }
+
         if (detalle.id) {
           incomingIds.add(detalle.id);
           updateOperations.push({
             where: { id: detalle.id },
-            data: {
-              loteId: detalle.loteId,
-              cantidadEnviada: detalle.cantidadEnviada,
-              precioUnitario: detalle.precioUnitario,
-            },
+            data: detalleData,
           });
         } else {
-          createOperations.push({
-            loteId: detalle.loteId,
-            cantidadEnviada: detalle.cantidadEnviada,
-            precioUnitario: detalle.precioUnitario,
-          });
+          createOperations.push(detalleData);
         }
       }
 
@@ -241,11 +322,30 @@ export class DespachoService {
           }
         : {};
 
+      let vesFinancialFields = {};
+      if (tasaValor !== null) {
+        const totalOriginalVes = createOperations.reduce((sum, d) => sum + (d.subtotalVes ?? 0), 0) +
+          updateOperations.reduce((sum, op) => sum + (op.data.subtotalVes ?? 0), 0);
+        vesFinancialFields = {
+          totalOriginalVes,
+          montoFacturadoNetoVes: totalOriginalVes,
+        };
+      }
+
+      const tasaFields = tasaCambioId
+        ? {
+            tasaCambioId,
+            tasaCambioValor: tasaValor,
+          }
+        : {};
+
       await this.prisma.ordenDespacho.update({
         where: { id },
         data: {
           ...ordenFields,
+          ...tasaFields,
           ...financialFields,
+          ...vesFinancialFields,
           detalles: {
             update: updateOperations,
             create: createOperations,
@@ -297,6 +397,12 @@ export class DespachoService {
         chofer: true,
         almacenTransito: true,
         documentoDeuda: true,
+        tasaCambio: {
+          include: {
+            divisaOrigen: true,
+            divisaDestino: true,
+          },
+        },
         detalles: {
           include: {
             lote: {
@@ -351,6 +457,15 @@ export class DespachoService {
         }
       : null;
 
+    const tasaCambioInfo = orden.tasaCambio
+      ? {
+          origen: orden.tasaCambio.divisaOrigen.codigo,
+          destino: orden.tasaCambio.divisaDestino.codigo,
+          tasa: Number(orden.tasaCambio.tasa),
+          fecha: orden.tasaCambio.fechaVigencia?.toISOString() ?? '',
+        }
+      : null;
+
     return {
       id: orden.id,
       numeroOrden: orden.numeroOrden,
@@ -362,11 +477,16 @@ export class DespachoService {
       almacenTransitoNombre: orden.almacenTransito.nombre,
       fechaSalida: orden.fechaSalida?.toISOString() ?? '',
       estado: orden.estado ?? 'PREPARACION',
+      tasaCambioId: orden.tasaCambioId,
+      tasaCambioValor: orden.tasaCambioValor ? Number(orden.tasaCambioValor) : null,
+      tasaCambioInfo,
       totalOriginal: Number(orden.totalOriginal ?? 0),
+      totalOriginalVes: Number(orden.totalOriginalVes ?? 0),
       tipoOrden: orden.tipoOrden ?? 'NORMAL',
       totalAbonado: Number(orden.totalAbonado ?? 0),
       saldoNetoCobrar: Number(orden.saldoNetoCobrar ?? 0),
       montoFacturadoNeto: Number(orden.montoFacturadoNeto ?? 0),
+      montoFacturadoNetoVes: Number(orden.montoFacturadoNetoVes ?? 0),
       totalRechazado: Number(orden.totalRechazado ?? 0),
       anticipos: anticiposData,
       documentoDeuda: documentoDeudaData,
@@ -378,6 +498,8 @@ export class DespachoService {
         numeroLote: detalle.lote.numeroLote,
         cantidadEnviada: detalle.cantidadEnviada,
         precioUnitario: Number(detalle.precioUnitario),
+        precioUnitarioVes: detalle.precioUnitarioVes ? Number(detalle.precioUnitarioVes) : null,
+        subtotalVes: detalle.subtotalVes ? Number(detalle.subtotalVes) : null,
         sku: detalle.lote.variante.sku,
         varianteNombre: detalle.lote.variante.nombre,
         productoNombre: detalle.lote.variante.producto.nombre,

@@ -31,7 +31,10 @@ export type DocumentoDeudaAvgAggregateOutputType = {
   ordenId: number | null
   clienteId: number | null
   montoTotalBase: runtime.Decimal | null
+  montoTotalVes: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
+  saldoPendienteVes: runtime.Decimal | null
+  tasaEmisionValor: runtime.Decimal | null
 }
 
 export type DocumentoDeudaSumAggregateOutputType = {
@@ -39,7 +42,10 @@ export type DocumentoDeudaSumAggregateOutputType = {
   ordenId: number | null
   clienteId: number | null
   montoTotalBase: runtime.Decimal | null
+  montoTotalVes: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
+  saldoPendienteVes: runtime.Decimal | null
+  tasaEmisionValor: runtime.Decimal | null
 }
 
 export type DocumentoDeudaMinAggregateOutputType = {
@@ -48,7 +54,10 @@ export type DocumentoDeudaMinAggregateOutputType = {
   ordenId: number | null
   clienteId: number | null
   montoTotalBase: runtime.Decimal | null
+  montoTotalVes: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
+  saldoPendienteVes: runtime.Decimal | null
+  tasaEmisionValor: runtime.Decimal | null
   estado: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento: $Enums.TipoDocumentoDeuda | null
   fechaEmision: Date | null
@@ -60,7 +69,10 @@ export type DocumentoDeudaMaxAggregateOutputType = {
   ordenId: number | null
   clienteId: number | null
   montoTotalBase: runtime.Decimal | null
+  montoTotalVes: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal | null
+  saldoPendienteVes: runtime.Decimal | null
+  tasaEmisionValor: runtime.Decimal | null
   estado: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento: $Enums.TipoDocumentoDeuda | null
   fechaEmision: Date | null
@@ -72,7 +84,10 @@ export type DocumentoDeudaCountAggregateOutputType = {
   ordenId: number
   clienteId: number
   montoTotalBase: number
+  montoTotalVes: number
   saldoPendienteBase: number
+  saldoPendienteVes: number
+  tasaEmisionValor: number
   estado: number
   tipoDocumento: number
   fechaEmision: number
@@ -85,7 +100,10 @@ export type DocumentoDeudaAvgAggregateInputType = {
   ordenId?: true
   clienteId?: true
   montoTotalBase?: true
+  montoTotalVes?: true
   saldoPendienteBase?: true
+  saldoPendienteVes?: true
+  tasaEmisionValor?: true
 }
 
 export type DocumentoDeudaSumAggregateInputType = {
@@ -93,7 +111,10 @@ export type DocumentoDeudaSumAggregateInputType = {
   ordenId?: true
   clienteId?: true
   montoTotalBase?: true
+  montoTotalVes?: true
   saldoPendienteBase?: true
+  saldoPendienteVes?: true
+  tasaEmisionValor?: true
 }
 
 export type DocumentoDeudaMinAggregateInputType = {
@@ -102,7 +123,10 @@ export type DocumentoDeudaMinAggregateInputType = {
   ordenId?: true
   clienteId?: true
   montoTotalBase?: true
+  montoTotalVes?: true
   saldoPendienteBase?: true
+  saldoPendienteVes?: true
+  tasaEmisionValor?: true
   estado?: true
   tipoDocumento?: true
   fechaEmision?: true
@@ -114,7 +138,10 @@ export type DocumentoDeudaMaxAggregateInputType = {
   ordenId?: true
   clienteId?: true
   montoTotalBase?: true
+  montoTotalVes?: true
   saldoPendienteBase?: true
+  saldoPendienteVes?: true
+  tasaEmisionValor?: true
   estado?: true
   tipoDocumento?: true
   fechaEmision?: true
@@ -126,7 +153,10 @@ export type DocumentoDeudaCountAggregateInputType = {
   ordenId?: true
   clienteId?: true
   montoTotalBase?: true
+  montoTotalVes?: true
   saldoPendienteBase?: true
+  saldoPendienteVes?: true
+  tasaEmisionValor?: true
   estado?: true
   tipoDocumento?: true
   fechaEmision?: true
@@ -225,7 +255,10 @@ export type DocumentoDeudaGroupByOutputType = {
   ordenId: number
   clienteId: number
   montoTotalBase: runtime.Decimal
+  montoTotalVes: runtime.Decimal | null
   saldoPendienteBase: runtime.Decimal
+  saldoPendienteVes: runtime.Decimal | null
+  tasaEmisionValor: runtime.Decimal | null
   estado: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento: $Enums.TipoDocumentoDeuda | null
   fechaEmision: Date | null
@@ -260,7 +293,10 @@ export type documentoDeudaWhereInput = {
   ordenId?: Prisma.IntFilter<"documentoDeuda"> | number
   clienteId?: Prisma.IntFilter<"documentoDeuda"> | number
   montoTotalBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.EnumEstadoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableFilter<"documentoDeuda"> | Date | string | null
@@ -275,7 +311,10 @@ export type documentoDeudaOrderByWithRelationInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrderInput | Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrderInput | Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrderInput | Prisma.SortOrder
   tipoDocumento?: Prisma.SortOrderInput | Prisma.SortOrder
   fechaEmision?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -294,7 +333,10 @@ export type documentoDeudaWhereUniqueInput = Prisma.AtLeast<{
   sistemaOrigen?: Prisma.EnumListadoOrigenFilter<"documentoDeuda"> | $Enums.ListadoOrigen
   clienteId?: Prisma.IntFilter<"documentoDeuda"> | number
   montoTotalBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.EnumEstadoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableFilter<"documentoDeuda"> | Date | string | null
@@ -309,7 +351,10 @@ export type documentoDeudaOrderByWithAggregationInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrderInput | Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrderInput | Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrderInput | Prisma.SortOrder
   tipoDocumento?: Prisma.SortOrderInput | Prisma.SortOrder
   fechaEmision?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -329,7 +374,10 @@ export type documentoDeudaScalarWhereWithAggregatesInput = {
   ordenId?: Prisma.IntWithAggregatesFilter<"documentoDeuda"> | number
   clienteId?: Prisma.IntWithAggregatesFilter<"documentoDeuda"> | number
   montoTotalBase?: Prisma.DecimalWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.DecimalNullableWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.DecimalNullableWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.DecimalNullableWithAggregatesFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.EnumEstadoDocumentoDeudaNullableWithAggregatesFilter<"documentoDeuda"> | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableWithAggregatesFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableWithAggregatesFilter<"documentoDeuda"> | Date | string | null
@@ -338,7 +386,10 @@ export type documentoDeudaScalarWhereWithAggregatesInput = {
 export type documentoDeudaCreateInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -353,7 +404,10 @@ export type documentoDeudaUncheckedCreateInput = {
   ordenId: number
   clienteId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -363,7 +417,10 @@ export type documentoDeudaUncheckedCreateInput = {
 export type documentoDeudaUpdateInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -378,7 +435,10 @@ export type documentoDeudaUncheckedUpdateInput = {
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   clienteId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -391,7 +451,10 @@ export type documentoDeudaCreateManyInput = {
   ordenId: number
   clienteId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -400,7 +463,10 @@ export type documentoDeudaCreateManyInput = {
 export type documentoDeudaUpdateManyMutationInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -412,7 +478,10 @@ export type documentoDeudaUncheckedUpdateManyInput = {
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   clienteId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -444,7 +513,10 @@ export type documentoDeudaCountOrderByAggregateInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   tipoDocumento?: Prisma.SortOrder
   fechaEmision?: Prisma.SortOrder
@@ -455,7 +527,10 @@ export type documentoDeudaAvgOrderByAggregateInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrder
 }
 
 export type documentoDeudaMaxOrderByAggregateInput = {
@@ -464,7 +539,10 @@ export type documentoDeudaMaxOrderByAggregateInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   tipoDocumento?: Prisma.SortOrder
   fechaEmision?: Prisma.SortOrder
@@ -476,7 +554,10 @@ export type documentoDeudaMinOrderByAggregateInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   tipoDocumento?: Prisma.SortOrder
   fechaEmision?: Prisma.SortOrder
@@ -487,7 +568,10 @@ export type documentoDeudaSumOrderByAggregateInput = {
   ordenId?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
   montoTotalBase?: Prisma.SortOrder
+  montoTotalVes?: Prisma.SortOrder
   saldoPendienteBase?: Prisma.SortOrder
+  saldoPendienteVes?: Prisma.SortOrder
+  tasaEmisionValor?: Prisma.SortOrder
 }
 
 export type documentoDeudaCreateNestedManyWithoutClienteInput = {
@@ -595,7 +679,10 @@ export type documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput = {
 export type documentoDeudaCreateWithoutClienteInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -608,7 +695,10 @@ export type documentoDeudaUncheckedCreateWithoutClienteInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   ordenId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -649,7 +739,10 @@ export type documentoDeudaScalarWhereInput = {
   ordenId?: Prisma.IntFilter<"documentoDeuda"> | number
   clienteId?: Prisma.IntFilter<"documentoDeuda"> | number
   montoTotalBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.DecimalNullableFilter<"documentoDeuda"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.EnumEstadoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.EnumTipoDocumentoDeudaNullableFilter<"documentoDeuda"> | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.DateTimeNullableFilter<"documentoDeuda"> | Date | string | null
@@ -658,7 +751,10 @@ export type documentoDeudaScalarWhereInput = {
 export type documentoDeudaCreateWithoutOrdenInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -671,7 +767,10 @@ export type documentoDeudaUncheckedCreateWithoutOrdenInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   clienteId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -697,7 +796,10 @@ export type documentoDeudaUpdateToOneWithWhereWithoutOrdenInput = {
 export type documentoDeudaUpdateWithoutOrdenInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -710,7 +812,10 @@ export type documentoDeudaUncheckedUpdateWithoutOrdenInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   clienteId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -720,7 +825,10 @@ export type documentoDeudaUncheckedUpdateWithoutOrdenInput = {
 export type documentoDeudaCreateWithoutTransaccionesPagoInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -734,7 +842,10 @@ export type documentoDeudaUncheckedCreateWithoutTransaccionesPagoInput = {
   ordenId: number
   clienteId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -759,7 +870,10 @@ export type documentoDeudaUpdateToOneWithWhereWithoutTransaccionesPagoInput = {
 export type documentoDeudaUpdateWithoutTransaccionesPagoInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -773,7 +887,10 @@ export type documentoDeudaUncheckedUpdateWithoutTransaccionesPagoInput = {
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   clienteId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -784,7 +901,10 @@ export type documentoDeudaCreateManyClienteInput = {
   sistemaOrigen: $Enums.ListadoOrigen
   ordenId: number
   montoTotalBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase: runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Date | string | null
@@ -793,7 +913,10 @@ export type documentoDeudaCreateManyClienteInput = {
 export type documentoDeudaUpdateWithoutClienteInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -806,7 +929,10 @@ export type documentoDeudaUncheckedUpdateWithoutClienteInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -818,7 +944,10 @@ export type documentoDeudaUncheckedUpdateManyWithoutClienteInput = {
   sistemaOrigen?: Prisma.EnumListadoOrigenFieldUpdateOperationsInput | $Enums.ListadoOrigen
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   montoTotalBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montoTotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   saldoPendienteBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  saldoPendienteVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  tasaEmisionValor?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estado?: Prisma.NullableEnumEstadoDocumentoDeudaFieldUpdateOperationsInput | $Enums.EstadoDocumentoDeuda | null
   tipoDocumento?: Prisma.NullableEnumTipoDocumentoDeudaFieldUpdateOperationsInput | $Enums.TipoDocumentoDeuda | null
   fechaEmision?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -861,7 +990,10 @@ export type documentoDeudaSelect<ExtArgs extends runtime.Types.Extensions.Intern
   ordenId?: boolean
   clienteId?: boolean
   montoTotalBase?: boolean
+  montoTotalVes?: boolean
   saldoPendienteBase?: boolean
+  saldoPendienteVes?: boolean
+  tasaEmisionValor?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
@@ -877,7 +1009,10 @@ export type documentoDeudaSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   ordenId?: boolean
   clienteId?: boolean
   montoTotalBase?: boolean
+  montoTotalVes?: boolean
   saldoPendienteBase?: boolean
+  saldoPendienteVes?: boolean
+  tasaEmisionValor?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
@@ -891,7 +1026,10 @@ export type documentoDeudaSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   ordenId?: boolean
   clienteId?: boolean
   montoTotalBase?: boolean
+  montoTotalVes?: boolean
   saldoPendienteBase?: boolean
+  saldoPendienteVes?: boolean
+  tasaEmisionValor?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
@@ -905,13 +1043,16 @@ export type documentoDeudaSelectScalar = {
   ordenId?: boolean
   clienteId?: boolean
   montoTotalBase?: boolean
+  montoTotalVes?: boolean
   saldoPendienteBase?: boolean
+  saldoPendienteVes?: boolean
+  tasaEmisionValor?: boolean
   estado?: boolean
   tipoDocumento?: boolean
   fechaEmision?: boolean
 }
 
-export type documentoDeudaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sistemaOrigen" | "ordenId" | "clienteId" | "montoTotalBase" | "saldoPendienteBase" | "estado" | "tipoDocumento" | "fechaEmision", ExtArgs["result"]["documentoDeuda"]>
+export type documentoDeudaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sistemaOrigen" | "ordenId" | "clienteId" | "montoTotalBase" | "montoTotalVes" | "saldoPendienteBase" | "saldoPendienteVes" | "tasaEmisionValor" | "estado" | "tipoDocumento" | "fechaEmision", ExtArgs["result"]["documentoDeuda"]>
 export type documentoDeudaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaccionesPago?: boolean | Prisma.documentoDeuda$transaccionesPagoArgs<ExtArgs>
   orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
@@ -940,7 +1081,10 @@ export type $documentoDeudaPayload<ExtArgs extends runtime.Types.Extensions.Inte
     ordenId: number
     clienteId: number
     montoTotalBase: runtime.Decimal
+    montoTotalVes: runtime.Decimal | null
     saldoPendienteBase: runtime.Decimal
+    saldoPendienteVes: runtime.Decimal | null
+    tasaEmisionValor: runtime.Decimal | null
     estado: $Enums.EstadoDocumentoDeuda | null
     tipoDocumento: $Enums.TipoDocumentoDeuda | null
     fechaEmision: Date | null
@@ -1375,7 +1519,10 @@ export interface documentoDeudaFieldRefs {
   readonly ordenId: Prisma.FieldRef<"documentoDeuda", 'Int'>
   readonly clienteId: Prisma.FieldRef<"documentoDeuda", 'Int'>
   readonly montoTotalBase: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
+  readonly montoTotalVes: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
   readonly saldoPendienteBase: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
+  readonly saldoPendienteVes: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
+  readonly tasaEmisionValor: Prisma.FieldRef<"documentoDeuda", 'Decimal'>
   readonly estado: Prisma.FieldRef<"documentoDeuda", 'EstadoDocumentoDeuda'>
   readonly tipoDocumento: Prisma.FieldRef<"documentoDeuda", 'TipoDocumentoDeuda'>
   readonly fechaEmision: Prisma.FieldRef<"documentoDeuda", 'DateTime'>

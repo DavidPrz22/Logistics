@@ -32,6 +32,8 @@ export type DetalleOrdenAvgAggregateOutputType = {
   loteId: number | null
   cantidadEnviada: number | null
   precioUnitario: runtime.Decimal | null
+  precioUnitarioVes: runtime.Decimal | null
+  subtotalVes: runtime.Decimal | null
 }
 
 export type DetalleOrdenSumAggregateOutputType = {
@@ -40,6 +42,8 @@ export type DetalleOrdenSumAggregateOutputType = {
   loteId: number | null
   cantidadEnviada: number | null
   precioUnitario: runtime.Decimal | null
+  precioUnitarioVes: runtime.Decimal | null
+  subtotalVes: runtime.Decimal | null
 }
 
 export type DetalleOrdenMinAggregateOutputType = {
@@ -48,6 +52,8 @@ export type DetalleOrdenMinAggregateOutputType = {
   loteId: number | null
   cantidadEnviada: number | null
   precioUnitario: runtime.Decimal | null
+  precioUnitarioVes: runtime.Decimal | null
+  subtotalVes: runtime.Decimal | null
 }
 
 export type DetalleOrdenMaxAggregateOutputType = {
@@ -56,6 +62,8 @@ export type DetalleOrdenMaxAggregateOutputType = {
   loteId: number | null
   cantidadEnviada: number | null
   precioUnitario: runtime.Decimal | null
+  precioUnitarioVes: runtime.Decimal | null
+  subtotalVes: runtime.Decimal | null
 }
 
 export type DetalleOrdenCountAggregateOutputType = {
@@ -64,6 +72,8 @@ export type DetalleOrdenCountAggregateOutputType = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: number
+  precioUnitarioVes: number
+  subtotalVes: number
   _all: number
 }
 
@@ -74,6 +84,8 @@ export type DetalleOrdenAvgAggregateInputType = {
   loteId?: true
   cantidadEnviada?: true
   precioUnitario?: true
+  precioUnitarioVes?: true
+  subtotalVes?: true
 }
 
 export type DetalleOrdenSumAggregateInputType = {
@@ -82,6 +94,8 @@ export type DetalleOrdenSumAggregateInputType = {
   loteId?: true
   cantidadEnviada?: true
   precioUnitario?: true
+  precioUnitarioVes?: true
+  subtotalVes?: true
 }
 
 export type DetalleOrdenMinAggregateInputType = {
@@ -90,6 +104,8 @@ export type DetalleOrdenMinAggregateInputType = {
   loteId?: true
   cantidadEnviada?: true
   precioUnitario?: true
+  precioUnitarioVes?: true
+  subtotalVes?: true
 }
 
 export type DetalleOrdenMaxAggregateInputType = {
@@ -98,6 +114,8 @@ export type DetalleOrdenMaxAggregateInputType = {
   loteId?: true
   cantidadEnviada?: true
   precioUnitario?: true
+  precioUnitarioVes?: true
+  subtotalVes?: true
 }
 
 export type DetalleOrdenCountAggregateInputType = {
@@ -106,6 +124,8 @@ export type DetalleOrdenCountAggregateInputType = {
   loteId?: true
   cantidadEnviada?: true
   precioUnitario?: true
+  precioUnitarioVes?: true
+  subtotalVes?: true
   _all?: true
 }
 
@@ -201,6 +221,8 @@ export type DetalleOrdenGroupByOutputType = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal
+  precioUnitarioVes: runtime.Decimal | null
+  subtotalVes: runtime.Decimal | null
   _count: DetalleOrdenCountAggregateOutputType | null
   _avg: DetalleOrdenAvgAggregateOutputType | null
   _sum: DetalleOrdenSumAggregateOutputType | null
@@ -232,6 +254,8 @@ export type detalleOrdenWhereInput = {
   loteId?: Prisma.IntFilter<"detalleOrden"> | number
   cantidadEnviada?: Prisma.IntFilter<"detalleOrden"> | number
   precioUnitario?: Prisma.DecimalFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.XOR<Prisma.OrdenDespachoScalarRelationFilter, Prisma.ordenDespachoWhereInput>
   lote?: Prisma.XOR<Prisma.LoteScalarRelationFilter, Prisma.loteWhereInput>
   rechazos?: Prisma.DetalleRechazoOrdenListRelationFilter
@@ -244,6 +268,8 @@ export type detalleOrdenOrderByWithRelationInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrderInput | Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrderInput | Prisma.SortOrder
   orden?: Prisma.ordenDespachoOrderByWithRelationInput
   lote?: Prisma.loteOrderByWithRelationInput
   rechazos?: Prisma.detalleRechazoOrdenOrderByRelationAggregateInput
@@ -259,6 +285,8 @@ export type detalleOrdenWhereUniqueInput = Prisma.AtLeast<{
   loteId?: Prisma.IntFilter<"detalleOrden"> | number
   cantidadEnviada?: Prisma.IntFilter<"detalleOrden"> | number
   precioUnitario?: Prisma.DecimalFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.XOR<Prisma.OrdenDespachoScalarRelationFilter, Prisma.ordenDespachoWhereInput>
   lote?: Prisma.XOR<Prisma.LoteScalarRelationFilter, Prisma.loteWhereInput>
   rechazos?: Prisma.DetalleRechazoOrdenListRelationFilter
@@ -271,6 +299,8 @@ export type detalleOrdenOrderByWithAggregationInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrderInput | Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.detalleOrdenCountOrderByAggregateInput
   _avg?: Prisma.detalleOrdenAvgOrderByAggregateInput
   _max?: Prisma.detalleOrdenMaxOrderByAggregateInput
@@ -287,11 +317,15 @@ export type detalleOrdenScalarWhereWithAggregatesInput = {
   loteId?: Prisma.IntWithAggregatesFilter<"detalleOrden"> | number
   cantidadEnviada?: Prisma.IntWithAggregatesFilter<"detalleOrden"> | number
   precioUnitario?: Prisma.DecimalWithAggregatesFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.DecimalNullableWithAggregatesFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.DecimalNullableWithAggregatesFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenCreateInput = {
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden: Prisma.ordenDespachoCreateNestedOneWithoutDetallesInput
   lote: Prisma.loteCreateNestedOneWithoutDetallesOrdenInput
   rechazos?: Prisma.detalleRechazoOrdenCreateNestedManyWithoutDetalleOrdenInput
@@ -304,6 +338,8 @@ export type detalleOrdenUncheckedCreateInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedCreateNestedManyWithoutDetalleOrdenInput
   movimientos?: Prisma.movimientoInventarioUncheckedCreateNestedManyWithoutDetalleOrdenInput
 }
@@ -311,6 +347,8 @@ export type detalleOrdenUncheckedCreateInput = {
 export type detalleOrdenUpdateInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDetallesNestedInput
   lote?: Prisma.loteUpdateOneRequiredWithoutDetallesOrdenNestedInput
   rechazos?: Prisma.detalleRechazoOrdenUpdateManyWithoutDetalleOrdenNestedInput
@@ -323,6 +361,8 @@ export type detalleOrdenUncheckedUpdateInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedUpdateManyWithoutDetalleOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUncheckedUpdateManyWithoutDetalleOrdenNestedInput
 }
@@ -333,11 +373,15 @@ export type detalleOrdenCreateManyInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenUpdateManyMutationInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenUncheckedUpdateManyInput = {
@@ -346,6 +390,8 @@ export type detalleOrdenUncheckedUpdateManyInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type DetalleOrdenListRelationFilter = {
@@ -369,6 +415,8 @@ export type detalleOrdenCountOrderByAggregateInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrder
 }
 
 export type detalleOrdenAvgOrderByAggregateInput = {
@@ -377,6 +425,8 @@ export type detalleOrdenAvgOrderByAggregateInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrder
 }
 
 export type detalleOrdenMaxOrderByAggregateInput = {
@@ -385,6 +435,8 @@ export type detalleOrdenMaxOrderByAggregateInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrder
 }
 
 export type detalleOrdenMinOrderByAggregateInput = {
@@ -393,6 +445,8 @@ export type detalleOrdenMinOrderByAggregateInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrder
 }
 
 export type detalleOrdenSumOrderByAggregateInput = {
@@ -401,6 +455,8 @@ export type detalleOrdenSumOrderByAggregateInput = {
   loteId?: Prisma.SortOrder
   cantidadEnviada?: Prisma.SortOrder
   precioUnitario?: Prisma.SortOrder
+  precioUnitarioVes?: Prisma.SortOrder
+  subtotalVes?: Prisma.SortOrder
 }
 
 export type DetalleOrdenScalarRelationFilter = {
@@ -533,6 +589,8 @@ export type detalleOrdenUpdateOneRequiredWithoutRechazosNestedInput = {
 export type detalleOrdenCreateWithoutLoteInput = {
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden: Prisma.ordenDespachoCreateNestedOneWithoutDetallesInput
   rechazos?: Prisma.detalleRechazoOrdenCreateNestedManyWithoutDetalleOrdenInput
   movimientos?: Prisma.movimientoInventarioCreateNestedManyWithoutDetalleOrdenInput
@@ -543,6 +601,8 @@ export type detalleOrdenUncheckedCreateWithoutLoteInput = {
   ordenId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedCreateNestedManyWithoutDetalleOrdenInput
   movimientos?: Prisma.movimientoInventarioUncheckedCreateNestedManyWithoutDetalleOrdenInput
 }
@@ -581,11 +641,15 @@ export type detalleOrdenScalarWhereInput = {
   loteId?: Prisma.IntFilter<"detalleOrden"> | number
   cantidadEnviada?: Prisma.IntFilter<"detalleOrden"> | number
   precioUnitario?: Prisma.DecimalFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.DecimalNullableFilter<"detalleOrden"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenCreateWithoutMovimientosInput = {
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden: Prisma.ordenDespachoCreateNestedOneWithoutDetallesInput
   lote: Prisma.loteCreateNestedOneWithoutDetallesOrdenInput
   rechazos?: Prisma.detalleRechazoOrdenCreateNestedManyWithoutDetalleOrdenInput
@@ -597,6 +661,8 @@ export type detalleOrdenUncheckedCreateWithoutMovimientosInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedCreateNestedManyWithoutDetalleOrdenInput
 }
 
@@ -619,6 +685,8 @@ export type detalleOrdenUpdateToOneWithWhereWithoutMovimientosInput = {
 export type detalleOrdenUpdateWithoutMovimientosInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDetallesNestedInput
   lote?: Prisma.loteUpdateOneRequiredWithoutDetallesOrdenNestedInput
   rechazos?: Prisma.detalleRechazoOrdenUpdateManyWithoutDetalleOrdenNestedInput
@@ -630,12 +698,16 @@ export type detalleOrdenUncheckedUpdateWithoutMovimientosInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedUpdateManyWithoutDetalleOrdenNestedInput
 }
 
 export type detalleOrdenCreateWithoutOrdenInput = {
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lote: Prisma.loteCreateNestedOneWithoutDetallesOrdenInput
   rechazos?: Prisma.detalleRechazoOrdenCreateNestedManyWithoutDetalleOrdenInput
   movimientos?: Prisma.movimientoInventarioCreateNestedManyWithoutDetalleOrdenInput
@@ -646,6 +718,8 @@ export type detalleOrdenUncheckedCreateWithoutOrdenInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedCreateNestedManyWithoutDetalleOrdenInput
   movimientos?: Prisma.movimientoInventarioUncheckedCreateNestedManyWithoutDetalleOrdenInput
 }
@@ -678,6 +752,8 @@ export type detalleOrdenUpdateManyWithWhereWithoutOrdenInput = {
 export type detalleOrdenCreateWithoutRechazosInput = {
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden: Prisma.ordenDespachoCreateNestedOneWithoutDetallesInput
   lote: Prisma.loteCreateNestedOneWithoutDetallesOrdenInput
   movimientos?: Prisma.movimientoInventarioCreateNestedManyWithoutDetalleOrdenInput
@@ -689,6 +765,8 @@ export type detalleOrdenUncheckedCreateWithoutRechazosInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   movimientos?: Prisma.movimientoInventarioUncheckedCreateNestedManyWithoutDetalleOrdenInput
 }
 
@@ -711,6 +789,8 @@ export type detalleOrdenUpdateToOneWithWhereWithoutRechazosInput = {
 export type detalleOrdenUpdateWithoutRechazosInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDetallesNestedInput
   lote?: Prisma.loteUpdateOneRequiredWithoutDetallesOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUpdateManyWithoutDetalleOrdenNestedInput
@@ -722,6 +802,8 @@ export type detalleOrdenUncheckedUpdateWithoutRechazosInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   movimientos?: Prisma.movimientoInventarioUncheckedUpdateManyWithoutDetalleOrdenNestedInput
 }
 
@@ -730,11 +812,15 @@ export type detalleOrdenCreateManyLoteInput = {
   ordenId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenUpdateWithoutLoteInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   orden?: Prisma.ordenDespachoUpdateOneRequiredWithoutDetallesNestedInput
   rechazos?: Prisma.detalleRechazoOrdenUpdateManyWithoutDetalleOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUpdateManyWithoutDetalleOrdenNestedInput
@@ -745,6 +831,8 @@ export type detalleOrdenUncheckedUpdateWithoutLoteInput = {
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedUpdateManyWithoutDetalleOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUncheckedUpdateManyWithoutDetalleOrdenNestedInput
 }
@@ -754,6 +842,8 @@ export type detalleOrdenUncheckedUpdateManyWithoutLoteInput = {
   ordenId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenCreateManyOrdenInput = {
@@ -761,11 +851,15 @@ export type detalleOrdenCreateManyOrdenInput = {
   loteId: number
   cantidadEnviada: number
   precioUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type detalleOrdenUpdateWithoutOrdenInput = {
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lote?: Prisma.loteUpdateOneRequiredWithoutDetallesOrdenNestedInput
   rechazos?: Prisma.detalleRechazoOrdenUpdateManyWithoutDetalleOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUpdateManyWithoutDetalleOrdenNestedInput
@@ -776,6 +870,8 @@ export type detalleOrdenUncheckedUpdateWithoutOrdenInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rechazos?: Prisma.detalleRechazoOrdenUncheckedUpdateManyWithoutDetalleOrdenNestedInput
   movimientos?: Prisma.movimientoInventarioUncheckedUpdateManyWithoutDetalleOrdenNestedInput
 }
@@ -785,6 +881,8 @@ export type detalleOrdenUncheckedUpdateManyWithoutOrdenInput = {
   loteId?: Prisma.IntFieldUpdateOperationsInput | number
   cantidadEnviada?: Prisma.IntFieldUpdateOperationsInput | number
   precioUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  precioUnitarioVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subtotalVes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -833,6 +931,8 @@ export type detalleOrdenSelect<ExtArgs extends runtime.Types.Extensions.Internal
   loteId?: boolean
   cantidadEnviada?: boolean
   precioUnitario?: boolean
+  precioUnitarioVes?: boolean
+  subtotalVes?: boolean
   orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   lote?: boolean | Prisma.loteDefaultArgs<ExtArgs>
   rechazos?: boolean | Prisma.detalleOrden$rechazosArgs<ExtArgs>
@@ -846,6 +946,8 @@ export type detalleOrdenSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   loteId?: boolean
   cantidadEnviada?: boolean
   precioUnitario?: boolean
+  precioUnitarioVes?: boolean
+  subtotalVes?: boolean
   orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   lote?: boolean | Prisma.loteDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["detalleOrden"]>
@@ -856,6 +958,8 @@ export type detalleOrdenSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   loteId?: boolean
   cantidadEnviada?: boolean
   precioUnitario?: boolean
+  precioUnitarioVes?: boolean
+  subtotalVes?: boolean
   orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   lote?: boolean | Prisma.loteDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["detalleOrden"]>
@@ -866,9 +970,11 @@ export type detalleOrdenSelectScalar = {
   loteId?: boolean
   cantidadEnviada?: boolean
   precioUnitario?: boolean
+  precioUnitarioVes?: boolean
+  subtotalVes?: boolean
 }
 
-export type detalleOrdenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ordenId" | "loteId" | "cantidadEnviada" | "precioUnitario", ExtArgs["result"]["detalleOrden"]>
+export type detalleOrdenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ordenId" | "loteId" | "cantidadEnviada" | "precioUnitario" | "precioUnitarioVes" | "subtotalVes", ExtArgs["result"]["detalleOrden"]>
 export type detalleOrdenInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orden?: boolean | Prisma.ordenDespachoDefaultArgs<ExtArgs>
   lote?: boolean | Prisma.loteDefaultArgs<ExtArgs>
@@ -899,6 +1005,8 @@ export type $detalleOrdenPayload<ExtArgs extends runtime.Types.Extensions.Intern
     loteId: number
     cantidadEnviada: number
     precioUnitario: runtime.Decimal
+    precioUnitarioVes: runtime.Decimal | null
+    subtotalVes: runtime.Decimal | null
   }, ExtArgs["result"]["detalleOrden"]>
   composites: {}
 }
@@ -1331,6 +1439,8 @@ export interface detalleOrdenFieldRefs {
   readonly loteId: Prisma.FieldRef<"detalleOrden", 'Int'>
   readonly cantidadEnviada: Prisma.FieldRef<"detalleOrden", 'Int'>
   readonly precioUnitario: Prisma.FieldRef<"detalleOrden", 'Decimal'>
+  readonly precioUnitarioVes: Prisma.FieldRef<"detalleOrden", 'Decimal'>
+  readonly subtotalVes: Prisma.FieldRef<"detalleOrden", 'Decimal'>
 }
     
 

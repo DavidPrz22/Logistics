@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, TriangleAlert } from "lucide-react";
 import { PagoSearchCombobox } from "./PagoSearchCombobox";
-import { TasaPagoSelector } from "./TasaPagoSelector";
+import { TasaPagoSelector } from "@/components/shared/tasa-pago-selector";
 import { FormSelect } from "./FormSelect";
 import { crearPagoSchema, type CrearPagoInput, type OrdenPendiente, type FacturaPendiente } from "../schemas/schemas";
 import type { TasaCambio } from "@/types/zodType";

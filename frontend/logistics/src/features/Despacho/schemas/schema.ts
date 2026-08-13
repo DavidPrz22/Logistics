@@ -4,7 +4,9 @@ export const detallesOrdenDespachoSchema = z.object({
     id: z.number().optional(),
     loteId: z.number().int().positive({ message: "ID de lote inválido" }),
     cantidadEnviada: z.number().min(0).positive({ message: "La cantidad debe ser mayor a 0" }),
-    precioUnitario: z.number().positive({ message: "El precio debe ser mayor a 0" })
+    precioUnitario: z.number().positive({ message: "El precio debe ser mayor a 0" }),
+    precioUnitarioVes: z.number().optional(),
+    subtotalVes: z.number().optional()
 })
 
 export const ordenDespachoSchema = z.object({
@@ -14,6 +16,7 @@ export const ordenDespachoSchema = z.object({
     almacenTransitoId: z.number().int().positive({ message: "ID de almacén inválido" }),
     tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
     totalFacturado: z.number().positive({ message: "El total debe ser mayor a 0" }),
+    tasaCambioId: z.number().int().positive({ message: "Tasa de cambio requerida" }),
     detallesOrdenDespacho: z.array(detallesOrdenDespachoSchema).optional()
 }).superRefine((data, ctx) => {
     if (data.tipoOrden === 'DESPACHO_RUTA' && !data.choferId) {
@@ -78,6 +81,8 @@ export const detalleOrdenDetailSchema = z.object({
   stockActualLote: z.number(),
   cantidadEnviada: z.number(),
   precioUnitario: z.number(),
+  precioUnitarioVes: z.number().nullable(),
+  subtotalVes: z.number().nullable(),
   sku: z.string(),
   varianteNombre: z.string(),
   productoNombre: z.string(),
@@ -98,6 +103,13 @@ export const documentoDeudaDetailSchema = z.object({
   tipoDocumento: z.enum(['FACTURA', 'NOTA_CREDITO']),
 });
 
+export const tasaCambioInfoSchema = z.object({
+  origen: z.string(),
+  destino: z.string(),
+  tasa: z.number(),
+  fecha: z.string(),
+});
+
 export const ordenDespachoDetailSchema = z.object({
   id: z.number(),
   numeroOrden: z.string(),
@@ -109,16 +121,23 @@ export const ordenDespachoDetailSchema = z.object({
   almacenTransitoNombre: z.string(),
   fechaSalida: z.string(),
   estado: z.enum(['PREPARACION', 'EN_RUTA', 'LIQUIDADA']),
+  tasaCambioId: z.number().nullable(),
+  tasaCambioValor: z.number().nullable(),
+  tasaCambioInfo: tasaCambioInfoSchema.nullable(),
   tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
   totalOriginal: z.number(),
+  totalOriginalVes: z.number(),
   saldoNetoCobrar: z.number(),
   totalAbonado: z.number(),
   montoFacturadoNeto: z.number(),
+  montoFacturadoNetoVes: z.number(),
   totalRechazado: z.number(),
   anticipos: z.array(anticipoDetailSchema),
   documentoDeuda: documentoDeudaDetailSchema.nullable(),
   detalles: z.array(detalleOrdenDetailSchema),
 });
+
+export type TasaCambioInfo = z.infer<typeof tasaCambioInfoSchema>;
 
 export type DetalleRechazoOrden = z.infer<typeof detalleRechazoOrdenSchema>;
 export type DetalleOrdenDetail = z.infer<typeof detalleOrdenDetailSchema>;

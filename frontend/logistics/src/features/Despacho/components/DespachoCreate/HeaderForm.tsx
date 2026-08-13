@@ -1,9 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Combobox } from "@/components/shared/combobox";
 import { DatePicker } from "@/components/shared/date-picker";
+import { TasaPagoSelector } from "@/components/shared/tasa-pago-selector";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field } from "../Field";
-import type { Almacen, Chofer, Cliente } from "@/types/types";
+import type { Almacen, Chofer, Cliente, TasaCambio } from "@/types/types";
 import type { TipoDeOrden } from "../../types/types";
 
 interface HeaderFormProps {
@@ -12,6 +13,7 @@ interface HeaderFormProps {
   almacen: string;
   fecha: string;
   tipoOrden: TipoDeOrden;
+  tasaCambioId: number | null;
   clientes: Cliente[];
   choferes: Chofer[];
   almacenes: Almacen[];
@@ -21,9 +23,12 @@ interface HeaderFormProps {
   onAlmacenChange: (v: string) => void;
   onFechaChange: (v: string) => void;
   onTipoOrdenChange: (v: TipoDeOrden) => void;
+  onTasaCambioSelect: (tasa: TasaCambio | null) => void;
 }
 
-export function HeaderForm({ cliente, chofer, almacen, fecha, tipoOrden, clientes, choferes, almacenes, isEdit, onClienteChange, onChoferChange, onAlmacenChange, onFechaChange, onTipoOrdenChange }: HeaderFormProps) {
+export function HeaderForm({ cliente, chofer, almacen, fecha, tipoOrden, tasaCambioId, clientes, choferes, almacenes, isEdit, onClienteChange, onChoferChange, onAlmacenChange, onFechaChange, onTipoOrdenChange, onTasaCambioSelect }: HeaderFormProps) {
+  const fechaDate = fecha ? new Date(fecha) : null;
+
   return (
     <Card className="p-6 space-y-4">
       <h2 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">Cabecera</h2>
@@ -64,6 +69,15 @@ export function HeaderForm({ cliente, chofer, almacen, fecha, tipoOrden, cliente
           <DatePicker value={fecha} onChange={onFechaChange} placeholder="Fecha de salida" />
         </Field>
       </div>
+      {fechaDate && (
+          <Field label="Tasa de cambio">
+            <TasaPagoSelector
+              fechaVigencia={fechaDate}
+              value={tasaCambioId ?? undefined}
+              onTasaSelect={onTasaCambioSelect}
+            />
+          </Field>
+      )}
     </Card>
   );
 }

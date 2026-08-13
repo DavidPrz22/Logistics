@@ -28,6 +28,14 @@ export class DetalleOrdenDespachoODT {
 
   @IsNumber()
   precioUnitario!: number;
+
+  @IsOptional()
+  @IsNumber()
+  precioUnitarioVes?: number;
+
+  @IsOptional()
+  @IsNumber()
+  subtotalVes?: number;
 }
 
 export class CreateOrdenODT {
@@ -49,6 +57,9 @@ export class CreateOrdenODT {
 
   @IsNumber()
   totalFacturado!: number;
+
+  @IsInt()
+  tasaCambioId!: number;
 
   @IsOptional()
   @IsArray()
