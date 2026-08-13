@@ -55,3 +55,9 @@ export interface UpdateTasasCambioResponse {
   message: string;
   updatedCount: number;
 }
+
+export interface RegistroTasasResponse {
+  id: number;
+  nombre: string | null;
+  createdAt: string;
+}

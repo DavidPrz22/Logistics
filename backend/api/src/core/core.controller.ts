@@ -6,9 +6,12 @@ import {
   Param,
   ParseIntPipe,
   Body,
+  Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CoreService } from './core.service';
-import { UpdateTasasCambioODT } from './ODTs/core.odts';
+import { UpdateTasasCambioODT, FindTasasCambioByFechaODT } from './ODTs/core.odts';
 
 @Controller('core')
 export class CoreController {
@@ -40,7 +43,11 @@ export class CoreController {
   }
 
   @Get('registro-tasas')
-  findAllRegistroTasas() {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  findAllRegistroTasas(@Query() query?: FindTasasCambioByFechaODT) {
+    if (query?.fecha) {
+      return this.coreService.findRegistrosTasasByFecha(query?.fecha);
+    }
     return this.coreService.findAllRegistroTasas();
   }
 

@@ -38,6 +38,7 @@ model tasaCambio {
   divisaDestino divisa @relation("DivisaDestino", fields: [divisaDestinoId], references: [id])
   registroTasas registroTasas @relation(fields: [registroTasasId], references: [id], onDelete: Cascade)
   tasasAplicadas transaccionPago[]
+  tasasOrdenes  ordenDespacho[]
 }
 
 model metodoPago {

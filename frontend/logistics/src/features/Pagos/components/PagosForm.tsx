@@ -1,19 +1,15 @@
-import React from "react";
+import { useState } from "react";
 import { useForm, FormProvider, useFormContext, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, TriangleAlert } from "lucide-react";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
 import { PagoSearchCombobox } from "./PagoSearchCombobox";
+import { TasaPagoSelector } from "./TasaPagoSelector";
+import { FormSelect } from "./FormSelect";
 import { crearPagoSchema, type CrearPagoInput, type OrdenPendiente, type FacturaPendiente } from "../schemas/schemas";
+import type { TasaCambio } from "@/types/zodType";
 import { 
   useDivisas, 
   useTasasCambio, 
@@ -42,12 +38,13 @@ export function PagosForm({
       fechaPago: new Date(),
     }
   });
+  const [ tasaAplicada, setTasaAplicada ] = useState<TasaCambio | null>(null);
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
-        <PagoCampos onOrdenSelect={onOrdenSelect} onFacturaSelect={onFacturaSelect} />
-        <ConversionBreakdown saldoPendiente={saldoPendiente} />
+        <PagoCampos onOrdenSelect={onOrdenSelect} onFacturaSelect={onFacturaSelect} setTasa={setTasaAplicada}/>
+        <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada}/>
       </form>
     </FormProvider>
   );
@@ -56,9 +53,11 @@ export function PagosForm({
 export function PagoCampos({
   onOrdenSelect,
   onFacturaSelect,
+  setTasa
 }: {
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
+  setTasa?: (tasa: TasaCambio | null) => void;
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
   
@@ -67,15 +66,22 @@ export function PagoCampos({
   const { data: tasas = [] } = useTasasCambio();
   const { data: cuentasDestino = [] } = useCuentasDestino();
   
+
   const tipoPago = useWatch({ control, name: "tipoPago" });
   
   const metodoPagoId = useWatch({ control, name: "metodoPagoId" });
   const divisaPagoId = useWatch({ control, name: "divisaPagoId" });
-
+  const fechaPago = useWatch({ control, name: "fechaPago" });
+  
   const metodo = metodosPago.find((m) => m.id === metodoPagoId);
   const requiereRef = metodo?.requiereReferencia ?? false;
 
   const divisaSeleccionada = divisas.find((d) => d.id === divisaPagoId);
+
+  const handleTasaSelect = (tasa: TasaCambio | null) => {
+    setTasa?.(tasa);
+    setValue("tasaAplicadaId", tasa?.id ?? 0);
+  };
 
 
   return (
@@ -116,58 +122,29 @@ export function PagoCampos({
       )}
 
       <Field label="Método de pago">
-        <Controller
+        <FormSelect
           name="metodoPagoId"
-          control={control}
-          render={({ field }) => (
-            <Select 
-              value={field.value ? String(field.value) : undefined} 
-              onValueChange={(val) => {
-                const numVal = Number(val);
-                field.onChange(numVal);
-                const isReq = metodosPago.find((m) => m.id === numVal)?.requiereReferencia ?? false;
-                if (!isReq) setValue("numeroReferencia", undefined);
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccione método" />
-              </SelectTrigger>
-              <SelectContent>
-                {metodosPago.map((m) => (
-                  <SelectItem key={m.id} value={String(m.id)}>
-                    {m.descripcion} ({m.codigo})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+          options={metodosPago}
+          placeholder="Seleccione método"
+          getDisplayValue={(m) => `${m.descripcion} (${m.codigo})`}
+          getItemContent={(m) => `${m.descripcion} (${m.codigo})`}
+          onValueChange={(val) => {
+            const isReq = metodosPago.find((m) => m.id === val)?.requiereReferencia ?? false;
+            if (!isReq) setValue("numeroReferencia", undefined);
+          }}
         />
       </Field>
 
       <Field label="Divisa de pago">
-        <Controller
+        <FormSelect
           name="divisaPagoId"
-          control={control}
-          render={({ field }) => (
-            <Select 
-              value={field.value ? String(field.value) : undefined} 
-              onValueChange={(val) => field.onChange(Number(val))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccione divisa" />
-              </SelectTrigger>
-              <SelectContent>
-                {divisas.map((d) => {
-                  const currentTasa = d.esMonedaBase ? 1 : tasas.find((t) => t.id === d.id)?.tasa;
-                  return (
-                    <SelectItem key={d.id} value={String(d.id)}>
-                      {d.codigo} · {d.nombre} {d.esMonedaBase ? "(Base)" : currentTasa ? `(Tasa: ${currentTasa})` : ""}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          )}
+          options={divisas}
+          placeholder="Seleccione divisa"
+          getDisplayValue={(d) => `${d.codigo} · ${d.nombre}`}
+          getItemContent={(d) => {
+            const currentTasa = d.esMonedaBase ? 1 : tasas.find((t) => t.id === d.id)?.tasa;
+            return `${d.codigo} · ${d.nombre} ${d.esMonedaBase ? "(Base)" : currentTasa ? `(Tasa: ${currentTasa})` : ""}`;
+          }}
         />
       </Field>
 
@@ -187,53 +164,16 @@ export function PagoCampos({
         />
       </Field>
 
-      <Field label="Tasa de cambio aplicada">
-        <Input
-          type="number"
-          value={""}
-          readOnly
-          disabled
-          className="font-mono tabular-nums bg-muted"
-        />
-      </Field>
-
       <Field label="Cuenta destino">
-        <Controller
+        <FormSelect
           name="cuentaDestinoId"
-          control={control}
-          render={({ field }) => (
-            <Select 
-              value={field.value ? String(field.value) : undefined} 
-              onValueChange={(val) => field.onChange(Number(val))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccione cuenta" />
-              </SelectTrigger>
-              <SelectContent>
-                {cuentasDestino.map((c) => (
-                  <SelectItem key={c.id} value={String(c.id)}>
-                    {c.nombre} ({c.tipo})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+          options={cuentasDestino}
+          placeholder="Seleccione cuenta"
+          getDisplayValue={(c) => `${c.nombre} (${c.tipo})`}
+          getItemContent={(c) => `${c.nombre} (${c.tipo})`}
         />
       </Field>
-
-      <Field label="Fecha de pago">
-        <Controller
-          name="fechaPago"
-          control={control}
-          render={({ field }) => (
-            <DatePicker 
-              value={field.value ? field.value.toISOString().split("T")[0] : ""} 
-              onChange={(v) => field.onChange(v ? new Date(v) : undefined)} 
-            />
-          )}
-        />
-      </Field>
-
+        
       {requiereRef && (
         <Field label={`Número de referencia (requerido)`}>
           <Controller
@@ -251,18 +191,41 @@ export function PagoCampos({
           />
         </Field>
       )}
+
+      <Field label="Fecha de pago">
+        <Controller
+          name="fechaPago"
+          control={control}
+          render={({ field }) => (
+            <DatePicker 
+              value={field.value ? field.value.toISOString().split("T")[0] : ""} 
+              onChange={(v) => field.onChange(v ? new Date(v) : undefined)} 
+            />
+          )}
+        />
+      </Field>
+
+      {
+        fechaPago && (
+        <TasaPagoSelector
+          fechaVigencia={fechaPago}
+          onTasaSelect={handleTasaSelect}
+        />
+      )}
+      
     </div>
   );
 }
 
 
 export function ConversionBreakdown({ 
-  saldoPendiente 
+  saldoPendiente,
+  tasaAplicada
 }: { 
   saldoPendiente?: number;
+  tasaAplicada?: TasaCambio | null;
 }) {
   const { data: divisas = [] } = useDivisas();
-  const { data: tasas = [] } = useTasasCambio();
   
   const divisaBase = divisas.find((d) => d.esMonedaBase);
 
@@ -271,10 +234,10 @@ export function ConversionBreakdown({
 
   const divisa = divisas.find((d) => d.id === form.divisaPagoId);
   const base = divisaBase;
-  const tasaAplicada = divisa?.esMonedaBase ? 1 : tasas.find((t) => t.id === form.tasaAplicadaId)?.tasa || 0;
+  const tasaValor = tasaAplicada?.tasa || 0;
   
   const montoOrigen = form.montoPago || 0;
-  const equiv = Math.round((montoOrigen * tasaAplicada) * 100) / 100;
+  const equiv = Math.round((montoOrigen * tasaValor) * 100) / 100;
   
   const excedente = saldoPendiente !== undefined ? Math.round((equiv - saldoPendiente) * 100) / 100 : 0;
 
@@ -285,7 +248,7 @@ export function ConversionBreakdown({
       <div className="text-xs uppercase tracking-wider text-muted-foreground">Conversión en tiempo real</div>
       <div className="flex flex-wrap items-center gap-3 font-mono tabular-nums">
         <span className="text-xl font-semibold">{montoOrigen.toFixed(2)} {divisa?.codigo}</span>
-        <span className="text-xs text-muted-foreground">× {tasaAplicada} {base.codigo}/{divisa?.codigo}</span>
+        <span className="text-xs text-muted-foreground">× {tasaValor} {base.codigo}/{divisa?.codigo}</span>
         <ArrowRight className="size-4 text-muted-foreground" />
         <span className="text-2xl font-bold">{equiv} {base.codigo}</span>
       </div>

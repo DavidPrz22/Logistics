@@ -1,4 +1,4 @@
-import { IsArray, IsInt, IsNumber, ValidateNested } from 'class-validator';
+import { IsArray, IsInt, IsNumber, ValidateNested, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class UpdateTasaCambioItemODT {
@@ -14,4 +14,10 @@ export class UpdateTasasCambioODT {
   @ValidateNested({ each: true })
   @Type(() => UpdateTasaCambioItemODT)
   tasas!: UpdateTasaCambioItemODT[];
+}
+
+export class FindTasasCambioByFechaODT {
+  @IsOptional()
+  @IsString()
+  fecha?: string;
 }

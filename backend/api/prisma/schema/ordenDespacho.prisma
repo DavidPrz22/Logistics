@@ -21,6 +21,7 @@ model ordenDespacho {
   fechaSalida            DateTime?      @default(now()) 
   estado                 EstadoOrdenDespacho? @default(PREPARACION)
 
+  tasaCambioId         Int
   tipoOrden              TipoDeOrden
   ///
   // CAMPOS FINANCIEROS
@@ -30,6 +31,7 @@ model ordenDespacho {
   totalAbonado           Decimal?             @default(0.00) // Suma de cobros recibidos
   saldoNetoCobrar        Decimal?             @default(0.00) // montoFacturadoNeto - totalAbonado
   
+  tasaCambio             tasaCambio     @relation(fields: [tasaCambioId], references: [id])
   cliente                cliente        @relation(fields: [clienteId], references: [id])
   chofer                 chofer?        @relation(fields: [choferId], references: [id])
   almacenTransito        almacen        @relation(fields: [almacenTransitoId], references: [id], onDelete: Restrict)

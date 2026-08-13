@@ -34,3 +34,25 @@ export interface PaginatedTransaccionesResponse {
     totalPages: number;
   };
 }
+
+export interface TasaCambioItem {
+  id: number;
+  divisaOrigenId: number;
+  divisaDestinoId: number;
+  tasa: number;
+  tasaMoficada: number | null;
+  fuente: string;
+  fechaVigencia: string | null;
+  divisaOrigen: {
+    id: number;
+    codigo: string;
+    nombre: string;
+    esMonedaBase: boolean | null;
+  };
+  divisaDestino: {
+    id: number;
+    codigo: string;
+    nombre: string;
+    esMonedaBase: boolean | null;
+  };
+}

@@ -3,6 +3,8 @@ import {
     fetchTransaccionesPagos,
     fetchOrdenesPendientes,
     fetchFacturasPendientes,
+    fetchTasasCambio,
+    fetchTasasCambioByRegistro,
     type FetchTransaccionesParams,
 } from "../../api/api";
 
@@ -28,3 +30,22 @@ export const facturasPendientesQueryOptions = (q: string) =>
         staleTime: Infinity,
         enabled: q.length >= 3,
     });
+
+
+export const TasasPagoPerDateQueryOptions = (date: string) =>
+    queryOptions({
+        queryKey: ["tasasPagoPerDate", date],
+        queryFn: () => fetchTasasCambio(date),
+        staleTime: Infinity,
+        enabled: !!date,
+    });
+
+
+export const TasasCambiobyRegistro = ( id: number) => {
+    return queryOptions({
+        queryKey: ["tasasCambiobyRegistro", id],
+        queryFn: () => fetchTasasCambioByRegistro(id),
+        staleTime: Infinity,
+        enabled: !!id,
+    });
+}

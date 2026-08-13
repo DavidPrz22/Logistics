@@ -16,6 +16,7 @@ import {
   TasaCambioItem,
   BinanceP2PResponse,
   UpdateTasasCambioResponse,
+  RegistroTasasResponse,
 } from './type/core.types';
 import { UpdateTasasCambioODT } from './ODTs/core.odts';
 
@@ -316,5 +317,34 @@ export class CoreService {
       message: 'Tasas de cambio actualizadas exitosamente',
       updatedCount: data.tasas.length,
     };
+  }
+
+  async findRegistrosTasasByFecha(
+    fecha?: string,
+  ): Promise<RegistroTasasResponse[]> {
+    if (!fecha) {
+      return [];
+    }
+
+    const fechaInicio = new Date(fecha);
+    fechaInicio.setHours(0, 0, 0, 0);
+
+    const fechaFin = new Date(fechaInicio);
+    fechaFin.setDate(fechaFin.getDate() + 1);
+
+    const registros = await this.prisma.registroTasas.findMany({
+      where: {
+        createdAt: {
+          gte: fechaInicio,
+          lt: fechaFin,
+        },
+      },
+    });
+
+    return registros.map((registro) => ({
+      id: registro.id,
+      nombre: registro.nombre,
+      createdAt: registro.createdAt.toISOString(),
+    }));
   }
 }
