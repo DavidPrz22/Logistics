@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { AsyncSearchCombobox, type AsyncComboboxItem } from "@/components/shared/async-search-combobox";
 import { useOrdenesPendientes, useFacturasPendientes } from "../hooks/queries/queries";
 import type { OrdenPendiente, FacturaPendiente } from "../schemas/schemas";
@@ -12,6 +12,7 @@ interface PagoSearchComboboxProps {
   onSelect?: (item: OrdenPendiente | FacturaPendiente) => void;
   placeholder?: string;
   className?: string;
+  ordenNumeroQueryParam?: string;
 }
 
 export function PagoSearchCombobox({
@@ -21,13 +22,25 @@ export function PagoSearchCombobox({
   onSelect,
   placeholder,
   className,
+  ordenNumeroQueryParam,
 }: PagoSearchComboboxProps) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(ordenNumeroQueryParam ?? "");
 
   const ordenesQuery = useOrdenesPendientes(tipo === "orden" ? searchQuery : "");
   const facturasQuery = useFacturasPendientes(tipo === "factura" ? searchQuery : "");
 
   const query = tipo === "orden" ? ordenesQuery : facturasQuery;
+
+  const hasAutoSelected = useRef(false);
+
+  useEffect(() => {
+    if (ordenNumeroQueryParam && query.data?.length === 1 && !hasAutoSelected.current) {
+      const item = query.data[0];
+      onChange(String(item.id));
+      onSelect?.(item);
+      hasAutoSelected.current = true;
+    }
+  }, [ordenNumeroQueryParam, query.data, onChange, onSelect]);
 
   const handleSearch = useCallback((q: string) => {
     setSearchQuery(q);

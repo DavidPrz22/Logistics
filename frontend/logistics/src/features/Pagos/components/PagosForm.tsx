@@ -23,12 +23,14 @@ export function PagosForm({
   saldoPendiente,
   onOrdenSelect,
   onFacturaSelect,
+  ordenQueryParam,
 }: { 
   tipoPago: 'ANTICIPO' | 'COBRO_FACTURA';
   onSubmit: (data: CrearPagoInput) => void;
   saldoPendiente?: number;
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
+  ordenQueryParam?: string;
 }) {
   const methods = useForm<CrearPagoInput>({
     resolver: zodResolver(crearPagoSchema),
@@ -43,7 +45,13 @@ export function PagosForm({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
-        <PagoCampos onOrdenSelect={onOrdenSelect} onFacturaSelect={onFacturaSelect} setTasa={setTasaAplicada}/>
+        <PagoCampos 
+        onOrdenSelect={onOrdenSelect} 
+        onFacturaSelect={onFacturaSelect} 
+        setTasa={setTasaAplicada}
+        ordenQueryParam={ordenQueryParam}
+
+        />
         <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada}/>
       </form>
     </FormProvider>
@@ -53,13 +61,14 @@ export function PagosForm({
 export function PagoCampos({
   onOrdenSelect,
   onFacturaSelect,
-  tasa,
-  setTasa
+  setTasa,
+  ordenQueryParam
 }: {
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
   tasa?: TasaCambio | null;
   setTasa?: (tasa: TasaCambio | null) => void;
+  ordenQueryParam?: string;
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
   
@@ -102,7 +111,8 @@ export function PagoCampos({
                   value={field.value?.toString()} 
                   onChange={field.onChange} 
                   onSelect={(item) => onOrdenSelect?.(item as OrdenPendiente)}
-                  tipo="orden" 
+                  tipo="orden"
+                  ordenNumeroQueryParam={ordenQueryParam}
                   />
               )}
             />
@@ -110,7 +120,7 @@ export function PagoCampos({
         )}
 
         {tipoPago === 'COBRO_FACTURA' && (
-          <Field label="ID de Documento / Factura">
+          <Field label="Numero de Orden / Factura">
             <Controller
               name="documentoId"
               control={control}
@@ -119,7 +129,8 @@ export function PagoCampos({
                   value={field.value?.toString()} 
                   onChange={field.onChange} 
                   onSelect={(item) => onFacturaSelect?.(item as FacturaPendiente)}
-                  tipo="factura" 
+                  tipo="factura"
+                  ordenNumeroQueryParam={ordenQueryParam}
                   />
               )}
             />

@@ -6,13 +6,23 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, HandCoins } from "lucide-react";
 import { useState, useCallback } from "react";
 import type { OrdenPendiente, FacturaPendiente, CrearPagoInput } from "@/features/Pagos/schemas/schemas";
+import { z } from "zod";
+
+const crearPagoSchema = z.object({
+  orden: z.string().optional(),
+});
+
+type TcrearPago = z.infer<typeof crearPagoSchema>;
 
 export const Route = createFileRoute("/pagos/crear/$pagoTipo")({
+  validateSearch: (search) => crearPagoSchema.parse(search),
   component: CrearPago,
 });
 
 function CrearPago() {
   const { pagoTipo } = Route.useParams() as { pagoTipo: "anticipado" | "factura" };
+  const ordenQuery = Route.useSearch() as TcrearPago;
+  
   const navigate = useNavigate();
 
   const [orden, setOrden] = useState<OrdenPendiente | null>(null);
@@ -79,6 +89,7 @@ function CrearPago() {
           saldoPendiente={selectedSaldo}
           onOrdenSelect={handleOrdenSelect}
           onFacturaSelect={handleFacturaSelect}
+          ordenQueryParam={ordenQuery.orden}
         />
       </Card>
 
