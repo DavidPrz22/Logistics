@@ -53,10 +53,12 @@ export function PagosForm({
 export function PagoCampos({
   onOrdenSelect,
   onFacturaSelect,
+  tasa,
   setTasa
 }: {
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
+  tasa?: TasaCambio | null;
   setTasa?: (tasa: TasaCambio | null) => void;
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
@@ -72,7 +74,8 @@ export function PagoCampos({
   const metodoPagoId = useWatch({ control, name: "metodoPagoId" });
   const divisaPagoId = useWatch({ control, name: "divisaPagoId" });
   const fechaPago = useWatch({ control, name: "fechaPago" });
-  
+  const tasaId = useWatch({ control, name: "tasaAplicadaId" });
+
   const metodo = metodosPago.find((m) => m.id === metodoPagoId);
   const requiereRef = metodo?.requiereReferencia ?? false;
 
@@ -85,134 +88,138 @@ export function PagoCampos({
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-6">
 
-      {tipoPago === 'ANTICIPO' && (
-        <Field label="ID de Orden">
-          <Controller
-            name="ordenId"
-            control={control}
-            render={({ field }) => (
-              <PagoSearchCombobox 
-                value={field.value?.toString()} 
-                onChange={field.onChange} 
-                onSelect={(item) => onOrdenSelect?.(item as OrdenPendiente)}
-                tipo="orden" 
-                />
-            )}
-          />
-        </Field>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      {tipoPago === 'COBRO_FACTURA' && (
-        <Field label="ID de Documento / Factura">
-          <Controller
-            name="documentoId"
-            control={control}
-            render={({ field }) => (
-              <PagoSearchCombobox 
-                value={field.value?.toString()} 
-                onChange={field.onChange} 
-                onSelect={(item) => onFacturaSelect?.(item as FacturaPendiente)}
-                tipo="factura" 
-                />
-            )}
-          />
-        </Field>
-      )}
-
-      <Field label="Método de pago">
-        <FormSelect
-          name="metodoPagoId"
-          options={metodosPago}
-          placeholder="Seleccione método"
-          getDisplayValue={(m) => `${m.descripcion} (${m.codigo})`}
-          getItemContent={(m) => `${m.descripcion} (${m.codigo})`}
-          onValueChange={(val) => {
-            const isReq = metodosPago.find((m) => m.id === val)?.requiereReferencia ?? false;
-            if (!isReq) setValue("numeroReferencia", undefined);
-          }}
-        />
-      </Field>
-
-      <Field label="Divisa de pago">
-        <FormSelect
-          name="divisaPagoId"
-          options={divisas}
-          placeholder="Seleccione divisa"
-          getDisplayValue={(d) => `${d.codigo} · ${d.nombre}`}
-          getItemContent={(d) => {
-            const currentTasa = d.esMonedaBase ? 1 : tasas.find((t) => t.id === d.id)?.tasa;
-            return `${d.codigo} · ${d.nombre} ${d.esMonedaBase ? "(Base)" : currentTasa ? `(Tasa: ${currentTasa})` : ""}`;
-          }}
-        />
-      </Field>
-
-      <Field label={`Monto origen (${divisaSeleccionada?.codigo ?? ""})`}>
-        <Controller
-          name="montoPago"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="number" min="0" step="0.01" inputMode="decimal"
-              value={field.value || ""}
-              onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
-              placeholder="0.00"
-              className="font-mono tabular-nums"
+        {tipoPago === 'ANTICIPO' && (
+          <Field label="ID de Orden">
+            <Controller
+              name="ordenId"
+              control={control}
+              render={({ field }) => (
+                <PagoSearchCombobox 
+                  value={field.value?.toString()} 
+                  onChange={field.onChange} 
+                  onSelect={(item) => onOrdenSelect?.(item as OrdenPendiente)}
+                  tipo="orden" 
+                  />
+              )}
             />
-          )}
-        />
-      </Field>
+          </Field>
+        )}
 
-      <Field label="Cuenta destino">
-        <FormSelect
-          name="cuentaDestinoId"
-          options={cuentasDestino}
-          placeholder="Seleccione cuenta"
-          getDisplayValue={(c) => `${c.nombre} (${c.tipo})`}
-          getItemContent={(c) => `${c.nombre} (${c.tipo})`}
-        />
-      </Field>
-        
-      {requiereRef && (
-        <Field label={`Número de referencia (requerido)`}>
+        {tipoPago === 'COBRO_FACTURA' && (
+          <Field label="ID de Documento / Factura">
+            <Controller
+              name="documentoId"
+              control={control}
+              render={({ field }) => (
+                <PagoSearchCombobox 
+                  value={field.value?.toString()} 
+                  onChange={field.onChange} 
+                  onSelect={(item) => onFacturaSelect?.(item as FacturaPendiente)}
+                  tipo="factura" 
+                  />
+              )}
+            />
+          </Field>
+        )}
+
+        <Field label="Método de pago">
+          <FormSelect
+            name="metodoPagoId"
+            options={metodosPago}
+            placeholder="Seleccione método"
+            getDisplayValue={(m) => `${m.descripcion} (${m.codigo})`}
+            getItemContent={(m) => `${m.descripcion} (${m.codigo})`}
+            onValueChange={(val) => {
+              const isReq = metodosPago.find((m) => m.id === val)?.requiereReferencia ?? false;
+              if (!isReq) setValue("numeroReferencia", undefined);
+            }}
+          />
+        </Field>
+
+        <Field label="Divisa de pago">
+          <FormSelect
+            name="divisaPagoId"
+            options={divisas}
+            placeholder="Seleccione divisa"
+            getDisplayValue={(d) => `${d.codigo} · ${d.nombre}`}
+            getItemContent={(d) => {
+              const currentTasa = d.esMonedaBase ? 1 : tasas.find((t) => t.id === d.id)?.tasa;
+              return `${d.codigo} · ${d.nombre} ${d.esMonedaBase ? "(Base)" : currentTasa ? `(Tasa: ${currentTasa})` : ""}`;
+            }}
+          />
+        </Field>
+
+        <Field label={`Monto origen (${divisaSeleccionada?.codigo ?? ""})`}>
           <Controller
-            name="numeroReferencia"
+            name="montoPago"
             control={control}
             render={({ field }) => (
               <Input
+                type="number" min="0" step="0.01" inputMode="decimal"
                 value={field.value || ""}
-                onChange={field.onChange}
-                placeholder="TRF-000123"
-                maxLength={40}
-                className="font-mono"
+                onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                placeholder="0.00"
+                className="font-mono tabular-nums"
               />
             )}
           />
         </Field>
-      )}
 
-      <Field label="Fecha de pago">
-        <Controller
-          name="fechaPago"
-          control={control}
-          render={({ field }) => (
-            <DatePicker 
-              value={field.value ? field.value.toISOString().split("T")[0] : ""} 
-              onChange={(v) => field.onChange(v ? new Date(v) : undefined)} 
+        <Field label="Cuenta destino">
+          <FormSelect
+            name="cuentaDestinoId"
+            options={cuentasDestino}
+            placeholder="Seleccione cuenta"
+            getDisplayValue={(c) => `${c.nombre} (${c.tipo})`}
+            getItemContent={(c) => `${c.nombre} (${c.tipo})`}
+          />
+        </Field>
+          
+        {requiereRef && (
+          <Field label={`Número de referencia (requerido)`}>
+            <Controller
+              name="numeroReferencia"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  placeholder="TRF-000123"
+                  maxLength={40}
+                  className="font-mono"
+                />
+              )}
             />
-          )}
-        />
-      </Field>
+          </Field>
+        )}
+
+        <Field label="Fecha de pago">
+          <Controller
+            name="fechaPago"
+            control={control}
+            render={({ field }) => (
+              <DatePicker 
+                value={field.value ? field.value.toISOString().split("T")[0] : ""} 
+                onChange={(v) => field.onChange(v ? new Date(v) : undefined)} 
+              />
+            )}
+          />
+        </Field>
+        
+      </div>
 
       {
-        fechaPago && (
-        <TasaPagoSelector
-          fechaVigencia={fechaPago}
-          onTasaSelect={handleTasaSelect}
-        />
-      )}
-      
+          fechaPago && (
+          <TasaPagoSelector
+            fechaVigencia={fechaPago}
+            onTasaSelect={handleTasaSelect}
+            value={tasaId}
+          />
+        )}
     </div>
   );
 }

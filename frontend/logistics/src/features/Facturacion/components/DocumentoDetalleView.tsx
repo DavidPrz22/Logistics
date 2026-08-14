@@ -21,8 +21,11 @@ export function DocumentoDetalleView({ doc }: DocumentoDetalleViewProps) {
       />
       <DocumentoStats
         montoTotalBase={doc.montoTotalBase}
+        montoTotalVes={doc.montoTotalVes}
         totalAbonado={doc.totalAbonado}
         saldoPendienteBase={doc.saldoPendienteBase}
+        saldoPendienteVes={doc.saldoPendienteVes}
+        tasaEmisionValor={doc.tasaEmisionValor}
       />
       <PagosTable transacciones={doc.transaccionesPago} />
     </div>

@@ -50,7 +50,10 @@ export interface DocumentoDeudaDetalle {
   numeroOrden: string;
   identificadorCliente: string;
   montoTotalBase: number;
+  montoTotalVes: number | null;
   saldoPendienteBase: number;
+  saldoPendienteVes: number | null;
+  tasaEmisionValor: number | null;
   totalAbonado: number;
   estado: EstadoDocumentoDeuda;
   tipoDocumento: TipoDocumentoDeuda;

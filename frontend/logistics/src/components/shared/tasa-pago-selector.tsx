@@ -103,6 +103,7 @@ export function TasaPagoSelector({
             value={value?.toString()}
             onChange={(v) => {
               const tasa = tasas.find((t: TasaCambio) => t.id === Number(v));
+              console.log(tasa);
               onTasaSelect(tasa ?? null);
             }}
             placeholder={loadingTasas ? "Cargando..." : "Seleccione tasa"}

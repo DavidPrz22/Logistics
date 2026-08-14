@@ -54,7 +54,7 @@ export function FormSelect<T extends SelectOption>({
                   onValueChange?.(numVal);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full bg-background">
                   <SelectValue placeholder={placeholder}>
                     {selectedOption && getDisplayValue(selectedOption)}
                   </SelectValue>

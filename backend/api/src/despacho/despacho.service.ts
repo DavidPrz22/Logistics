@@ -657,6 +657,15 @@ export class DespachoService {
       const montoFacturadoNeto = Number(orden.totalOriginal) - totalRechazado;
       const saldoPendienteBase = montoFacturadoNeto - totalAnticipado;
 
+      // Calculate VES amounts using the order's exchange rate
+      const tasaEmision = orden.tasaCambioValor ? Number(orden.tasaCambioValor) : null;
+      const montoTotalVes = tasaEmision
+        ? Math.round(montoFacturadoNeto * tasaEmision * 100) / 100
+        : null;
+      const saldoPendienteVes = tasaEmision
+        ? Math.round(saldoPendienteBase * tasaEmision * 100) / 100
+        : null;
+
       let estadoDocumento: EstadoDocumentoDeuda;
       if (saldoPendienteBase <= 0) {
         estadoDocumento = EstadoDocumentoDeuda.PAGADO_TOTAL;
@@ -682,7 +691,10 @@ export class DespachoService {
           ordenId: id,
           clienteId: orden.clienteId,
           montoTotalBase: montoFacturadoNeto,
+          montoTotalVes: montoTotalVes,
           saldoPendienteBase: saldoPendienteBase,
+          saldoPendienteVes: saldoPendienteVes,
+          tasaEmisionValor: tasaEmision,
           estado: estadoDocumento,
           tipoDocumento: TipoDocumentoDeuda.FACTURA,
         },
