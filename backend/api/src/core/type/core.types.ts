@@ -21,6 +21,13 @@ export interface DolarApiResponse {
   fechaActualizacion: string;
 }
 
+export interface FrankfurterApiResponse {
+  amount: number;
+  base: string;
+  date: string;
+  rates: Record<string, number>;
+}
+
 export interface TasaCambioMontosVEResponse {
   data: TasaCambioItem[];
   meta: {

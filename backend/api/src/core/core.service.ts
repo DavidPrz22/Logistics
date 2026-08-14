@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   TasaCambioMontosVEResponse,
   DolarApiResponse,
+  FrankfurterApiResponse,
   TasaCambioItem,
   BinanceP2PResponse,
   UpdateTasasCambioResponse,
@@ -58,7 +59,10 @@ export class CoreService {
   findTasasCambioByRegistroId(registroTasasId: number) {
     return this.prisma.tasaCambio.findMany({
       where: { registroTasasId },
-      include: { divisaOrigen: true, divisaDestino: true },
+      include: {
+        divisaOrigen: true,
+        divisaDestino: true,
+      },
     });
   }
 
@@ -137,6 +141,23 @@ export class CoreService {
       return response.data;
     } catch (error) {
       console.error('Error fetching from DolarApi:', error);
+      return null;
+    }
+  }
+
+  private async fetchFrankfurterRates() {
+    try {
+      const response = await axios.get<FrankfurterApiResponse>(
+        'https://api.frankfurter.app/latest?from=EUR&to=USD',
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching from Frankfurter:', error);
       return null;
     }
   }
@@ -273,6 +294,24 @@ export class CoreService {
           fuente: 'PARALELO',
           registroTasasId: registro.id,
           fechaVigencia: new Date(dolarApiData.fechaActualizacion),
+        });
+      }
+    }
+
+    // Fetch and process Frankfurter (EUR/USD)
+    const frankfurterData = await this.fetchFrankfurterRates();
+    if (frankfurterData?.rates?.USD) {
+      const divisaOrigenId = divisaMap['EUR'];
+      const divisaDestinoId = divisaMap['USD'];
+
+      if (divisaOrigenId && divisaDestinoId) {
+        combinedTasasCambioList.push({
+          divisaOrigenId,
+          divisaDestinoId,
+          tasa: roundToFour(frankfurterData.rates.USD),
+          fuente: 'PARALELO',
+          registroTasasId: registro.id,
+          fechaVigencia: new Date(frankfurterData.date),
         });
       }
     }

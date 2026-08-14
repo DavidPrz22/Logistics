@@ -40,19 +40,23 @@ export function PagosForm({
       fechaPago: new Date(),
     }
   });
-  const [ tasaAplicada, setTasaAplicada ] = useState<TasaCambio | null>(null);
 
+  const [ tasaAplicada, setTasaAplicada ] = useState<TasaCambio | null>(null);
+  const { data: divisas = [] } = useDivisas();
+  const isMonedaBase = divisas.find((d) => d.esMonedaBase)?.id === useWatch({ control: methods.control, name: 'divisaPagoId' });
+  
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
         <PagoCampos 
-        onOrdenSelect={onOrdenSelect} 
-        onFacturaSelect={onFacturaSelect} 
-        setTasa={setTasaAplicada}
-        ordenQueryParam={ordenQueryParam}
+          onOrdenSelect={onOrdenSelect} 
+          onFacturaSelect={onFacturaSelect} 
+          setTasa={setTasaAplicada}
+          ordenQueryParam={ordenQueryParam}
+          isMonedaBase={isMonedaBase}
 
         />
-        <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada}/>
+        <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada} isMonedaBase/>
       </form>
     </FormProvider>
   );
@@ -62,13 +66,15 @@ export function PagoCampos({
   onOrdenSelect,
   onFacturaSelect,
   setTasa,
-  ordenQueryParam
+  ordenQueryParam,
+  isMonedaBase
 }: {
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
   tasa?: TasaCambio | null;
   setTasa?: (tasa: TasaCambio | null) => void;
   ordenQueryParam?: string;
+  isMonedaBase: boolean
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
   
@@ -76,7 +82,7 @@ export function PagoCampos({
   const { data: divisas = [] } = useDivisas();
   const { data: tasas = [] } = useTasasCambio();
   const { data: cuentasDestino = [] } = useCuentasDestino();
-  
+ 
 
   const tipoPago = useWatch({ control, name: "tipoPago" });
   
@@ -164,7 +170,7 @@ export function PagoCampos({
           />
         </Field>
 
-        <Field label={`Monto origen (${divisaSeleccionada?.codigo ?? ""})`}>
+        <Field label={`Monto (${divisaSeleccionada?.codigo ?? ""})`}>
           <Controller
             name="montoPago"
             control={control}
@@ -224,7 +230,7 @@ export function PagoCampos({
       </div>
 
       {
-          fechaPago && (
+          (fechaPago && !isMonedaBase) && (
           <TasaPagoSelector
             fechaVigencia={fechaPago}
             onTasaSelect={handleTasaSelect}
@@ -238,10 +244,12 @@ export function PagoCampos({
 
 export function ConversionBreakdown({ 
   saldoPendiente,
-  tasaAplicada
+  tasaAplicada,
+  isMonedaBase
 }: { 
   saldoPendiente?: number;
   tasaAplicada?: TasaCambio | null;
+  isMonedaBase: boolean
 }) {
   const { data: divisas = [] } = useDivisas();
   
@@ -252,10 +260,10 @@ export function ConversionBreakdown({
 
   const divisa = divisas.find((d) => d.id === form.divisaPagoId);
   const base = divisaBase;
-  const tasaValor = tasaAplicada?.tasa || 0;
+  const tasaValor = tasaAplicada && !isMonedaBase ? tasaAplicada.tasa : 1;
   
   const montoOrigen = form.montoPago || 0;
-  const equiv = Math.round((montoOrigen * tasaValor) * 100) / 100;
+  const equiv = Math.round((montoOrigen / tasaValor) * 100) / 100;
   
   const excedente = saldoPendiente !== undefined ? Math.round((equiv - saldoPendiente) * 100) / 100 : 0;
 
@@ -264,9 +272,10 @@ export function ConversionBreakdown({
   return (
     <Card className="p-5 space-y-3 bg-secondary/40">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">Conversión en tiempo real</div>
+
       <div className="flex flex-wrap items-center gap-3 font-mono tabular-nums">
         <span className="text-xl font-semibold">{montoOrigen.toFixed(2)} {divisa?.codigo}</span>
-        <span className="text-xs text-muted-foreground">× {tasaValor} {base.codigo}/{divisa?.codigo}</span>
+        <span className="text-xs text-muted-foreground">÷ {tasaValor} {divisa?.codigo}/{base.codigo}</span>
         <ArrowRight className="size-4 text-muted-foreground" />
         <span className="text-2xl font-bold">{equiv} {base.codigo}</span>
       </div>
