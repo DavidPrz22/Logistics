@@ -59,7 +59,7 @@ function CrearPago() {
     ? "Abono recibido antes de la emisión de la factura. Se cruzará automáticamente al liquidar la ruta."
     : "Pago aplicado a una factura pendiente. El saldo restante se actualizará automáticamente.";
 
-    console.log(divisa)
+
   return (
     <div className="p-8 space-y-6 max-w-4xl mx-auto">
       <PageHeader

@@ -7,7 +7,7 @@ const basePagoSchema = z.object({
   tasaAplicadaId: z.number().optional(),
   montoPago: z.number().min(0.01),
   cuentaDestinoId: z.number(),
-  fechaPago: z.date(),
+  fechaPago: z.date({ required_error: "La fecha es requerida" }),
   usuario: z.string().optional(),
 });
 

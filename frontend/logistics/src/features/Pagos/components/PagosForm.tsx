@@ -44,7 +44,7 @@ export function PagosForm({
       fechaPago: new Date(),
     }
   });
-
+  console.log(methods.formState.errors);
   const setTasaAplicada = usePagosStore((state) => state.setTasaAplicada);
   const divisa = usePagosStore((state) => state.divisa);
   const isMonedaBase = divisa?.esMonedaBase ?? false;
@@ -133,7 +133,7 @@ export function PagoCampos({
               render={({ field }) => (
                 <PagoSearchCombobox 
                   value={field.value?.toString()} 
-                  onChange={field.onChange} 
+                  onChange={(val) => field.onChange(val ? Number(val) : undefined)}
                   onSelect={(item) => onOrdenSelect?.(item as OrdenPendiente)}
                   tipo="orden"
                   ordenNumeroQueryParam={ordenQueryParam}
@@ -151,7 +151,7 @@ export function PagoCampos({
               render={({ field }) => (
                 <PagoSearchCombobox 
                   value={field.value?.toString()} 
-                  onChange={field.onChange} 
+                  onChange={(val) => field.onChange(val ? Number(val) : undefined)}
                   onSelect={(item) => onFacturaSelect?.(item as FacturaPendiente)}
                   tipo="factura"
                   ordenNumeroQueryParam={ordenQueryParam}
@@ -228,8 +228,8 @@ export function PagoCampos({
             control={control}
             render={({ field }) => (
               <DatePicker 
-                value={field.value ? field.value.toISOString().split("T")[0] : ""} 
-                onChange={(v) => field.onChange(v ? new Date(v) : undefined)} 
+                value={field.value instanceof Date && !isNaN(field.value.getTime()) ? field.value.toISOString().split("T")[0] : ""} 
+                onChange={(v) => field.onChange(v ? new Date(v) : new Date())} 
               />
             )}
           />
@@ -287,7 +287,7 @@ export function ConversionBreakdown({
   
   const montoOrigen = form.montoPago || 0;
   const equiv = convertirDivisa(montoOrigen, tasaValor, base?.codigo ?? null, divisa?.codigo ?? null);
-  
+
   const excedente = saldoPendiente !== undefined ? Math.round((equiv - saldoPendiente) * 100) / 100 : 0;
 
 

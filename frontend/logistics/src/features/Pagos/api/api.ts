@@ -110,7 +110,7 @@ export const registrarPago = async (
       tasaAplicadaId: data.tasaAplicadaId || undefined,
       numeroReferencia: data.numeroReferencia,
       cuentaDestinoId: data.cuentaDestinoId,
-      fechaPago: data.fechaPago.toISOString(),
+      fechaPago: data.fechaPago ? new Date(data.fechaPago).toISOString() : undefined,
     };
 
     const { data: response } = await apiClient.post<TransaccionPagoResponse>(
