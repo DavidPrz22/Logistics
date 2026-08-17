@@ -56,3 +56,87 @@ export interface TasaCambioItem {
     esMonedaBase: boolean | null;
   };
 }
+
+export interface TransaccionPagoResponse {
+  id: number;
+  fecha: string;
+  cliente: string;
+  tipo: string;
+  metodo: string;
+  referencia: string | null;
+  estado: string;
+  montoOrigen: number;
+  divisaSimbolo?: string;
+  montoEquivalenteBase: number;
+  montoCalculadoVes: number | null;
+}
+
+export interface TransaccionPagoDetailResponse {
+  id: number;
+  fecha: string;
+  tipoDePago: string;
+  estado: string;
+  tipoOperacion: string;
+  montoOrigen: number;
+  montoEquivalenteBase: number;
+  montoCalculadoVes: number | null;
+  tasaAplicadaValor: number | null;
+  numeroReferencia: string | null;
+  motivoAnulacion: string | null;
+  metodoPago: {
+    id: number;
+    codigo: string;
+    descripcion: string;
+  };
+  divisa: {
+    id: number;
+    codigo: string;
+    nombre: string;
+  };
+  usuario: {
+    id: number;
+    nombreUsuario: string;
+  };
+  documento?: {
+    id: number;
+    sistemaOrigen: string;
+    estado: string | null;
+    montoTotalBase: number;
+    saldoPendienteBase: number;
+    cliente: {
+      id: number;
+      nombre: string;
+    };
+    orden: {
+      id: number;
+      numeroOrden: string;
+    };
+  } | null;
+  orden?: {
+    id: number;
+    numeroOrden: string;
+    estado: string | null;
+    cliente: {
+      id: number;
+      nombre: string;
+    };
+  } | null;
+  tasaAplicada?: {
+    id: number;
+    tasa: number;
+    divisaOrigen: {
+      codigo: string;
+    };
+    divisaDestino: {
+      codigo: string;
+    };
+  } | null;
+  cuentaDestino?: {
+    id: number;
+    nombre: string;
+    tipo: string;
+    divisa: {
+      codigo: string;
+    };
+  } | null;
+}

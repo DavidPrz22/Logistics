@@ -74,6 +74,7 @@ export type TransaccionPagoMinAggregateOutputType = {
   fechaPago: Date | null
   cuentaDestinoId: number | null
   usuarioId: number | null
+  motivoAnulacion: string | null
 }
 
 export type TransaccionPagoMaxAggregateOutputType = {
@@ -94,6 +95,7 @@ export type TransaccionPagoMaxAggregateOutputType = {
   fechaPago: Date | null
   cuentaDestinoId: number | null
   usuarioId: number | null
+  motivoAnulacion: string | null
 }
 
 export type TransaccionPagoCountAggregateOutputType = {
@@ -114,6 +116,7 @@ export type TransaccionPagoCountAggregateOutputType = {
   fechaPago: number
   cuentaDestinoId: number
   usuarioId: number
+  motivoAnulacion: number
   _all: number
 }
 
@@ -166,6 +169,7 @@ export type TransaccionPagoMinAggregateInputType = {
   fechaPago?: true
   cuentaDestinoId?: true
   usuarioId?: true
+  motivoAnulacion?: true
 }
 
 export type TransaccionPagoMaxAggregateInputType = {
@@ -186,6 +190,7 @@ export type TransaccionPagoMaxAggregateInputType = {
   fechaPago?: true
   cuentaDestinoId?: true
   usuarioId?: true
+  motivoAnulacion?: true
 }
 
 export type TransaccionPagoCountAggregateInputType = {
@@ -206,6 +211,7 @@ export type TransaccionPagoCountAggregateInputType = {
   fechaPago?: true
   cuentaDestinoId?: true
   usuarioId?: true
+  motivoAnulacion?: true
   _all?: true
 }
 
@@ -313,6 +319,7 @@ export type TransaccionPagoGroupByOutputType = {
   fechaPago: Date | null
   cuentaDestinoId: number | null
   usuarioId: number
+  motivoAnulacion: string | null
   _count: TransaccionPagoCountAggregateOutputType | null
   _avg: TransaccionPagoAvgAggregateOutputType | null
   _sum: TransaccionPagoSumAggregateOutputType | null
@@ -356,6 +363,7 @@ export type transaccionPagoWhereInput = {
   fechaPago?: Prisma.DateTimeNullableFilter<"transaccionPago"> | Date | string | null
   cuentaDestinoId?: Prisma.IntNullableFilter<"transaccionPago"> | number | null
   usuarioId?: Prisma.IntFilter<"transaccionPago"> | number
+  motivoAnulacion?: Prisma.StringNullableFilter<"transaccionPago"> | string | null
   documento?: Prisma.XOR<Prisma.DocumentoDeudaNullableScalarRelationFilter, Prisma.documentoDeudaWhereInput> | null
   metodoPago?: Prisma.XOR<Prisma.MetodoPagoScalarRelationFilter, Prisma.metodoPagoWhereInput>
   divisa?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
@@ -382,6 +390,7 @@ export type transaccionPagoOrderByWithRelationInput = {
   fechaPago?: Prisma.SortOrderInput | Prisma.SortOrder
   cuentaDestinoId?: Prisma.SortOrderInput | Prisma.SortOrder
   usuarioId?: Prisma.SortOrder
+  motivoAnulacion?: Prisma.SortOrderInput | Prisma.SortOrder
   documento?: Prisma.documentoDeudaOrderByWithRelationInput
   metodoPago?: Prisma.metodoPagoOrderByWithRelationInput
   divisa?: Prisma.divisaOrderByWithRelationInput
@@ -411,6 +420,7 @@ export type transaccionPagoWhereUniqueInput = Prisma.AtLeast<{
   fechaPago?: Prisma.DateTimeNullableFilter<"transaccionPago"> | Date | string | null
   cuentaDestinoId?: Prisma.IntNullableFilter<"transaccionPago"> | number | null
   usuarioId?: Prisma.IntFilter<"transaccionPago"> | number
+  motivoAnulacion?: Prisma.StringNullableFilter<"transaccionPago"> | string | null
   documento?: Prisma.XOR<Prisma.DocumentoDeudaNullableScalarRelationFilter, Prisma.documentoDeudaWhereInput> | null
   metodoPago?: Prisma.XOR<Prisma.MetodoPagoScalarRelationFilter, Prisma.metodoPagoWhereInput>
   divisa?: Prisma.XOR<Prisma.DivisaScalarRelationFilter, Prisma.divisaWhereInput>
@@ -437,6 +447,7 @@ export type transaccionPagoOrderByWithAggregationInput = {
   fechaPago?: Prisma.SortOrderInput | Prisma.SortOrder
   cuentaDestinoId?: Prisma.SortOrderInput | Prisma.SortOrder
   usuarioId?: Prisma.SortOrder
+  motivoAnulacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.transaccionPagoCountOrderByAggregateInput
   _avg?: Prisma.transaccionPagoAvgOrderByAggregateInput
   _max?: Prisma.transaccionPagoMaxOrderByAggregateInput
@@ -465,6 +476,7 @@ export type transaccionPagoScalarWhereWithAggregatesInput = {
   fechaPago?: Prisma.DateTimeNullableWithAggregatesFilter<"transaccionPago"> | Date | string | null
   cuentaDestinoId?: Prisma.IntNullableWithAggregatesFilter<"transaccionPago"> | number | null
   usuarioId?: Prisma.IntWithAggregatesFilter<"transaccionPago"> | number
+  motivoAnulacion?: Prisma.StringNullableWithAggregatesFilter<"transaccionPago"> | string | null
 }
 
 export type transaccionPagoCreateInput = {
@@ -478,6 +490,7 @@ export type transaccionPagoCreateInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
@@ -504,6 +517,7 @@ export type transaccionPagoUncheckedCreateInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateInput = {
@@ -517,6 +531,7 @@ export type transaccionPagoUpdateInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
@@ -543,6 +558,7 @@ export type transaccionPagoUncheckedUpdateInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyInput = {
@@ -563,6 +579,7 @@ export type transaccionPagoCreateManyInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateManyMutationInput = {
@@ -576,6 +593,7 @@ export type transaccionPagoUpdateManyMutationInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyInput = {
@@ -596,6 +614,7 @@ export type transaccionPagoUncheckedUpdateManyInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransaccionPagoListRelationFilter = {
@@ -626,6 +645,7 @@ export type transaccionPagoCountOrderByAggregateInput = {
   fechaPago?: Prisma.SortOrder
   cuentaDestinoId?: Prisma.SortOrder
   usuarioId?: Prisma.SortOrder
+  motivoAnulacion?: Prisma.SortOrder
 }
 
 export type transaccionPagoAvgOrderByAggregateInput = {
@@ -661,6 +681,7 @@ export type transaccionPagoMaxOrderByAggregateInput = {
   fechaPago?: Prisma.SortOrder
   cuentaDestinoId?: Prisma.SortOrder
   usuarioId?: Prisma.SortOrder
+  motivoAnulacion?: Prisma.SortOrder
 }
 
 export type transaccionPagoMinOrderByAggregateInput = {
@@ -681,6 +702,7 @@ export type transaccionPagoMinOrderByAggregateInput = {
   fechaPago?: Prisma.SortOrder
   cuentaDestinoId?: Prisma.SortOrder
   usuarioId?: Prisma.SortOrder
+  motivoAnulacion?: Prisma.SortOrder
 }
 
 export type transaccionPagoSumOrderByAggregateInput = {
@@ -973,6 +995,7 @@ export type transaccionPagoCreateWithoutDivisaInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   tasaAplicada?: Prisma.tasaCambioCreateNestedOneWithoutTasasAplicadasInput
@@ -997,6 +1020,7 @@ export type transaccionPagoUncheckedCreateWithoutDivisaInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutDivisaInput = {
@@ -1045,6 +1069,7 @@ export type transaccionPagoScalarWhereInput = {
   fechaPago?: Prisma.DateTimeNullableFilter<"transaccionPago"> | Date | string | null
   cuentaDestinoId?: Prisma.IntNullableFilter<"transaccionPago"> | number | null
   usuarioId?: Prisma.IntFilter<"transaccionPago"> | number
+  motivoAnulacion?: Prisma.StringNullableFilter<"transaccionPago"> | string | null
 }
 
 export type transaccionPagoCreateWithoutTasaAplicadaInput = {
@@ -1058,6 +1083,7 @@ export type transaccionPagoCreateWithoutTasaAplicadaInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
@@ -1082,6 +1108,7 @@ export type transaccionPagoUncheckedCreateWithoutTasaAplicadaInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutTasaAplicadaInput = {
@@ -1120,6 +1147,7 @@ export type transaccionPagoCreateWithoutMetodoPagoInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
   tasaAplicada?: Prisma.tasaCambioCreateNestedOneWithoutTasasAplicadasInput
@@ -1144,6 +1172,7 @@ export type transaccionPagoUncheckedCreateWithoutMetodoPagoInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutMetodoPagoInput = {
@@ -1182,6 +1211,7 @@ export type transaccionPagoCreateWithoutDocumentoInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
   tasaAplicada?: Prisma.tasaCambioCreateNestedOneWithoutTasasAplicadasInput
@@ -1206,6 +1236,7 @@ export type transaccionPagoUncheckedCreateWithoutDocumentoInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutDocumentoInput = {
@@ -1244,6 +1275,7 @@ export type transaccionPagoCreateWithoutCuentaDestinoInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
@@ -1268,6 +1300,7 @@ export type transaccionPagoUncheckedCreateWithoutCuentaDestinoInput = {
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutCuentaDestinoInput = {
@@ -1306,6 +1339,7 @@ export type transaccionPagoCreateWithoutUsuarioInput = {
   estado?: $Enums.EstadoTransaccionPago | null
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
+  motivoAnulacion?: string | null
   documento?: Prisma.documentoDeudaCreateNestedOneWithoutTransaccionesPagoInput
   metodoPago: Prisma.metodoPagoCreateNestedOneWithoutTransaccionesPagoInput
   divisa: Prisma.divisaCreateNestedOneWithoutTransaccionesPagoInput
@@ -1330,6 +1364,7 @@ export type transaccionPagoUncheckedCreateWithoutUsuarioInput = {
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoCreateOrConnectWithoutUsuarioInput = {
@@ -1374,6 +1409,7 @@ export type transaccionPagoCreateManyDivisaInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutDivisaInput = {
@@ -1387,6 +1423,7 @@ export type transaccionPagoUpdateWithoutDivisaInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   tasaAplicada?: Prisma.tasaCambioUpdateOneWithoutTasasAplicadasNestedInput
@@ -1411,6 +1448,7 @@ export type transaccionPagoUncheckedUpdateWithoutDivisaInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutDivisaInput = {
@@ -1430,6 +1468,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutDivisaInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyTasaAplicadaInput = {
@@ -1449,6 +1488,7 @@ export type transaccionPagoCreateManyTasaAplicadaInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutTasaAplicadaInput = {
@@ -1462,6 +1502,7 @@ export type transaccionPagoUpdateWithoutTasaAplicadaInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
@@ -1486,6 +1527,7 @@ export type transaccionPagoUncheckedUpdateWithoutTasaAplicadaInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutTasaAplicadaInput = {
@@ -1505,6 +1547,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutTasaAplicadaInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyMetodoPagoInput = {
@@ -1524,6 +1567,7 @@ export type transaccionPagoCreateManyMetodoPagoInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutMetodoPagoInput = {
@@ -1537,6 +1581,7 @@ export type transaccionPagoUpdateWithoutMetodoPagoInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   tasaAplicada?: Prisma.tasaCambioUpdateOneWithoutTasasAplicadasNestedInput
@@ -1561,6 +1606,7 @@ export type transaccionPagoUncheckedUpdateWithoutMetodoPagoInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutMetodoPagoInput = {
@@ -1580,6 +1626,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutMetodoPagoInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyDocumentoInput = {
@@ -1599,6 +1646,7 @@ export type transaccionPagoCreateManyDocumentoInput = {
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutDocumentoInput = {
@@ -1612,6 +1660,7 @@ export type transaccionPagoUpdateWithoutDocumentoInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   tasaAplicada?: Prisma.tasaCambioUpdateOneWithoutTasasAplicadasNestedInput
@@ -1636,6 +1685,7 @@ export type transaccionPagoUncheckedUpdateWithoutDocumentoInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutDocumentoInput = {
@@ -1655,6 +1705,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutDocumentoInput = {
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyCuentaDestinoInput = {
@@ -1674,6 +1725,7 @@ export type transaccionPagoCreateManyCuentaDestinoInput = {
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
   usuarioId: number
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutCuentaDestinoInput = {
@@ -1687,6 +1739,7 @@ export type transaccionPagoUpdateWithoutCuentaDestinoInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
@@ -1711,6 +1764,7 @@ export type transaccionPagoUncheckedUpdateWithoutCuentaDestinoInput = {
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutCuentaDestinoInput = {
@@ -1730,6 +1784,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutCuentaDestinoInput = {
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoCreateManyUsuarioInput = {
@@ -1749,6 +1804,7 @@ export type transaccionPagoCreateManyUsuarioInput = {
   tipoOperacion?: $Enums.TipoOperacionPago | null
   fechaPago?: Date | string | null
   cuentaDestinoId?: number | null
+  motivoAnulacion?: string | null
 }
 
 export type transaccionPagoUpdateWithoutUsuarioInput = {
@@ -1762,6 +1818,7 @@ export type transaccionPagoUpdateWithoutUsuarioInput = {
   estado?: Prisma.NullableEnumEstadoTransaccionPagoFieldUpdateOperationsInput | $Enums.EstadoTransaccionPago | null
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documento?: Prisma.documentoDeudaUpdateOneWithoutTransaccionesPagoNestedInput
   metodoPago?: Prisma.metodoPagoUpdateOneRequiredWithoutTransaccionesPagoNestedInput
   divisa?: Prisma.divisaUpdateOneRequiredWithoutTransaccionesPagoNestedInput
@@ -1786,6 +1843,7 @@ export type transaccionPagoUncheckedUpdateWithoutUsuarioInput = {
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type transaccionPagoUncheckedUpdateManyWithoutUsuarioInput = {
@@ -1805,6 +1863,7 @@ export type transaccionPagoUncheckedUpdateManyWithoutUsuarioInput = {
   tipoOperacion?: Prisma.NullableEnumTipoOperacionPagoFieldUpdateOperationsInput | $Enums.TipoOperacionPago | null
   fechaPago?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cuentaDestinoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motivoAnulacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1827,6 +1886,7 @@ export type transaccionPagoSelect<ExtArgs extends runtime.Types.Extensions.Inter
   fechaPago?: boolean
   cuentaDestinoId?: boolean
   usuarioId?: boolean
+  motivoAnulacion?: boolean
   documento?: boolean | Prisma.transaccionPago$documentoArgs<ExtArgs>
   metodoPago?: boolean | Prisma.metodoPagoDefaultArgs<ExtArgs>
   divisa?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
@@ -1853,6 +1913,7 @@ export type transaccionPagoSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   fechaPago?: boolean
   cuentaDestinoId?: boolean
   usuarioId?: boolean
+  motivoAnulacion?: boolean
   documento?: boolean | Prisma.transaccionPago$documentoArgs<ExtArgs>
   metodoPago?: boolean | Prisma.metodoPagoDefaultArgs<ExtArgs>
   divisa?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
@@ -1879,6 +1940,7 @@ export type transaccionPagoSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   fechaPago?: boolean
   cuentaDestinoId?: boolean
   usuarioId?: boolean
+  motivoAnulacion?: boolean
   documento?: boolean | Prisma.transaccionPago$documentoArgs<ExtArgs>
   metodoPago?: boolean | Prisma.metodoPagoDefaultArgs<ExtArgs>
   divisa?: boolean | Prisma.divisaDefaultArgs<ExtArgs>
@@ -1905,9 +1967,10 @@ export type transaccionPagoSelectScalar = {
   fechaPago?: boolean
   cuentaDestinoId?: boolean
   usuarioId?: boolean
+  motivoAnulacion?: boolean
 }
 
-export type transaccionPagoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "documentoId" | "ordenId" | "tipoDePago" | "metodoPagoId" | "divisaPagoId" | "montoOrigen" | "tasaAplicadaId" | "tasaAplicadaValor" | "montoEquivalenteBase" | "montoCalculadoVes" | "numeroReferencia" | "estado" | "tipoOperacion" | "fechaPago" | "cuentaDestinoId" | "usuarioId", ExtArgs["result"]["transaccionPago"]>
+export type transaccionPagoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "documentoId" | "ordenId" | "tipoDePago" | "metodoPagoId" | "divisaPagoId" | "montoOrigen" | "tasaAplicadaId" | "tasaAplicadaValor" | "montoEquivalenteBase" | "montoCalculadoVes" | "numeroReferencia" | "estado" | "tipoOperacion" | "fechaPago" | "cuentaDestinoId" | "usuarioId" | "motivoAnulacion", ExtArgs["result"]["transaccionPago"]>
 export type transaccionPagoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documento?: boolean | Prisma.transaccionPago$documentoArgs<ExtArgs>
   metodoPago?: boolean | Prisma.metodoPagoDefaultArgs<ExtArgs>
@@ -1961,6 +2024,7 @@ export type $transaccionPagoPayload<ExtArgs extends runtime.Types.Extensions.Int
     fechaPago: Date | null
     cuentaDestinoId: number | null
     usuarioId: number
+    motivoAnulacion: string | null
   }, ExtArgs["result"]["transaccionPago"]>
   composites: {}
 }
@@ -2407,6 +2471,7 @@ export interface transaccionPagoFieldRefs {
   readonly fechaPago: Prisma.FieldRef<"transaccionPago", 'DateTime'>
   readonly cuentaDestinoId: Prisma.FieldRef<"transaccionPago", 'Int'>
   readonly usuarioId: Prisma.FieldRef<"transaccionPago", 'Int'>
+  readonly motivoAnulacion: Prisma.FieldRef<"transaccionPago", 'String'>
 }
     
 

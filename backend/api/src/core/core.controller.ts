@@ -11,7 +11,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CoreService } from './core.service';
-import { UpdateTasasCambioODT, FindTasasCambioByFechaODT } from './ODTs/core.odts';
+import {
+  UpdateTasasCambioODT,
+  FindTasasCambioByFechaODT,
+} from './ODTs/core.odts';
 
 @Controller('core')
 export class CoreController {

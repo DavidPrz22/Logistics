@@ -3,10 +3,11 @@ import { PageHeader } from "@/components/shared/page-header";
 import { PagosForm } from "@/features/Pagos/components/PagosForm";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, HandCoins } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState, useCallback } from "react";
 import type { OrdenPendiente, FacturaPendiente, CrearPagoInput } from "@/features/Pagos/schemas/schemas";
 import { z } from "zod";
+import { useRegistrarPagoMutation } from "@/features/Pagos/hooks/mutations/mutations";
 
 const crearPagoSchema = z.object({
   orden: z.string().optional(),
@@ -24,6 +25,7 @@ function CrearPago() {
   const ordenQuery = Route.useSearch() as TcrearPago;
   
   const navigate = useNavigate();
+  const registrarPagoMutation = useRegistrarPagoMutation();
 
   const [orden, setOrden] = useState<OrdenPendiente | null>(null);
   const [factura, setFactura] = useState<FacturaPendiente | null>(null);
@@ -39,9 +41,12 @@ function CrearPago() {
   }, []);
 
   const handleSubmit = useCallback((data: CrearPagoInput) => {
-    console.log("Submitting payment:", data);
-    navigate({ to: "/pagos" });
-  }, [navigate]);
+    registrarPagoMutation.mutate(data, {
+      onSuccess: () => {
+        navigate({ to: "/pagos" });
+      },
+    });
+  }, [registrarPagoMutation, navigate]);
 
   const isAnticipo = pagoTipo === "anticipado";
   const selectedSaldo = isAnticipo ? orden?.totalOriginal : factura?.saldoPendienteBase;
@@ -90,14 +95,12 @@ function CrearPago() {
           onOrdenSelect={handleOrdenSelect}
           onFacturaSelect={handleFacturaSelect}
           ordenQueryParam={ordenQuery.orden}
+          isSubmitting={registrarPagoMutation.isPending}
         />
       </Card>
 
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end">
         <Button variant="outline"><Link to="/pagos">Cancelar</Link></Button>
-        <Button onClick={() => handleSubmit({} as CrearPagoInput)}>
-          <HandCoins className="size-4" /> {isAnticipo ? "Registrar anticipo" : "Registrar cobro"}
-        </Button>
       </div>
     </div>
   );

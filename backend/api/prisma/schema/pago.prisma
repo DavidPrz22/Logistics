@@ -136,7 +136,8 @@ model transaccionPago {
   tipoOperacion        TipoOperacionPago? @default(INGRESO)
   fechaPago            DateTime?      @default(now()) 
   cuentaDestinoId      Int?
-  usuarioId            Int            
+  usuarioId            Int
+  motivoAnulacion      String?
 
   documento     documentoDeuda? @relation(fields: [documentoId], references: [id], onDelete: Restrict)
   metodoPago    metodoPago     @relation(fields: [metodoPagoId], references: [id])

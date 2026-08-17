@@ -5,6 +5,7 @@ import {
     fetchFacturasPendientes,
     fetchTasasCambio,
     fetchTasasCambioByRegistro,
+    fetchTransaccionById,
     type FetchTransaccionesParams,
 } from "../../api/api";
 
@@ -49,3 +50,11 @@ export const TasasCambiobyRegistro = ( id: number) => {
         enabled: !!id,
     });
 }
+
+export const transaccionByIdQueryOptions = (id: number) =>
+    queryOptions({
+        queryKey: ["transaccionPagoDetalle", id],
+        queryFn: () => fetchTransaccionById(id),
+        staleTime: 1000 * 60 * 5,
+        enabled: !!id,
+    });

@@ -290,7 +290,8 @@ export const TransaccionPagoScalarFieldEnum = {
   tipoOperacion: 'tipoOperacion',
   fechaPago: 'fechaPago',
   cuentaDestinoId: 'cuentaDestinoId',
-  usuarioId: 'usuarioId'
+  usuarioId: 'usuarioId',
+  motivoAnulacion: 'motivoAnulacion'
 } as const
 
 export type TransaccionPagoScalarFieldEnum = (typeof TransaccionPagoScalarFieldEnum)[keyof typeof TransaccionPagoScalarFieldEnum]

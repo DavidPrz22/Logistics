@@ -4,7 +4,7 @@ const basePagoSchema = z.object({
   metodoPagoId: z.number(),
   numeroReferencia: z.string().optional(),
   divisaPagoId: z.number(),
-  tasaAplicadaId: z.number(),
+  tasaAplicadaId: z.number().optional(),
   montoPago: z.number().min(0.01),
   cuentaDestinoId: z.number(),
   fechaPago: z.date(),
@@ -68,3 +68,89 @@ export const facturaPendienteSchema = z.object({
 });
 
 export type FacturaPendiente = z.infer<typeof facturaPendienteSchema>;
+
+export const transaccionPagoDetalleSchema = z.object({
+  id: z.number(),
+  fecha: z.string(),
+  tipoDePago: z.string(),
+  estado: z.string(),
+  tipoOperacion: z.string(),
+  montoOrigen: z.number(),
+  montoEquivalenteBase: z.number(),
+  montoCalculadoVes: z.number().nullable(),
+  tasaAplicadaValor: z.number().nullable(),
+  numeroReferencia: z.string().nullable(),
+  motivoAnulacion: z.string().nullable(),
+  metodoPago: z.object({
+    id: z.number(),
+    codigo: z.string(),
+    descripcion: z.string(),
+  }),
+  divisa: z.object({
+    id: z.number(),
+    codigo: z.string(),
+    nombre: z.string(),
+  }),
+  usuario: z.object({
+    id: z.number(),
+    nombreUsuario: z.string(),
+  }),
+  documento: z
+    .object({
+      id: z.number(),
+      sistemaOrigen: z.string(),
+      estado: z.string().nullable(),
+      montoTotalBase: z.number(),
+      saldoPendienteBase: z.number(),
+      cliente: z.object({
+        id: z.number(),
+        nombre: z.string(),
+      }),
+      orden: z.object({
+        id: z.number(),
+        numeroOrden: z.string(),
+      }),
+    })
+    .nullable(),
+  orden: z
+    .object({
+      id: z.number(),
+      numeroOrden: z.string(),
+      estado: z.string().nullable(),
+      cliente: z.object({
+        id: z.number(),
+        nombre: z.string(),
+      }),
+    })
+    .nullable(),
+  tasaAplicada: z
+    .object({
+      id: z.number(),
+      tasa: z.number(),
+      divisaOrigen: z.object({
+        codigo: z.string(),
+      }),
+      divisaDestino: z.object({
+        codigo: z.string(),
+      }),
+    })
+    .nullable(),
+  cuentaDestino: z
+    .object({
+      id: z.number(),
+      nombre: z.string(),
+      tipo: z.string(),
+      divisa: z.object({
+        codigo: z.string(),
+      }),
+    })
+    .nullable(),
+});
+
+export type TransaccionPagoDetalle = z.infer<typeof transaccionPagoDetalleSchema>;
+
+export const anularTransaccionSchema = z.object({
+  motivo: z.string().min(4),
+});
+
+export type AnularTransaccionInput = z.infer<typeof anularTransaccionSchema>;

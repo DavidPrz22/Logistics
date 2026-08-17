@@ -1,4 +1,11 @@
-import { IsArray, IsInt, IsNumber, ValidateNested, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsInt,
+  IsNumber,
+  ValidateNested,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class UpdateTasaCambioItemODT {

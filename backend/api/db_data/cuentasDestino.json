@@ -1,0 +1,37 @@
+[
+  {
+    "nombre": "Caja Principal VES",
+    "divisaCodigo": "VES",
+    "tipo": "CAJA_FISICA"
+  },
+  {
+    "nombre": "Caja Principal USD",
+    "divisaCodigo": "USD",
+    "tipo": "CAJA_FISICA"
+  },
+  {
+    "nombre": "Banesco VES",
+    "divisaCodigo": "VES",
+    "tipo": "BANCO"
+  },
+  {
+    "nombre": "Mercantil VES",
+    "divisaCodigo": "VES",
+    "tipo": "BANCO"
+  },
+  {
+    "nombre": "Banesco Panamá USD",
+    "divisaCodigo": "USD",
+    "tipo": "BANCO"
+  },
+  {
+    "nombre": "Binance USDT",
+    "divisaCodigo": "USDT",
+    "tipo": "BILLETERA_DIGITAL"
+  },
+  {
+    "nombre": "Zelle USD",
+    "divisaCodigo": "USD",
+    "tipo": "BILLETERA_DIGITAL"
+  }
+]

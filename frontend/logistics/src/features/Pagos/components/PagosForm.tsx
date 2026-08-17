@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, TriangleAlert } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, TriangleAlert, HandCoins, Loader2 } from "lucide-react";
 import { PagoSearchCombobox } from "./PagoSearchCombobox";
 import { TasaPagoSelector } from "@/components/shared/tasa-pago-selector";
 import { FormSelect } from "./FormSelect";
@@ -24,6 +25,7 @@ export function PagosForm({
   onOrdenSelect,
   onFacturaSelect,
   ordenQueryParam,
+  isSubmitting,
 }: { 
   tipoPago: 'ANTICIPO' | 'COBRO_FACTURA';
   onSubmit: (data: CrearPagoInput) => void;
@@ -31,6 +33,7 @@ export function PagosForm({
   onOrdenSelect?: (orden: OrdenPendiente) => void;
   onFacturaSelect?: (factura: FacturaPendiente) => void;
   ordenQueryParam?: string;
+  isSubmitting?: boolean;
 }) {
   const methods = useForm<CrearPagoInput>({
     resolver: zodResolver(crearPagoSchema),
@@ -57,6 +60,21 @@ export function PagosForm({
 
         />
         <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada} isMonedaBase/>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="size-4 animate-spin mr-2" />
+                Registrando...
+              </>
+            ) : (
+              <>
+                <HandCoins className="size-4 mr-2" />
+                {tipoPago === 'ANTICIPO' ? 'Registrar anticipo' : 'Registrar cobro'}
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );

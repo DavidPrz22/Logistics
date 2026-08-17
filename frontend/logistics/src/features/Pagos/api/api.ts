@@ -1,5 +1,5 @@
 import apiClient from "@/api/client";
-import type { PaginatedTransacciones, OrdenPendiente, FacturaPendiente } from "../schemas/schemas";
+import type { PaginatedTransacciones, OrdenPendiente, FacturaPendiente, CrearPagoInput, TransaccionPagoDetalle } from "../schemas/schemas";
 import type { RegistroTasas, TasaCambio } from "@/types/zodType";
 
 export interface FetchTransaccionesParams {
@@ -79,6 +79,77 @@ export const fetchTasasCambioByRegistro = async (registroId: number): Promise<Ta
     return data;
   } catch (error) {
     console.error("Error fetching tasas de cambio by registro:", error);
+    throw error;
+  }
+};
+
+export interface TransaccionPagoResponse {
+  id: number;
+  fecha: string;
+  cliente: string;
+  tipo: string;
+  metodo: string;
+  referencia: string | null;
+  estado: string;
+  montoOrigen: number;
+  divisaSimbolo?: string;
+  montoEquivalenteBase: number;
+  montoCalculadoVes: number | null;
+}
+
+export const registrarPago = async (
+  data: CrearPagoInput
+): Promise<TransaccionPagoResponse> => {
+  try {
+    const payload = {
+      documentoId: data.tipoPago === 'COBRO_FACTURA' ? data.documentoId : undefined,
+      ordenId: data.tipoPago === 'ANTICIPO' ? data.ordenId : undefined,
+      metodoPagoId: data.metodoPagoId,
+      divisaPagoId: data.divisaPagoId,
+      montoOrigen: data.montoPago,
+      tasaAplicadaId: data.tasaAplicadaId || undefined,
+      numeroReferencia: data.numeroReferencia,
+      cuentaDestinoId: data.cuentaDestinoId,
+      fechaPago: data.fechaPago.toISOString(),
+    };
+
+    const { data: response } = await apiClient.post<TransaccionPagoResponse>(
+      "pagos/transaccion",
+      payload
+    );
+    return response;
+  } catch (error) {
+    console.error("Error registrando pago:", error);
+    throw error;
+  }
+};
+
+export const fetchTransaccionById = async (
+  id: number
+): Promise<TransaccionPagoDetalle> => {
+  try {
+    const { data } = await apiClient.get<TransaccionPagoDetalle>(
+      `pagos/transaccion/${id}`
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching transaccion by id:", error);
+    throw error;
+  }
+};
+
+export const anularTransaccion = async (
+  id: number,
+  motivo: string
+): Promise<TransaccionPagoResponse> => {
+  try {
+    const { data } = await apiClient.post<TransaccionPagoResponse>(
+      `pagos/transaccion/${id}/anular`,
+      { motivo }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error anulando transaccion:", error);
     throw error;
   }
 };

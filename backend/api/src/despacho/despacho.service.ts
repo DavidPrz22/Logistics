@@ -74,7 +74,12 @@ export class DespachoService {
   async createOrdenDespacho(
     ordenData: CreateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, totalFacturado, tasaCambioId, ...ordenFields } = ordenData;
+    const {
+      detallesOrdenDespacho,
+      totalFacturado,
+      tasaCambioId,
+      ...ordenFields
+    } = ordenData;
 
     const numeroOrden = `OD-${Date.now()}`;
 
@@ -92,19 +97,25 @@ export class DespachoService {
 
     const tasaValor = Number(tasaCambio.tasa);
 
-    const detallesConVes = detallesOrdenDespacho?.map((detalle) => {
-      const precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
-      const subtotalVes = Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
-      return {
-        loteId: detalle.loteId,
-        cantidadEnviada: detalle.cantidadEnviada,
-        precioUnitario: detalle.precioUnitario,
-        precioUnitarioVes,
-        subtotalVes,
-      };
-    }) ?? [];
+    const detallesConVes =
+      detallesOrdenDespacho?.map((detalle) => {
+        const precioUnitarioVes =
+          Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+        const subtotalVes =
+          Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
+        return {
+          loteId: detalle.loteId,
+          cantidadEnviada: detalle.cantidadEnviada,
+          precioUnitario: detalle.precioUnitario,
+          precioUnitarioVes,
+          subtotalVes,
+        };
+      }) ?? [];
 
-    const totalOriginalVes = detallesConVes.reduce((sum, d) => sum + d.subtotalVes, 0);
+    const totalOriginalVes = detallesConVes.reduce(
+      (sum, d) => sum + d.subtotalVes,
+      0,
+    );
 
     try {
       await this.prisma.ordenDespacho.create({
@@ -176,8 +187,10 @@ export class DespachoService {
       }[] = [];
 
       for (const detalle of detallesOrdenDespacho ?? []) {
-        const precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
-        const subtotalVes = Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
+        const precioUnitarioVes =
+          Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+        const subtotalVes =
+          Math.round(detalle.cantidadEnviada * precioUnitarioVes * 100) / 100;
 
         if (detalle.id) {
           incomingIds.add(detalle.id);
@@ -204,7 +217,8 @@ export class DespachoService {
 
       const deleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
 
-      const totalOriginalVes = createOperations.reduce((sum, d) => sum + d.subtotalVes, 0) +
+      const totalOriginalVes =
+        createOperations.reduce((sum, d) => sum + d.subtotalVes, 0) +
         updateOperations.reduce((sum, op) => sum + op.data.subtotalVes, 0);
 
       await this.prisma.ordenDespacho.update({
@@ -240,7 +254,12 @@ export class DespachoService {
     id: number,
     data: UpdateOrdenODT,
   ): Promise<{ message: string }> {
-    const { detallesOrdenDespacho, totalFacturado, tasaCambioId, ...ordenFields } = data;
+    const {
+      detallesOrdenDespacho,
+      totalFacturado,
+      tasaCambioId,
+      ...ordenFields
+    } = data;
 
     try {
       let tasaValor: number | null = null;
@@ -297,8 +316,12 @@ export class DespachoService {
         };
 
         if (tasaValor !== null) {
-          detalleData.precioUnitarioVes = Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
-          detalleData.subtotalVes = Math.round(detalle.cantidadEnviada * detalleData.precioUnitarioVes * 100) / 100;
+          detalleData.precioUnitarioVes =
+            Math.round(detalle.precioUnitario * tasaValor * 100) / 100;
+          detalleData.subtotalVes =
+            Math.round(
+              detalle.cantidadEnviada * detalleData.precioUnitarioVes * 100,
+            ) / 100;
         }
 
         if (detalle.id) {
@@ -324,8 +347,12 @@ export class DespachoService {
 
       let vesFinancialFields = {};
       if (tasaValor !== null) {
-        const totalOriginalVes = createOperations.reduce((sum, d) => sum + (d.subtotalVes ?? 0), 0) +
-          updateOperations.reduce((sum, op) => sum + (op.data.subtotalVes ?? 0), 0);
+        const totalOriginalVes =
+          createOperations.reduce((sum, d) => sum + (d.subtotalVes ?? 0), 0) +
+          updateOperations.reduce(
+            (sum, op) => sum + (op.data.subtotalVes ?? 0),
+            0,
+          );
         vesFinancialFields = {
           totalOriginalVes,
           montoFacturadoNetoVes: totalOriginalVes,
@@ -478,7 +505,9 @@ export class DespachoService {
       fechaSalida: orden.fechaSalida?.toISOString() ?? '',
       estado: orden.estado ?? 'PREPARACION',
       tasaCambioId: orden.tasaCambioId,
-      tasaCambioValor: orden.tasaCambioValor ? Number(orden.tasaCambioValor) : null,
+      tasaCambioValor: orden.tasaCambioValor
+        ? Number(orden.tasaCambioValor)
+        : null,
       tasaCambioInfo,
       totalOriginal: Number(orden.totalOriginal ?? 0),
       totalOriginalVes: Number(orden.totalOriginalVes ?? 0),
@@ -498,7 +527,9 @@ export class DespachoService {
         numeroLote: detalle.lote.numeroLote,
         cantidadEnviada: detalle.cantidadEnviada,
         precioUnitario: Number(detalle.precioUnitario),
-        precioUnitarioVes: detalle.precioUnitarioVes ? Number(detalle.precioUnitarioVes) : null,
+        precioUnitarioVes: detalle.precioUnitarioVes
+          ? Number(detalle.precioUnitarioVes)
+          : null,
         subtotalVes: detalle.subtotalVes ? Number(detalle.subtotalVes) : null,
         sku: detalle.lote.variante.sku,
         varianteNombre: detalle.lote.variante.nombre,
@@ -658,7 +689,9 @@ export class DespachoService {
       const saldoPendienteBase = montoFacturadoNeto - totalAnticipado;
 
       // Calculate VES amounts using the order's exchange rate
-      const tasaEmision = orden.tasaCambioValor ? Number(orden.tasaCambioValor) : null;
+      const tasaEmision = orden.tasaCambioValor
+        ? Number(orden.tasaCambioValor)
+        : null;
       const montoTotalVes = tasaEmision
         ? Math.round(montoFacturadoNeto * tasaEmision * 100) / 100
         : null;

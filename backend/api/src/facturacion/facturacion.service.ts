@@ -146,8 +146,12 @@ export class FacturacionService {
       montoTotalBase: Number(doc.montoTotalBase),
       montoTotalVes: doc.montoTotalVes ? Number(doc.montoTotalVes) : null,
       saldoPendienteBase: Number(doc.saldoPendienteBase),
-      saldoPendienteVes: doc.saldoPendienteVes ? Number(doc.saldoPendienteVes) : null,
-      tasaEmisionValor: doc.tasaEmisionValor ? Number(doc.tasaEmisionValor) : null,
+      saldoPendienteVes: doc.saldoPendienteVes
+        ? Number(doc.saldoPendienteVes)
+        : null,
+      tasaEmisionValor: doc.tasaEmisionValor
+        ? Number(doc.tasaEmisionValor)
+        : null,
       totalAbonado: Number(doc.orden?.totalAbonado ?? 0),
       estado: doc.estado ?? 'PENDIENTE',
       tipoDocumento: doc.tipoDocumento ?? 'FACTURA',

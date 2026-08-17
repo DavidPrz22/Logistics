@@ -5,6 +5,7 @@ import {
     facturasPendientesQueryOptions,
     TasasPagoPerDateQueryOptions,
     TasasCambiobyRegistro,
+    transaccionByIdQueryOptions,
 } from "./queryOptions";
 import type { FetchTransaccionesParams } from "../../api/api";
 
@@ -21,3 +22,6 @@ export const useTasasCambiobyDate = (date: string) =>
     useQuery(TasasPagoPerDateQueryOptions(date));
 
 export const useTasasCambio = (id: number) => useQuery(TasasCambiobyRegistro(id));
+
+export const useTransaccionById = (id: number) =>
+    useQuery(transaccionByIdQueryOptions(id));

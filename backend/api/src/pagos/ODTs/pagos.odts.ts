@@ -1,4 +1,14 @@
-import { IsOptional, IsInt, IsString, IsEnum, Min, Max } from 'class-validator';
+import {
+  IsOptional,
+  IsInt,
+  IsString,
+  IsEnum,
+  Min,
+  Max,
+  IsNumber,
+  IsDateString,
+  MinLength,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class BuscarOrdenesPendientesODT {
@@ -58,4 +68,46 @@ export class FindAllTransaccionesODT {
   @IsOptional()
   @IsString()
   hasta?: string;
+}
+
+export class CrearTransaccionPagoODT {
+  @IsOptional()
+  @IsInt()
+  documentoId?: number;
+
+  @IsOptional()
+  @IsInt()
+  ordenId?: number;
+
+  @IsInt()
+  metodoPagoId!: number;
+
+  @IsInt()
+  divisaPagoId!: number;
+
+  @IsNumber()
+  montoOrigen!: number;
+
+  @IsOptional()
+  @IsInt()
+  tasaAplicadaId?: number;
+
+  @IsOptional()
+  @IsString()
+  numeroReferencia?: string;
+
+  @IsOptional()
+  @IsInt()
+  cuentaDestinoId?: number;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDateString()
+  fechaPago?: string;
+}
+
+export class AnularTransaccionODT {
+  @IsString()
+  @MinLength(4)
+  motivo!: string;
 }
