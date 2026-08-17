@@ -8,6 +8,9 @@ import { useState, useCallback } from "react";
 import type { OrdenPendiente, FacturaPendiente, CrearPagoInput } from "@/features/Pagos/schemas/schemas";
 import { z } from "zod";
 import { useRegistrarPagoMutation } from "@/features/Pagos/hooks/mutations/mutations";
+import usePagosStore  from "@/features/Pagos/store/zustandstore";
+import { convertirDivisa } from "@/features/Pagos/lib/helpers";
+import { DIVISAS } from "@/types/zodType";
 
 const crearPagoSchema = z.object({
   orden: z.string().optional(),
@@ -23,7 +26,7 @@ export const Route = createFileRoute("/pagos/crear/$pagoTipo")({
 function CrearPago() {
   const { pagoTipo } = Route.useParams() as { pagoTipo: "anticipado" | "factura" };
   const ordenQuery = Route.useSearch() as TcrearPago;
-  
+  const { tasaAplicada, divisa } = usePagosStore()
   const navigate = useNavigate();
   const registrarPagoMutation = useRegistrarPagoMutation();
 
@@ -56,6 +59,7 @@ function CrearPago() {
     ? "Abono recibido antes de la emisión de la factura. Se cruzará automáticamente al liquidar la ruta."
     : "Pago aplicado a una factura pendiente. El saldo restante se actualizará automáticamente.";
 
+    console.log(divisa)
   return (
     <div className="p-8 space-y-6 max-w-4xl mx-auto">
       <PageHeader
@@ -67,16 +71,22 @@ function CrearPago() {
 
       <Card className="p-6 space-y-4">
         {orden && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="flex gap-3 ">
             <Mini label="Cliente" value={orden.clienteNombre ?? "—"} />
-            <Mini label="Monto estimado" value={`$${orden.totalOriginal}`} />
+            <Mini label="Monto estimado usd" value={`$${orden.totalOriginal}`} />
+            {tasaAplicada && <Mini label={`Monto estimado ${divisa?.codigo ?? ""}`} value={`${ divisa?.codigo + " " || "$ "}${ (
+              convertirDivisa(orden.totalOriginal, tasaAplicada.tasa, divisa?.codigo ?? null, DIVISAS.USD, )
+              ).toFixed(2)}`} />}
           </div>
         )}
 
         {factura && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Mini label="Cliente" value={factura.clienteNombre ?? "—"} />
-            <Mini label="Saldo pendiente" value={`$${factura.saldoPendienteBase}`} />
+            <Mini label="Saldo pendiente usd" value={`$${factura.saldoPendienteBase}`} />
+            {tasaAplicada && <Mini label="Monto estimado" value={`${ divisa?.codigo ?? "$"}${ 
+              convertirDivisa(factura.saldoPendienteBase, tasaAplicada.tasa,  DIVISAS.USD,  divisa?.codigo ?? null)
+              .toFixed(2)}`} />}
           </div>
         )}
 
@@ -108,7 +118,7 @@ function CrearPago() {
 
 function Mini({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-md border border-border bg-secondary/40 p-3">
+    <div className="rounded-md border border-border bg-secondary/40 p-3 flex-1">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="mt-1 font-mono tabular-nums font-semibold truncate">{value}</div>
     </div>

@@ -117,3 +117,11 @@ export type TipoDocumentoDeudaType = z.infer<typeof tipoDocumentoDeudaSchema>;
 export type TipoDePagoType = z.infer<typeof tipoDePagoSchema>;
 export type TipoOperacionPagoType = z.infer<typeof tipoOperacionPagoSchema>;
 export type CuentaDestino = z.infer<typeof cuentaDestinoSchema>;
+
+
+export const DIVISAS = {
+  EUR: 'EUR',
+  USD: 'USD',
+  USDT: 'USDT',
+  VES: 'VES',
+} as const

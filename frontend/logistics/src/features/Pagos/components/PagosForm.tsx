@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm, FormProvider, useFormContext, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/shared/date-picker";
@@ -17,6 +16,8 @@ import {
   useMetodosPago, 
   useCuentasDestino 
 } from "@/hooks/queries/queries";
+import usePagosStore from "../store/zustandstore";
+import { convertirDivisa, formatStringConversion } from "../lib/helpers";
 
 export function PagosForm({ 
   tipoPago,
@@ -44,9 +45,9 @@ export function PagosForm({
     }
   });
 
-  const [ tasaAplicada, setTasaAplicada ] = useState<TasaCambio | null>(null);
-  const { data: divisas = [] } = useDivisas();
-  const isMonedaBase = divisas.find((d) => d.esMonedaBase)?.id === useWatch({ control: methods.control, name: 'divisaPagoId' });
+  const setTasaAplicada = usePagosStore((state) => state.setTasaAplicada);
+  const divisa = usePagosStore((state) => state.divisa);
+  const isMonedaBase = divisa?.esMonedaBase ?? false;
   
   return (
     <FormProvider {...methods}>
@@ -59,7 +60,7 @@ export function PagosForm({
           isMonedaBase={isMonedaBase}
 
         />
-        <ConversionBreakdown saldoPendiente={saldoPendiente}  tasaAplicada={tasaAplicada} isMonedaBase/>
+        <ConversionBreakdown saldoPendiente={saldoPendiente} isMonedaBase={isMonedaBase}/>
         <div className="flex justify-end">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
@@ -95,6 +96,8 @@ export function PagoCampos({
   isMonedaBase: boolean
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
+  const setDivisaPagoId = usePagosStore((state) => state.setDivisaPagoId);
+  const divisaSeleccionada = usePagosStore((state) => state.divisa);
   
   const { data: metodosPago = [] } = useMetodosPago();
   const { data: divisas = [] } = useDivisas();
@@ -105,14 +108,11 @@ export function PagoCampos({
   const tipoPago = useWatch({ control, name: "tipoPago" });
   
   const metodoPagoId = useWatch({ control, name: "metodoPagoId" });
-  const divisaPagoId = useWatch({ control, name: "divisaPagoId" });
   const fechaPago = useWatch({ control, name: "fechaPago" });
   const tasaId = useWatch({ control, name: "tasaAplicadaId" });
 
   const metodo = metodosPago.find((m) => m.id === metodoPagoId);
   const requiereRef = metodo?.requiereReferencia ?? false;
-
-  const divisaSeleccionada = divisas.find((d) => d.id === divisaPagoId);
 
   const handleTasaSelect = (tasa: TasaCambio | null) => {
     setTasa?.(tasa);
@@ -185,24 +185,14 @@ export function PagoCampos({
               const currentTasa = d.esMonedaBase ? 1 : tasas.find((t) => t.id === d.id)?.tasa;
               return `${d.codigo} · ${d.nombre} ${d.esMonedaBase ? "(Base)" : currentTasa ? `(Tasa: ${currentTasa})` : ""}`;
             }}
+            onValueChange={(val) => {
+              const selectedDivisa = divisas.find((d) => d.id === val) ?? null;
+              setDivisaPagoId(selectedDivisa);
+            }}
           />
         </Field>
 
-        <Field label={`Monto (${divisaSeleccionada?.codigo ?? ""})`}>
-          <Controller
-            name="montoPago"
-            control={control}
-            render={({ field }) => (
-              <Input
-                type="number" min="0" step="0.01" inputMode="decimal"
-                value={field.value || ""}
-                onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
-                placeholder="0.00"
-                className="font-mono tabular-nums"
-              />
-            )}
-          />
-        </Field>
+        
 
         <Field label="Cuenta destino">
           <FormSelect
@@ -255,6 +245,22 @@ export function PagoCampos({
             value={tasaId}
           />
         )}
+
+        <Field label={`Monto (${divisaSeleccionada?.codigo ?? ""})`}>
+          <Controller
+            name="montoPago"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type="number" min="0" step="0.01" inputMode="decimal"
+                value={field.value || ""}
+                onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                placeholder="0.00"
+                className="font-mono tabular-nums w-[50%]"
+              />
+            )}
+          />
+        </Field>
     </div>
   );
 }
@@ -262,28 +268,28 @@ export function PagoCampos({
 
 export function ConversionBreakdown({ 
   saldoPendiente,
-  tasaAplicada,
   isMonedaBase
 }: { 
   saldoPendiente?: number;
-  tasaAplicada?: TasaCambio | null;
   isMonedaBase: boolean
 }) {
-  const { data: divisas = [] } = useDivisas();
+  const tasaAplicada = usePagosStore((state) => state.tasaAplicada);
+  const divisa = usePagosStore((state) => state.divisa);
   
+  const { data: divisas = [] } = useDivisas();
   const divisaBase = divisas.find((d) => d.esMonedaBase);
+  const base = divisaBase;
 
   const { control } = useFormContext<CrearPagoInput>();
   const form = useWatch({ control });
 
-  const divisa = divisas.find((d) => d.id === form.divisaPagoId);
-  const base = divisaBase;
   const tasaValor = tasaAplicada && !isMonedaBase ? tasaAplicada.tasa : 1;
   
   const montoOrigen = form.montoPago || 0;
-  const equiv = Math.round((montoOrigen / tasaValor) * 100) / 100;
+  const equiv = convertirDivisa(montoOrigen, tasaValor, base?.codigo ?? null, divisa?.codigo ?? null);
   
   const excedente = saldoPendiente !== undefined ? Math.round((equiv - saldoPendiente) * 100) / 100 : 0;
+
 
   if (!base) return null;
 
@@ -293,10 +299,14 @@ export function ConversionBreakdown({
 
       <div className="flex flex-wrap items-center gap-3 font-mono tabular-nums">
         <span className="text-xl font-semibold">{montoOrigen.toFixed(2)} {divisa?.codigo}</span>
-        <span className="text-xs text-muted-foreground">÷ {tasaValor} {divisa?.codigo}/{base.codigo}</span>
+        <span className="text-xs text-muted-foreground">
+          {formatStringConversion(divisa?.codigo ?? null, base.codigo, tasaValor)}
+        </span>
         <ArrowRight className="size-4 text-muted-foreground" />
         <span className="text-2xl font-bold">{equiv} {base.codigo}</span>
       </div>
+
+
       {saldoPendiente !== undefined && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
           <Line label="Saldo pendiente actual" value={String(saldoPendiente)} />

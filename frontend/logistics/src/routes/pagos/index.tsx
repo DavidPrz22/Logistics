@@ -74,7 +74,7 @@ function PagosList() {
         subtitle="Anticipos, cobros de factura y saldos a favor registrados en el sistema."
         actions={
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button aria-label="Opciones de pago">
                 Crear pago
                 <ChevronDown className="size-4" />

@@ -611,7 +611,7 @@ export class PagosService {
           where: { id: transaccion.documentoId },
           data: {
             saldoPendienteBase: saldoRedondeado,
-            saldoRedondeadoVES: saldoRedondeadoVES,
+            saldoPendienteVes: saldoRedondeadoVES,
             estado: nuevoEstado,
           },
         });
