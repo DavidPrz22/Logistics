@@ -4,6 +4,8 @@ interface DocumentoStatsProps {
   montoTotalBase: number;
   montoTotalVes: number | null;
   totalAbonado: number;
+  totalPagadoBase: number;
+  totalPagadoVes: number | null;
   saldoPendienteBase: number;
   saldoPendienteVes: number | null;
   tasaEmisionValor: number | null;
@@ -22,7 +24,6 @@ function Stat({
   label,
   valueUsd,
   valueVes,
-  strong,
 }: {
   label: string;
   valueUsd: number;
@@ -32,10 +33,13 @@ function Stat({
   return (
     <Card className="p-5">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className={`mt-2 font-mono tabular-nums ${strong ? "text-3xl font-bold" : "text-2xl font-semibold"}`}>
-        {formatCurrency(valueUsd, "USD")}
-        <span className="text-muted-foreground mx-1">/</span>
-        {valueVes !== null ? formatCurrency(valueVes, "VES") : "N/A"}
+      <div className={`flex flex-col mt-2 font-mono tabular-nums text-xl font-semibold`}>
+        <span>
+          {formatCurrency(valueUsd, "USD")}
+        </span>
+        <span >
+          {valueVes !== null ? formatCurrency(valueVes, "VES") : "N/A"}
+        </span>
       </div>
     </Card>
   );
@@ -45,6 +49,8 @@ export function DocumentoStats({
   montoTotalBase,
   montoTotalVes,
   totalAbonado,
+  totalPagadoBase,
+  totalPagadoVes,
   saldoPendienteBase,
   saldoPendienteVes,
   tasaEmisionValor,
@@ -59,9 +65,10 @@ export function DocumentoStats({
           Tasa de emisión: <span className="font-mono font-semibold text-foreground">{tasaEmisionValor.toFixed(2)} Bs/$</span>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <Stat label="Monto total" valueUsd={montoTotalBase} valueVes={montoTotalVes} />
-        <Stat label="Total abonado" valueUsd={totalAbonado} valueVes={totalAbonadoVes} />
+        <Stat label="Monto Pagado total" valueUsd={totalPagadoBase} valueVes={totalPagadoVes} />
+        <Stat label="Total abonado en Anticipos" valueUsd={totalAbonado} valueVes={totalAbonadoVes} />
         <Stat label="Saldo pendiente" valueUsd={saldoPendienteBase} valueVes={saldoPendienteVes} strong />
       </div>
     </div>

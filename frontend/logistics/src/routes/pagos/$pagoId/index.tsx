@@ -58,7 +58,12 @@ function PagoDetalle() {
 
   const handleAnular = () => {
     if (motivo.trim().length < 4) return;
-    anularMutation.mutate(motivo.trim());
+
+    anularMutation.mutate({ 
+      motivo: motivo.trim(), 
+      documentoId:  transaccion.documento?.id,
+      ordenId: transaccion.orden?.id,
+    });
     setMotivo("");
   };
 

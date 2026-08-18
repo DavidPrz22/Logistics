@@ -44,7 +44,11 @@ function CrearPago() {
   }, []);
 
   const handleSubmit = useCallback((data: CrearPagoInput) => {
-    registrarPagoMutation.mutate(data, {
+    registrarPagoMutation.mutate({  
+      data, 
+      documentoId: factura?.id,
+      ordenId: orden?.id, 
+    }, {
       onSuccess: () => {
         setTasaAplicada(null);
         navigate({ to: "/pagos" });

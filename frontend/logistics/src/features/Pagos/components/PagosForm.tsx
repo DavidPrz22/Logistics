@@ -44,7 +44,6 @@ export function PagosForm({
       fechaPago: new Date(),
     }
   });
-  console.log(methods.formState.errors);
   const setTasaAplicada = usePagosStore((state) => state.setTasaAplicada);
   const divisa = usePagosStore((state) => state.divisa);
   const isMonedaBase = divisa?.esMonedaBase ?? false;

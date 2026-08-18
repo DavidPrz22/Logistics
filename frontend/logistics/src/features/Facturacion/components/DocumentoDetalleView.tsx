@@ -23,6 +23,8 @@ export function DocumentoDetalleView({ doc }: DocumentoDetalleViewProps) {
         montoTotalBase={doc.montoTotalBase}
         montoTotalVes={doc.montoTotalVes}
         totalAbonado={doc.totalAbonado}
+        totalPagadoBase={doc.totalPagadoBase}
+        totalPagadoVes={doc.totalPagadoVes}
         saldoPendienteBase={doc.saldoPendienteBase}
         saldoPendienteVes={doc.saldoPendienteVes}
         tasaEmisionValor={doc.tasaEmisionValor}

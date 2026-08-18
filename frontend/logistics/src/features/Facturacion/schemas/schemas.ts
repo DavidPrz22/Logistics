@@ -56,6 +56,8 @@ export const documentoDeudaDetalleSchema = z.object({
   saldoPendienteVes: z.number().nullable(),
   tasaEmisionValor: z.number().nullable(),
   totalAbonado: z.number(),
+  totalPagadoBase: z.number(),
+  totalPagadoVes: z.number().nullable(),
   estado: estadoDocumentoDeudaSchema,
   tipoDocumento: tipoDocumentoDeudaSchema,
   fechaEmision: z.string(),

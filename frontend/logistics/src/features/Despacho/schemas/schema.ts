@@ -15,7 +15,7 @@ export const ordenDespachoSchema = z.object({
     fechaSalida: z.date(),
     almacenTransitoId: z.number().int().positive({ message: "ID de almacén inválido" }),
     tipoOrden: z.enum(['DESPACHO_RUTA', 'VENTA_MOSTRADOR']),
-    totalFacturado: z.number().positive({ message: "El total debe ser mayor a 0" }),
+    totalFacturado: z.number().nonnegative({ message: "El total debe ser mayor a 0" }),
     tasaCambioId: z.number().int().positive({ message: "Tasa de cambio requerida" }),
     detallesOrdenDespacho: z.array(detallesOrdenDespachoSchema).optional()
 }).superRefine((data, ctx) => {

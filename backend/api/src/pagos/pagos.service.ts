@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
@@ -23,6 +23,45 @@ import {
 @Injectable()
 export class PagosService {
   constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(PagosService.name);
+
+  private async actualizarSaldoDocumento(
+    documentoId: number,
+    montoEquivalente: number,
+    operacion: 'sumar' | 'restar',
+  ): Promise<void> {
+    const documento = await this.prisma.documentoDeuda.findUnique({
+      where: { id: documentoId },
+    });
+
+    if (!documento) return;
+
+    const factor = operacion === 'sumar' ? 1 : -1;
+    const nuevoSaldo =
+      Number(documento.saldoPendienteBase) + montoEquivalente * factor;
+    const saldoRedondeado = Math.max(0, Math.round(nuevoSaldo * 100) / 100);
+
+    const nuevoSaldoVES =
+      Number(documento.saldoPendienteVes || 0) +
+      montoEquivalente * factor * Number(documento.tasaEmisionValor || 0);
+    const saldoRedondeadoVES = Math.round(nuevoSaldoVES * 100) / 100;
+
+    let nuevoEstado: EstadoDocumentoDeuda = EstadoDocumentoDeuda.PENDIENTE;
+    if (saldoRedondeado === 0) {
+      nuevoEstado = EstadoDocumentoDeuda.PAGADO_TOTAL;
+    } else if (saldoRedondeado < Number(documento.montoTotalBase)) {
+      nuevoEstado = EstadoDocumentoDeuda.PAGADO_PARCIAL;
+    }
+
+    await this.prisma.documentoDeuda.update({
+      where: { id: documentoId },
+      data: {
+        saldoPendienteBase: saldoRedondeado,
+        saldoPendienteVes: saldoRedondeadoVES,
+        estado: nuevoEstado,
+      },
+    });
+  }
 
   async findAll(
     query?: FindAllTransaccionesODT,
@@ -91,6 +130,11 @@ export class PagosService {
               cliente: true,
             },
           },
+          orden: {
+            include: {
+              cliente: true,
+            },
+          },
         },
         orderBy: {
           fechaPago: 'desc',
@@ -101,7 +145,9 @@ export class PagosService {
     ]);
 
     const data: TransaccionTablaResponse[] = transacciones.map((t) => {
-      const clienteNombre = t.documento?.cliente?.nombre || '—';
+      const clienteNombre = t.documento
+        ? t.documento.cliente?.nombre
+        : t.orden?.cliente?.nombre || '—';
 
       return {
         id: t.id,
@@ -356,34 +402,20 @@ export class PagosService {
             cliente: true,
           },
         },
+        orden: {
+          include: {
+            cliente: true,
+          },
+        },
       },
     });
 
     if (documentoId) {
-      const documento = await this.prisma.documentoDeuda.findUnique({
-        where: { id: documentoId },
-      });
-
-      if (documento) {
-        const nuevoSaldo =
-          Number(documento.saldoPendienteBase) - montoEquivalenteBase;
-        const saldoRedondeado = Math.max(0, Math.round(nuevoSaldo * 100) / 100);
-
-        let nuevoEstado: EstadoDocumentoDeuda = EstadoDocumentoDeuda.PENDIENTE;
-        if (saldoRedondeado === 0) {
-          nuevoEstado = EstadoDocumentoDeuda.PAGADO_TOTAL;
-        } else if (saldoRedondeado < Number(documento.montoTotalBase)) {
-          nuevoEstado = EstadoDocumentoDeuda.PAGADO_PARCIAL;
-        }
-
-        await this.prisma.documentoDeuda.update({
-          where: { id: documentoId },
-          data: {
-            saldoPendienteBase: saldoRedondeado,
-            estado: nuevoEstado,
-          },
-        });
-      }
+      await this.actualizarSaldoDocumento(
+        documentoId,
+        montoEquivalenteBase,
+        'restar',
+      );
     }
 
     if (ordenId && !documentoId) {
@@ -407,12 +439,17 @@ export class PagosService {
       }
     }
 
+    const nombreCliente = transaccion.documento
+      ? transaccion.documento.cliente?.nombre
+      : transaccion.orden
+        ? transaccion.orden.cliente?.nombre
+        : '-';
     return {
       id: transaccion.id,
       fecha: transaccion.fechaPago
         ? transaccion.fechaPago.toISOString()
         : new Date().toISOString(),
-      cliente: transaccion.documento?.cliente?.nombre || '—',
+      cliente: nombreCliente,
       tipo: transaccion.tipoDePago,
       metodo: transaccion.metodoPago.descripcion,
       referencia: transaccion.numeroReferencia,
@@ -570,6 +607,9 @@ export class PagosService {
         documento: {
           include: { cliente: true },
         },
+        orden: {
+          include: { cliente: true },
+        },
       },
     });
 
@@ -583,42 +623,18 @@ export class PagosService {
 
     const montoEquivalente = Number(transaccion.montoEquivalenteBase);
 
-    if (transaccion.documentoId) {
-      const documento = await this.prisma.documentoDeuda.findUnique({
-        where: { id: transaccion.documentoId },
-      });
-
-      if (documento) {
-        const nuevoSaldo =
-          Number(documento.saldoPendienteBase) + montoEquivalente;
-        
-        const nuevoSaldoVES =
-          Number(documento.saldoPendienteVes) + (montoEquivalente * Number(documento.tasaEmisionValor));
-        const saldoRedondeadoVES = Math.round(nuevoSaldoVES * 100) / 100; 
-        const saldoRedondeado = Math.round(nuevoSaldo * 100) / 100;
-
-        let nuevoEstado: EstadoDocumentoDeuda = EstadoDocumentoDeuda.PENDIENTE;
-        if (
-          saldoRedondeado >= Number(documento.montoTotalBase) &&
-          Number(documento.montoTotalBase) > 0
-        ) {
-          nuevoEstado = EstadoDocumentoDeuda.PENDIENTE;
-        } else if (saldoRedondeado > 0) {
-          nuevoEstado = EstadoDocumentoDeuda.PAGADO_PARCIAL;
-        }
-
-        await this.prisma.documentoDeuda.update({
-          where: { id: transaccion.documentoId },
-          data: {
-            saldoPendienteBase: saldoRedondeado,
-            saldoPendienteVes: saldoRedondeadoVES,
-            estado: nuevoEstado,
-          },
-        });
-      }
+    if (
+      transaccion?.documentoId &&
+      transaccion.tipoDePago === TipoDePago.COBRO_FACTURA
+    ) {
+      await this.actualizarSaldoDocumento(
+        transaccion.documentoId,
+        montoEquivalente,
+        'sumar',
+      );
     }
 
-    if (transaccion.ordenId && !transaccion.documentoId) {
+    if (transaccion.ordenId && transaccion.tipoDePago === TipoDePago.ANTICIPO) {
       const orden = await this.prisma.ordenDespacho.findUnique({
         where: { id: transaccion.ordenId },
       });
@@ -638,6 +654,18 @@ export class PagosService {
             saldoNetoCobrar: Math.max(0, Math.round(nuevoSaldo * 100) / 100),
           },
         });
+
+        const documentoDeuda = await this.prisma.documentoDeuda.findFirst({
+          where: { ordenId: transaccion.ordenId },
+        });
+
+        if (documentoDeuda) {
+          await this.actualizarSaldoDocumento(
+            documentoDeuda.id,
+            montoEquivalente,
+            'sumar',
+          );
+        }
       }
     }
 
@@ -653,15 +681,24 @@ export class PagosService {
         documento: {
           include: { cliente: true },
         },
+        orden: {
+          include: { cliente: true },
+        },
       },
     });
+
+    const nombreClienteActualizado = transaccionActualizada.documento
+      ? transaccionActualizada.documento.cliente?.nombre
+      : transaccionActualizada.orden
+        ? transaccionActualizada.orden.cliente?.nombre
+        : '—';
 
     return {
       id: transaccionActualizada.id,
       fecha: transaccionActualizada.fechaPago
         ? transaccionActualizada.fechaPago.toISOString()
         : new Date().toISOString(),
-      cliente: transaccionActualizada.documento?.cliente?.nombre || '—',
+      cliente: nombreClienteActualizado,
       tipo: transaccionActualizada.tipoDePago,
       metodo: transaccionActualizada.metodoPago.descripcion,
       referencia: transaccionActualizada.numeroReferencia,

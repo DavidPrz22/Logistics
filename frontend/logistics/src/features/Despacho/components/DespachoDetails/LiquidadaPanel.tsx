@@ -5,7 +5,7 @@ import type { DetalleOrdenDetail, DetalleRechazoOrden, DocumentoDeudaDetail } fr
 import type { TasaCambio } from "@/types/zodType";
 import { DetallesTable } from "../DetallesTable";
 import { EstadoDocumentoBadge } from "@/components/shared/estado-badge";
-
+import { Link } from "@tanstack/react-router";
 interface LiquidadaPanelProps {
   detalles: DetalleOrdenDetail[];
   rechazos: DetalleRechazoOrden[];
@@ -16,16 +16,25 @@ interface LiquidadaPanelProps {
 export function LiquidadaPanel({ detalles, rechazos, documentoDeuda, tasaCambio }: LiquidadaPanelProps) {
   const tasaValor = tasaCambio ? Number(tasaCambio.tasa) : 0;
   const showVES = tasaValor > 0;
-  console.log(showVES );
+
 
   return (
     <div className="space-y-4">
       {documentoDeuda && (
         <Card className="overflow-hidden">
           <div className="p-4 border-b border-border bg-(--status-liq-bg)/50 flex items-center gap-2">
-            <FileText className="size-4 text-(--status-liq)" />
-            <h2 className="font-semibold">Factura generada</h2>
+            <div className="flex gap-4">
+              <div className="flex items-center gap-1">
+                <FileText className="size-4 text-(--status-liq)" />
+                <h2 className="font-semibold">Factura generada</h2>
+              </div>
+              <Link to='/facturacion/$id' params={{ id: String(documentoDeuda.id) }} className='inline-flex items-center underline gap-1 text-sm  hover:text-foreground'>
+                Ver factura
+              </Link>
+            </div>
+            
             <div className="ml-auto">
+              
               <EstadoDocumentoBadge estado={documentoDeuda.estado} />
             </div>
           </div>

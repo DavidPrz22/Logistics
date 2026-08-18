@@ -55,6 +55,8 @@ export interface DocumentoDeudaDetalle {
   saldoPendienteVes: number | null;
   tasaEmisionValor: number | null;
   totalAbonado: number;
+  totalPagadoBase: number;
+  totalPagadoVes: number | null;
   estado: EstadoDocumentoDeuda;
   tipoDocumento: TipoDocumentoDeuda;
   fechaEmision: string;

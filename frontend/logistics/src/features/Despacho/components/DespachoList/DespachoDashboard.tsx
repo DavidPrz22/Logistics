@@ -20,7 +20,7 @@ interface DespachoDashboardProps {
 export function DespachoDashboard({ search, onSearchChange, onClearFilters, onRowClick }: DespachoDashboardProps) {
   const { data: ordenes = [] } = useOrdenesDespacho() as { data: ListOrdenDespacho[] };
   const { data: choferes = [] } = useChoferes();
-
+  
   const filtered = useMemo(() => {
     return ordenes.filter((o) => {
       if (search.tab !== "TODOS" && o.estado !== search.tab) return false;

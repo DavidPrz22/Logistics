@@ -20,7 +20,7 @@ export function FacturacionPagination({ meta, totalMontoPage, isFetching, isPlac
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="text-sm text-muted-foreground">
         {totalItems} documento(s) · monto total página{" "}
-        <span className="font-mono font-semibold text-foreground tabular-nums">{totalMontoPage} Bs.</span>
+        <span className="font-mono font-semibold text-foreground tabular-nums">${totalMontoPage}</span>
       </div>
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground tabular-nums">

@@ -50,7 +50,7 @@ export function FacturacionTable({ facturas, isLoading, isFetching, onRowClick }
               <TableCell className="text-xs text-muted-foreground">{d.sistemaOrigen === "RUTA_LIQUIDADA" ? "Ruta liquidada" : "Venta mostrador"}</TableCell>
               <TableCell className="text-muted-foreground tabular-nums">{fechaCorta(d.fechaEmision)}</TableCell>
               <TableCell><DocEstadoBadge estado={d.estado} /></TableCell>
-              <TableCell className="text-right font-mono tabular-nums">{d.montoTotalBase} Bs.</TableCell>
+              <TableCell className="text-right font-mono tabular-nums">${d.montoTotalBase}</TableCell>
             </TableRow>
           ))}
         </TableBody>
