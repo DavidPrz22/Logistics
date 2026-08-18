@@ -26,7 +26,7 @@ export const Route = createFileRoute("/pagos/crear/$pagoTipo")({
 function CrearPago() {
   const { pagoTipo } = Route.useParams() as { pagoTipo: "anticipado" | "factura" };
   const ordenQuery = Route.useSearch() as TcrearPago;
-  const { tasaAplicada, divisa } = usePagosStore()
+  const { tasaAplicada, divisa, setTasaAplicada } = usePagosStore()
   const navigate = useNavigate();
   const registrarPagoMutation = useRegistrarPagoMutation();
 
@@ -46,10 +46,11 @@ function CrearPago() {
   const handleSubmit = useCallback((data: CrearPagoInput) => {
     registrarPagoMutation.mutate(data, {
       onSuccess: () => {
+        setTasaAplicada(null);
         navigate({ to: "/pagos" });
       },
     });
-  }, [registrarPagoMutation, navigate]);
+  }, [registrarPagoMutation, navigate, setTasaAplicada]);
 
   const isAnticipo = pagoTipo === "anticipado";
   const selectedSaldo = isAnticipo ? orden?.totalOriginal : factura?.saldoPendienteBase;
@@ -84,8 +85,8 @@ function CrearPago() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Mini label="Cliente" value={factura.clienteNombre ?? "—"} />
             <Mini label="Saldo pendiente usd" value={`$${factura.saldoPendienteBase}`} />
-            {tasaAplicada && <Mini label="Monto estimado" value={`${ divisa?.codigo ?? "$"}${ 
-              convertirDivisa(factura.saldoPendienteBase, tasaAplicada.tasa,  DIVISAS.USD,  divisa?.codigo ?? null)
+            {tasaAplicada && <Mini label="Monto estimado" value={`${ divisa?.codigo + " " || "$ "}${ 
+              convertirDivisa(factura.saldoPendienteBase, tasaAplicada.tasa, divisa?.codigo ?? null, DIVISAS.USD)
               .toFixed(2)}`} />}
           </div>
         )}

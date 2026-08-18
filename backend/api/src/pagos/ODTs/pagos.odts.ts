@@ -101,7 +101,6 @@ export class CrearTransaccionPagoODT {
   cuentaDestinoId?: number;
 
   @IsOptional()
-  @Type(() => Date)
   @IsDateString()
   fechaPago?: string;
 }

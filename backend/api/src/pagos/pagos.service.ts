@@ -254,11 +254,11 @@ export class PagosService {
         throw new Error('Tasa de cambio no encontrada');
       }
 
-      if (tasa.divisaOrigenId !== divisaPagoId && !divisa.esMonedaBase) {
-        throw new Error(
-          'La tasa de cambio no corresponde a la divisa de pago seleccionada',
-        );
-      }
+      // if (tasa.divisaOrigenId !== divisaPagoId && !divisa.esMonedaBase) {
+      //   throw new Error(
+      //     'La tasa de cambio no corresponde a la divisa de pago seleccionada',
+      //   );
+      // }
 
       tasaAplicadaValor = Number(tasa.tasa);
     }
