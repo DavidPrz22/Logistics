@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
@@ -23,7 +23,10 @@ import {
 @Injectable()
 export class PagosService {
   constructor(private readonly prisma: PrismaService) {}
-  private readonly logger = new Logger(PagosService.name);
+
+  private round2(value: unknown): number {
+    return Math.round((Number(value) || 0) * 100) / 100;
+  }
 
   private async actualizarSaldoDocumento(
     documentoId: number,
@@ -44,7 +47,10 @@ export class PagosService {
     const nuevoSaldoVES =
       Number(documento.saldoPendienteVes || 0) +
       montoEquivalente * factor * Number(documento.tasaEmisionValor || 0);
-    const saldoRedondeadoVES = Math.round(nuevoSaldoVES * 100) / 100;
+    const saldoRedondeadoVES = Math.max(
+      0,
+      Math.round(nuevoSaldoVES * 100) / 100,
+    );
 
     let nuevoEstado: EstadoDocumentoDeuda = EstadoDocumentoDeuda.PENDIENTE;
     if (saldoRedondeado === 0) {
@@ -159,7 +165,7 @@ export class PagosService {
         metodo: t.metodoPago.descripcion,
         referencia: t.numeroReferencia,
         estado: t.estado ?? 'APROBADO',
-        montoOrigen: Number(t.montoOrigen),
+        montoOrigen: this.round2(t.montoOrigen),
         divisaSimbolo: t.divisa.codigo,
       };
     });
@@ -259,7 +265,7 @@ export class PagosService {
       id: factura.id,
       numeroOrden: factura.orden.numeroOrden,
       clienteNombre: factura.cliente.nombre,
-      saldoPendienteBase: Number(factura.saldoPendienteBase),
+      saldoPendienteBase: this.round2(factura.saldoPendienteBase),
     }));
   }
 
@@ -432,7 +438,10 @@ export class PagosService {
         await this.prisma.ordenDespacho.update({
           where: { id: ordenId },
           data: {
-            totalAbonado: Math.round(nuevoTotalAbonado * 100) / 100,
+            totalAbonado: Math.max(
+              0,
+              Math.round(nuevoTotalAbonado * 100) / 100,
+            ),
             saldoNetoCobrar: Math.max(0, Math.round(nuevoSaldo * 100) / 100),
           },
         });
@@ -454,11 +463,11 @@ export class PagosService {
       metodo: transaccion.metodoPago.descripcion,
       referencia: transaccion.numeroReferencia,
       estado: transaccion.estado ?? 'APROBADO',
-      montoOrigen: Number(transaccion.montoOrigen),
+      montoOrigen: this.round2(transaccion.montoOrigen),
       divisaSimbolo: transaccion.divisa.codigo,
-      montoEquivalenteBase: Number(transaccion.montoEquivalenteBase),
+      montoEquivalenteBase: this.round2(transaccion.montoEquivalenteBase),
       montoCalculadoVes: transaccion.montoCalculadoVes
-        ? Number(transaccion.montoCalculadoVes)
+        ? this.round2(transaccion.montoCalculadoVes)
         : null,
     };
   }
@@ -526,10 +535,10 @@ export class PagosService {
       tipoDePago: transaccion.tipoDePago,
       estado: transaccion.estado ?? 'APROBADO',
       tipoOperacion: transaccion.tipoOperacion ?? 'INGRESO',
-      montoOrigen: Number(transaccion.montoOrigen),
-      montoEquivalenteBase: Number(transaccion.montoEquivalenteBase),
+      montoOrigen: this.round2(transaccion.montoOrigen),
+      montoEquivalenteBase: this.round2(transaccion.montoEquivalenteBase),
       montoCalculadoVes: transaccion.montoCalculadoVes
-        ? Number(transaccion.montoCalculadoVes)
+        ? this.round2(transaccion.montoCalculadoVes)
         : null,
       tasaAplicadaValor: transaccion.tasaAplicadaValor
         ? Number(transaccion.tasaAplicadaValor)
@@ -555,8 +564,8 @@ export class PagosService {
             id: transaccion.documento.id,
             sistemaOrigen: transaccion.documento.sistemaOrigen,
             estado: transaccion.documento.estado,
-            montoTotalBase: Number(transaccion.documento.montoTotalBase),
-            saldoPendienteBase: Number(
+            montoTotalBase: this.round2(transaccion.documento.montoTotalBase),
+            saldoPendienteBase: this.round2(
               transaccion.documento.saldoPendienteBase,
             ),
             cliente: {
@@ -703,11 +712,13 @@ export class PagosService {
       metodo: transaccionActualizada.metodoPago.descripcion,
       referencia: transaccionActualizada.numeroReferencia,
       estado: transaccionActualizada.estado ?? 'ANULADO',
-      montoOrigen: Number(transaccionActualizada.montoOrigen),
+      montoOrigen: this.round2(transaccionActualizada.montoOrigen),
       divisaSimbolo: transaccionActualizada.divisa.codigo,
-      montoEquivalenteBase: Number(transaccionActualizada.montoEquivalenteBase),
+      montoEquivalenteBase: this.round2(
+        transaccionActualizada.montoEquivalenteBase,
+      ),
       montoCalculadoVes: transaccionActualizada.montoCalculadoVes
-        ? Number(transaccionActualizada.montoCalculadoVes)
+        ? this.round2(transaccionActualizada.montoCalculadoVes)
         : null,
     };
   }

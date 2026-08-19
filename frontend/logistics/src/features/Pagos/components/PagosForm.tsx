@@ -95,7 +95,7 @@ export function PagoCampos({
   isMonedaBase: boolean
 }) {
   const { control, setValue } = useFormContext<CrearPagoInput>();
-  const setDivisaPagoId = usePagosStore((state) => state.setDivisaPagoId);
+  const setDivisaPago = usePagosStore((state) => state.setDivisaPago);
   const divisaSeleccionada = usePagosStore((state) => state.divisa);
   
   const { data: metodosPago = [] } = useMetodosPago();
@@ -186,7 +186,7 @@ export function PagoCampos({
             }}
             onValueChange={(val) => {
               const selectedDivisa = divisas.find((d) => d.id === val) ?? null;
-              setDivisaPagoId(selectedDivisa);
+              setDivisaPago(selectedDivisa);
             }}
           />
         </Field>
@@ -242,6 +242,7 @@ export function PagoCampos({
             fechaVigencia={fechaPago}
             onTasaSelect={handleTasaSelect}
             value={tasaId}
+            divisaSelectedId={divisaSeleccionada?.id}
           />
         )}
 

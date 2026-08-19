@@ -25,6 +25,8 @@ import type {
 export class DespachoService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private round2 = (n: number): number => Math.round(n * 100) / 100;
+
   async searchLotes(query?: string): Promise<LoteSearchResult[]> {
     const whereClause = {
       stockActual: { gt: 0 },
@@ -112,9 +114,8 @@ export class DespachoService {
         };
       }) ?? [];
 
-    const totalOriginalVes = detallesConVes.reduce(
-      (sum, d) => sum + d.subtotalVes,
-      0,
+    const totalOriginalVes = this.round2(
+      detallesConVes.reduce((sum, d) => sum + d.subtotalVes, 0),
     );
 
     try {
@@ -123,10 +124,10 @@ export class DespachoService {
           ...ordenFields,
           tasaCambioId,
           tasaCambioValor: tasaValor,
-          totalOriginal: totalFacturado,
+          totalOriginal: this.round2(totalFacturado),
           totalOriginalVes,
-          saldoNetoCobrar: totalFacturado,
-          montoFacturadoNeto: totalFacturado,
+          saldoNetoCobrar: this.round2(totalFacturado),
+          montoFacturadoNeto: this.round2(totalFacturado),
           montoFacturadoNetoVes: totalOriginalVes,
           numeroOrden,
           detalles: {
@@ -217,9 +218,10 @@ export class DespachoService {
 
       const deleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
 
-      const totalOriginalVes =
+      const totalOriginalVes = this.round2(
         createOperations.reduce((sum, d) => sum + d.subtotalVes, 0) +
-        updateOperations.reduce((sum, op) => sum + op.data.subtotalVes, 0);
+          updateOperations.reduce((sum, op) => sum + op.data.subtotalVes, 0),
+      );
 
       await this.prisma.ordenDespacho.update({
         where: { id: ordenId },
@@ -230,10 +232,10 @@ export class DespachoService {
             deleteMany:
               deleteIds.length > 0 ? [{ id: { in: deleteIds } }] : undefined,
           },
-          totalOriginal: totalFacturado,
+          totalOriginal: this.round2(totalFacturado),
           totalOriginalVes,
-          saldoNetoCobrar: totalFacturado,
-          montoFacturadoNeto: totalFacturado,
+          saldoNetoCobrar: this.round2(totalFacturado),
+          montoFacturadoNeto: this.round2(totalFacturado),
           montoFacturadoNetoVes: totalOriginalVes,
         },
       });
@@ -339,20 +341,21 @@ export class DespachoService {
 
       const financialFields = totalFacturado
         ? {
-            totalOriginal: totalFacturado,
-            saldoNetoCobrar: totalFacturado,
-            montoFacturadoNeto: totalFacturado,
+            totalOriginal: this.round2(totalFacturado),
+            saldoNetoCobrar: this.round2(totalFacturado),
+            montoFacturadoNeto: this.round2(totalFacturado),
           }
         : {};
 
       let vesFinancialFields = {};
       if (tasaValor !== null) {
-        const totalOriginalVes =
+        const totalOriginalVes = this.round2(
           createOperations.reduce((sum, d) => sum + (d.subtotalVes ?? 0), 0) +
-          updateOperations.reduce(
-            (sum, op) => sum + (op.data.subtotalVes ?? 0),
-            0,
-          );
+            updateOperations.reduce(
+              (sum, op) => sum + (op.data.subtotalVes ?? 0),
+              0,
+            ),
+        );
         vesFinancialFields = {
           totalOriginalVes,
           montoFacturadoNetoVes: totalOriginalVes,
@@ -640,6 +643,7 @@ export class DespachoService {
               Number(detalleOrden.precioUnitario) * re.cantidadRechazada;
           }
         });
+        totalRechazado = this.round2(totalRechazado);
         for (const rechazo of detalle.rechazos) {
           const nuevoRechazo = await tx.detalleRechazoOrden.create({
             data: {
@@ -680,13 +684,16 @@ export class DespachoService {
         },
       });
 
-      const totalAnticipado = anticipos.reduce(
-        (sum, t) => sum + Number(t.montoEquivalenteBase),
-        0,
+      const totalAnticipado = this.round2(
+        anticipos.reduce((sum, t) => sum + Number(t.montoEquivalenteBase), 0),
       );
 
-      const montoFacturadoNeto = Number(orden.totalOriginal) - totalRechazado;
-      const saldoPendienteBase = montoFacturadoNeto - totalAnticipado;
+      const montoFacturadoNeto = this.round2(
+        Number(orden.totalOriginal) - totalRechazado,
+      );
+      const saldoPendienteBase = this.round2(
+        montoFacturadoNeto - totalAnticipado,
+      );
 
       // Calculate VES amounts using the order's exchange rate
       const tasaEmision = orden.tasaCambioValor
@@ -748,10 +755,10 @@ export class DespachoService {
         where: { id },
         data: {
           estado: EstadoOrdenDespacho.LIQUIDADA,
-          montoFacturadoNeto: montoFacturadoNeto,
-          saldoNetoCobrar: saldoPendienteBase,
-          totalRechazado: totalRechazado,
-          totalAbonado: totalAnticipado,
+          montoFacturadoNeto: this.round2(montoFacturadoNeto),
+          saldoNetoCobrar: this.round2(saldoPendienteBase),
+          totalRechazado: this.round2(totalRechazado),
+          totalAbonado: this.round2(totalAnticipado),
         },
       });
     });

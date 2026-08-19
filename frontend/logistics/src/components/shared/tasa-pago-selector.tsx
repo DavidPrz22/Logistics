@@ -47,10 +47,12 @@ export function TasaPagoSelector({
   fechaVigencia,
   onTasaSelect,
   value,
+  divisaSelectedId,
 }: {
   fechaVigencia: Date;
   onTasaSelect: (tasa: TasaCambio | null) => void;
   value?: number;
+  divisaSelectedId?: number;
 }) {
   const [selectedRegistroId, setSelectedRegistroId] = useState<number | null>(null);
 
@@ -73,7 +75,7 @@ export function TasaPagoSelector({
     hint: new Date(r.createdAt).toLocaleString(),
   }));
 
-  const tasaItems = tasas.map((t: TasaCambio) => ({
+  const tasaItems = tasas.filter( t => t.divisaOrigen.id === divisaSelectedId).map((t: TasaCambio) => ({
     value: t.id.toString(),
     label: `${t.divisaOrigen.codigo} → ${t.divisaDestino.codigo}`,
     hint: `Tasa: ${Number(t.tasa).toFixed(2)} (${t.fuente})`,

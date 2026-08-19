@@ -86,6 +86,7 @@ export class CrearTransaccionPagoODT {
   divisaPagoId!: number;
 
   @IsNumber()
+  @Min(0)
   montoOrigen!: number;
 
   @IsOptional()

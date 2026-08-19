@@ -13,6 +13,10 @@ import { FindAllFacturasODT } from './ODTs/factuacion.odts';
 export class FacturacionService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private round2(value: unknown): number {
+    return Math.round((Number(value) || 0) * 100) / 100;
+  }
+
   async findAll(
     query?: FindAllFacturasODT,
   ): Promise<PaginatedDocumentosResponse> {
@@ -72,7 +76,7 @@ export class FacturacionService {
       sistemaOrigen: doc.sistemaOrigen,
       numeroOrden: doc.orden.numeroOrden,
       identificadorCliente: doc.cliente.nombre,
-      montoTotalBase: Number(doc.montoTotalBase),
+      montoTotalBase: this.round2(doc.montoTotalBase),
       estado: doc.estado ?? 'PENDIENTE',
       tipoDocumento: doc.tipoDocumento ?? 'FACTURA',
       fechaEmision: doc.fechaEmision
@@ -127,7 +131,7 @@ export class FacturacionService {
         tipoDePago: pago.tipoDePago,
         metodoPago: pago.metodoPago.descripcion,
         divisaPago: pago.divisa.codigo,
-        montoOrigen: Number(pago.montoOrigen),
+        montoOrigen: this.round2(pago.montoOrigen),
         numeroReferencia: pago.numeroReferencia || undefined,
         estado: pago.estado ?? 'APROBADO',
         fechaPago: pago.fechaPago
@@ -143,21 +147,32 @@ export class FacturacionService {
       ordenId: doc.ordenId,
       numeroOrden: doc.orden.numeroOrden,
       identificadorCliente: doc.cliente.nombre,
-      montoTotalBase: Number(doc.montoTotalBase),
-      montoTotalVes: doc.montoTotalVes ? Number(doc.montoTotalVes) : null,
-      saldoPendienteBase: Number(doc.saldoPendienteBase),
-      saldoPendienteVes: doc.saldoPendienteVes
-        ? Number(doc.saldoPendienteVes)
-        : null,
+      montoTotalBase: this.round2(doc.montoTotalBase),
+      montoTotalVes:
+        doc.montoTotalVes != null ? this.round2(doc.montoTotalVes) : null,
+      saldoPendienteBase: this.round2(doc.saldoPendienteBase),
+      saldoPendienteVes:
+        doc.saldoPendienteVes != null
+          ? this.round2(doc.saldoPendienteVes)
+          : null,
       tasaEmisionValor: doc.tasaEmisionValor
         ? Number(doc.tasaEmisionValor)
         : null,
-      totalAbonado: Number(doc.orden?.totalAbonado ?? 0),
-      totalPagadoBase:
-        Number(doc.montoTotalBase) - Number(doc.saldoPendienteBase),
+      totalAbonado: this.round2(doc.orden?.totalAbonado ?? 0),
+      totalPagadoBase: Math.max(
+        0,
+        this.round2(
+          Number(doc.montoTotalBase) - Number(doc.saldoPendienteBase),
+        ),
+      ),
       totalPagadoVes:
         doc.montoTotalVes != null && doc.saldoPendienteVes != null
-          ? Number(doc.montoTotalVes) - Number(doc.saldoPendienteVes)
+          ? Math.max(
+              0,
+              this.round2(
+                Number(doc.montoTotalVes) - Number(doc.saldoPendienteVes),
+              ),
+            )
           : null,
       estado: doc.estado ?? 'PENDIENTE',
       tipoDocumento: doc.tipoDocumento ?? 'FACTURA',

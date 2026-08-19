@@ -71,9 +71,9 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <StatCard label="Líneas" value={detalles.length} />
         <StatCard label="Unidades" value={detalles.reduce((s, d) => s + d.cantidadEnviada, 0)} />
         <StatCard label="Facturado" value={`$${orden.totalOriginal.toFixed(2)}`} mono />
+        <StatCard label="Total Rechazado" value={`$${orden.totalRechazado.toFixed(2)}`} mono/>
         <StatCard label="Anticipado" value={`$${orden.totalAbonado.toFixed(2)}`} mono />
         <StatCard label="Neto a cobrar" value={`$${orden.saldoNetoCobrar.toFixed(2)}`} mono highlight />
       </div>
