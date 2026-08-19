@@ -101,13 +101,28 @@ export class CoreService {
   }
 
   private async getDivisaMap() {
-    return this.prisma.divisa.findMany().then((divisas) => {
-      const map: Record<string, number> = {};
-      divisas.forEach((divisa) => {
-        map[divisa.codigo] = divisa.id;
-      });
-      return map;
+    // Se ejecutan ambas consultas en una sola transacción de Prisma
+    const [divisas, usdDivisa] = await this.prisma.$transaction([
+      this.prisma.divisa.findMany(),
+      this.prisma.divisa.findUnique({
+        where: { codigo: 'USD' },
+        select: { id: true },
+      }),
+    ]);
+
+    const map: Record<string, number> = {};
+
+    // Poblamos el mapa con los registros de la base de datos
+    divisas.forEach((divisa) => {
+      map[divisa.codigo] = divisa.id;
     });
+
+    // Asignamos el ID de USD a la clave 'USDT' si existe
+    if (usdDivisa?.id) {
+      map['USDT'] = usdDivisa.id;
+    }
+
+    return map;
   }
 
   private async fetchMontosVeRates(): Promise<TasaCambioItem[]> {
@@ -223,8 +238,8 @@ export class CoreService {
     const montosVeData = await this.fetchMontosVeRates();
     for (const item of montosVeData) {
       const currencyPair = item.currency_pair.split('/');
-      const divisaOrigenCodigo = currencyPair[0];
-      const divisaDestinoCodigo = currencyPair[1];
+      const divisaOrigenCodigo = currencyPair[1];
+      const divisaDestinoCodigo = currencyPair[0];
 
       const divisaOrigenId = divisaMap[divisaOrigenCodigo];
       const divisaDestinoId = divisaMap[divisaDestinoCodigo];
@@ -255,8 +270,8 @@ export class CoreService {
     // Fetch and process Binance
     const binanceData = await this.fetchBinanceRates();
     if (binanceData?.success && binanceData.data.length > 0) {
-      const divisaOrigenId = divisaMap['USD'];
-      const divisaDestinoId = divisaMap['VES'];
+      const divisaOrigenId = divisaMap['VES'];
+      const divisaDestinoId = divisaMap['USD'];
 
       if (divisaOrigenId && divisaDestinoId) {
         const usdtRate =
@@ -283,8 +298,8 @@ export class CoreService {
     // Fetch and process DolarApi
     const dolarApiData = await this.fetchDolarApiRates();
     if (dolarApiData) {
-      const divisaOrigenId = divisaMap['USD'];
-      const divisaDestinoId = divisaMap['VES'];
+      const divisaOrigenId = divisaMap['VES'];
+      const divisaDestinoId = divisaMap['USD'];
 
       if (divisaOrigenId && divisaDestinoId) {
         combinedTasasCambioList.push({
