@@ -75,7 +75,7 @@ export function TasaPagoSelector({
     hint: new Date(r.createdAt).toLocaleString(),
   }));
 
-  const tasaItems = tasas.filter( t => t.divisaOrigen.id === divisaSelectedId).map((t: TasaCambio) => ({
+  const tasaItems = (divisaSelectedId ? tasas.filter((t) => t.divisaOrigen.id === divisaSelectedId) : tasas).map((t: TasaCambio) => ({
     value: t.id.toString(),
     label: `${t.divisaOrigen.codigo} → ${t.divisaDestino.codigo}`,
     hint: `Tasa: ${Number(t.tasa).toFixed(2)} (${t.fuente})`,
