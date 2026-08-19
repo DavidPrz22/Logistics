@@ -89,6 +89,10 @@ export class CrearTransaccionPagoODT {
   @Min(0)
   montoOrigen!: number;
 
+  @IsNumber()
+  @Min(0)
+  montoEquivalenteBase!: number;
+
   @IsOptional()
   @IsInt()
   tasaAplicadaId?: number;

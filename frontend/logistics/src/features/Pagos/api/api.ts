@@ -107,6 +107,7 @@ export const registrarPago = async (
       metodoPagoId: data.metodoPagoId,
       divisaPagoId: data.divisaPagoId,
       montoOrigen: data.montoPago,
+      montoEquivalenteBase: data.montoEquivalenteBase,
       tasaAplicadaId: data.tasaAplicadaId || undefined,
       numeroReferencia: data.numeroReferencia,
       cuentaDestinoId: data.cuentaDestinoId,

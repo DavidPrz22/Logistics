@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
@@ -18,12 +18,13 @@ import {
   TipoOperacionPago,
   EstadoTransaccionPago,
   EstadoDocumentoDeuda,
+  FuenteTasaCambio,
 } from 'prisma/generated/prisma/enums';
 
 @Injectable()
 export class PagosService {
   constructor(private readonly prisma: PrismaService) {}
-
+  private readonly logger = new Logger(PagosService.name);
   private round2(value: unknown): number {
     return Math.round((Number(value) || 0) * 100) / 100;
   }
@@ -272,8 +273,13 @@ export class PagosService {
   async createTransaccionPago(
     data: CrearTransaccionPagoODT,
   ): Promise<TransaccionPagoResponse> {
-    const { documentoId, ordenId, tasaAplicadaId, divisaPagoId, montoOrigen } =
-      data;
+    const {
+      documentoId,
+      ordenId,
+      tasaAplicadaId,
+      divisaPagoId,
+      montoEquivalenteBase,
+    } = data;
 
     if (!documentoId && !ordenId) {
       throw new Error(
@@ -290,7 +296,6 @@ export class PagosService {
     }
 
     let tasaAplicadaValor: number | null = null;
-    let montoEquivalenteBase: number;
     let montoCalculadoVes: number | null = null;
 
     if (tasaAplicadaId) {
@@ -306,58 +311,43 @@ export class PagosService {
         throw new Error('Tasa de cambio no encontrada');
       }
 
-      // if (tasa.divisaOrigenId !== divisaPagoId && !divisa.esMonedaBase) {
-      //   throw new Error(
-      //     'La tasa de cambio no corresponde a la divisa de pago seleccionada',
-      //   );
-      // }
-
       tasaAplicadaValor = Number(tasa.tasa);
     }
 
-    if (divisa.esMonedaBase) {
-      montoEquivalenteBase = montoOrigen;
-    } else {
-      if (!tasaAplicadaValor) {
-        throw new Error(
-          'Debe seleccionar una tasa de cambio para divisas no base',
-        );
-      }
-      if (divisa.codigo === 'EUR') {
-        montoEquivalenteBase =
-          Math.round(montoOrigen * tasaAplicadaValor * 100) / 100;
-      } else {
-        montoEquivalenteBase =
-          Math.round((montoOrigen / tasaAplicadaValor) * 100) / 100;
-      }
-    }
+    // calculate montoCalculadoVes
 
-    if (divisa.codigo === 'VES') {
-      if (tasaAplicadaId && tasaAplicadaValor) {
-        montoCalculadoVes = Math.round(montoOrigen * 100) / 100;
-      }
-    } else if (ordenId && !tasaAplicadaId) {
-      const orden = await this.prisma.ordenDespacho.findUnique({
-        where: { id: ordenId },
-        include: {
-          tasaCambio: {
-            include: {
-              divisaOrigen: true,
-              divisaDestino: true,
-            },
-          },
+    if (divisa.codigo === 'VES' && tasaAplicadaId) {
+      console.log('tasausd', tasaAplicadaValor);
+      montoCalculadoVes = this.round2(
+        montoEquivalenteBase * (tasaAplicadaValor ?? 0),
+      );
+    } else if (divisa.codigo === 'EUR') {
+      const tasaEurVes = await this.prisma.tasaCambio.findFirst({
+        where: {
+          divisaOrigen: { codigo: 'VES' },
+          divisaDestino: { codigo: 'EUR' },
+        },
+        orderBy: {
+          fechaVigencia: 'desc', // Reemplaza por el campo correspondiente (ej. fecha, timestamp, id)
         },
       });
-
-      if (
-        orden?.tasaCambio &&
-        !orden.tasaCambio.divisaOrigen.esMonedaBase &&
-        orden.tasaCambio.divisaDestino.codigo === 'VES'
-      ) {
-        const tasaOrdenValor = Number(orden.tasaCambio.tasa);
-        montoCalculadoVes =
-          Math.round(montoOrigen * tasaOrdenValor * 100) / 100;
-      }
+      montoCalculadoVes = this.round2(
+        montoEquivalenteBase * Number(tasaEurVes?.tasa ?? 0),
+      );
+    } else if (divisa.esMonedaBase) {
+      const tasaUsdVes = await this.prisma.tasaCambio.findFirst({
+        where: {
+          divisaOrigen: { codigo: 'VES' },
+          divisaDestino: { codigo: 'USD' },
+          fuente: FuenteTasaCambio.BCV,
+        },
+        orderBy: {
+          fechaVigencia: 'desc', // Reemplaza por el campo correspondiente (ej. fecha, timestamp, id)
+        },
+      });
+      montoCalculadoVes = this.round2(
+        montoEquivalenteBase * Number(tasaUsdVes?.tasa ?? 0),
+      );
     }
 
     const tipoDePago = documentoId

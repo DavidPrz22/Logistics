@@ -6,6 +6,7 @@ const basePagoSchema = z.object({
   divisaPagoId: z.number(),
   tasaAplicadaId: z.number().optional(),
   montoPago: z.number().min(0.01),
+  montoEquivalenteBase: z.number().min(0),
   cuentaDestinoId: z.number(),
   fechaPago: z.date(),
   usuario: z.string().optional(),

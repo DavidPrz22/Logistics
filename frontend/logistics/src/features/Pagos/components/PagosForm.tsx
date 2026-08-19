@@ -1,5 +1,6 @@
 import { useForm, FormProvider, useFormContext, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -41,13 +42,14 @@ export function PagosForm({
     defaultValues: {
       tipoPago: tipoPago === 'ANTICIPO' ? 'ANTICIPO' : 'COBRO_FACTURA',
       montoPago: 0,
+      montoEquivalenteBase: 0,
       fechaPago: new Date(),
     }
   });
   const setTasaAplicada = usePagosStore((state) => state.setTasaAplicada);
   const divisa = usePagosStore((state) => state.divisa);
   const isMonedaBase = divisa?.esMonedaBase ?? false;
-  
+      console.log(methods.watch())
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
@@ -59,7 +61,7 @@ export function PagosForm({
           isMonedaBase={isMonedaBase}
 
         />
-        <ConversionBreakdown saldoPendiente={saldoPendiente} isMonedaBase={isMonedaBase}/>
+        <ConversionBreakdown saldoPendiente={saldoPendiente} />
         <div className="flex justify-end">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
@@ -97,11 +99,14 @@ export function PagoCampos({
   const { control, setValue } = useFormContext<CrearPagoInput>();
   const setDivisaPago = usePagosStore((state) => state.setDivisaPago);
   const divisaSeleccionada = usePagosStore((state) => state.divisa);
+  const tasaAplicada = usePagosStore((state) => state.tasaAplicada);
   
   const { data: metodosPago = [] } = useMetodosPago();
   const { data: divisas = [] } = useDivisas();
   const { data: tasas = [] } = useTasasCambio();
   const { data: cuentasDestino = [] } = useCuentasDestino();
+
+  const divisaBase = divisas.find((d) => d.esMonedaBase);
  
 
   const tipoPago = useWatch({ control, name: "tipoPago" });
@@ -109,6 +114,7 @@ export function PagoCampos({
   const metodoPagoId = useWatch({ control, name: "metodoPagoId" });
   const fechaPago = useWatch({ control, name: "fechaPago" });
   const tasaId = useWatch({ control, name: "tasaAplicadaId" });
+  const montoPago = useWatch({ control, name: "montoPago" });
 
   const metodo = metodosPago.find((m) => m.id === metodoPagoId);
   const requiereRef = metodo?.requiereReferencia ?? false;
@@ -117,6 +123,25 @@ export function PagoCampos({
     setTasa?.(tasa);
     setValue("tasaAplicadaId", tasa?.id ?? 0);
   };
+
+  useEffect(() => {
+    const monto = montoPago || 0;
+    if (isMonedaBase) {
+      setValue("montoEquivalenteBase", monto);
+      return;
+    }
+    if (!divisaBase || !tasaAplicada) {
+      setValue("montoEquivalenteBase", 0);
+      return;
+    }
+    const equiv = convertirDivisa(
+      monto,
+      tasaAplicada.tasa,
+      divisaBase.codigo,
+      divisaSeleccionada?.codigo ?? null
+    );
+    setValue("montoEquivalenteBase", equiv);
+  }, [montoPago, tasaAplicada, divisaSeleccionada, isMonedaBase, divisaBase, setValue]);
 
 
   return (
@@ -268,10 +293,8 @@ export function PagoCampos({
 
 export function ConversionBreakdown({ 
   saldoPendiente,
-  isMonedaBase
 }: { 
   saldoPendiente?: number;
-  isMonedaBase: boolean
 }) {
   const tasaAplicada = usePagosStore((state) => state.tasaAplicada);
   const divisa = usePagosStore((state) => state.divisa);
@@ -283,10 +306,10 @@ export function ConversionBreakdown({
   const { control } = useFormContext<CrearPagoInput>();
   const form = useWatch({ control });
 
-  const tasaValor = tasaAplicada && !isMonedaBase ? tasaAplicada.tasa : 1;
+  const tasaValor = tasaAplicada ? tasaAplicada.tasa : 1;
   
   const montoOrigen = form.montoPago || 0;
-  const equiv = convertirDivisa(montoOrigen, tasaValor, base?.codigo ?? null, divisa?.codigo ?? null);
+  const equiv = form.montoEquivalenteBase ?? 0;
 
   const excedente = saldoPendiente !== undefined ? Math.round((equiv - saldoPendiente) * 100) / 100 : 0;
 
