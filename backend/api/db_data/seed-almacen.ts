@@ -15,7 +15,6 @@ async function main() {
   const dataPath = path.join(__dirname, 'almacenes.json');
   const almacenesData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
 
-
   for (const almacen of almacenesData) {
     try {
       const result = await prisma.almacen.create({

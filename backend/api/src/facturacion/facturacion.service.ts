@@ -168,10 +168,7 @@ export class FacturacionService {
       totalPagadoVes:
         doc.montoTotalVes != null && doc.saldoPendienteVes != null
           ? Math.max(
-              0,
-              this.round2(
-                Number(doc.montoTotalVes) - Number(doc.saldoPendienteVes),
-              ),
+              0, Number(doc.montoTotalVes) - Number(doc.saldoPendienteVes),
             )
           : null,
       estado: doc.estado ?? 'PENDIENTE',

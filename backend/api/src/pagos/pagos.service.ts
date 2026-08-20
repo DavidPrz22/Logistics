@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
@@ -24,6 +24,7 @@ import {
 @Injectable()
 export class PagosService {
   constructor(private readonly prisma: PrismaService) {}
+  private logger = new Logger(PagosService.name);
   private round2(value: unknown): number {
     return Math.round((Number(value) || 0) * 100) / 100;
   }
@@ -32,6 +33,7 @@ export class PagosService {
     documentoId: number,
     montoEquivalente: number,
     operacion: 'sumar' | 'restar',
+    montoOrigenVES: number | null,
   ): Promise<void> {
     const documento = await this.prisma.documentoDeuda.findUnique({
       where: { id: documentoId },
@@ -46,7 +48,10 @@ export class PagosService {
 
     const nuevoSaldoVES =
       Number(documento.saldoPendienteVes || 0) +
-      montoEquivalente * factor * Number(documento.tasaEmisionValor || 0);
+      (montoOrigenVES
+        ? montoOrigenVES * factor
+        : montoEquivalente * factor * Number(documento.tasaEmisionValor || 0));
+
     const saldoRedondeadoVES = Math.max(
       0,
       Math.round(nuevoSaldoVES * 100) / 100,
@@ -278,6 +283,7 @@ export class PagosService {
       tasaAplicadaId,
       divisaPagoId,
       montoEquivalenteBase,
+      montoOrigen,
     } = data;
 
     if (!documentoId && !ordenId) {
@@ -316,9 +322,9 @@ export class PagosService {
     // calculate montoCalculadoVes
 
     if (divisa.codigo === 'VES' && tasaAplicadaId) {
-      montoCalculadoVes = this.round2(
-        montoEquivalenteBase * (tasaAplicadaValor ?? 0),
-      );
+      this.logger.log(`montoCalculadoVes: ${montoOrigen}`);
+      montoCalculadoVes = montoOrigen;
+      this.logger.log(`montoCalculadoVes: ${montoCalculadoVes}`);
     } else if (divisa.codigo === 'EUR') {
       const tasaEurVes = await this.prisma.tasaCambio.findFirst({
         where: {
@@ -405,11 +411,21 @@ export class PagosService {
     });
 
     if (documentoId) {
-      await this.actualizarSaldoDocumento(
-        documentoId,
-        montoEquivalenteBase,
-        'restar',
-      );
+      if (divisa.codigo === 'VES') {
+        await this.actualizarSaldoDocumento(
+          documentoId,
+          montoEquivalenteBase,
+          'restar',
+          montoOrigen,
+        );
+      } else {
+        await this.actualizarSaldoDocumento(
+          documentoId,
+          montoEquivalenteBase,
+          'restar',
+          null,
+        );
+      }
     }
 
     if (ordenId && !documentoId) {
@@ -624,10 +640,16 @@ export class PagosService {
       transaccion?.documentoId &&
       transaccion.tipoDePago === TipoDePago.COBRO_FACTURA
     ) {
+      // si el documento tiene saldo pendiente, se actualiza. En caso de se ves, se envia el monto en ves para evitar recalculo de la cantidad de ves pagados
+      const vesAmount =
+        transaccion.divisa.codigo === 'VES'
+          ? Number(transaccion.montoOrigen)
+          : null;
       await this.actualizarSaldoDocumento(
         transaccion.documentoId,
         montoEquivalente,
         'sumar',
+        vesAmount,
       );
     }
 
@@ -657,10 +679,15 @@ export class PagosService {
         });
 
         if (documentoDeuda) {
+          const vesAmount =
+            transaccion.divisa.codigo === 'VES'
+              ? Number(transaccion.montoOrigen)
+              : null;
           await this.actualizarSaldoDocumento(
             documentoDeuda.id,
             montoEquivalente,
             'sumar',
+            vesAmount,
           );
         }
       }
