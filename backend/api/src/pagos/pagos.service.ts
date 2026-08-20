@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Prisma } from 'prisma/generated/prisma/client';
 import type {
@@ -24,7 +24,6 @@ import {
 @Injectable()
 export class PagosService {
   constructor(private readonly prisma: PrismaService) {}
-  private readonly logger = new Logger(PagosService.name);
   private round2(value: unknown): number {
     return Math.round((Number(value) || 0) * 100) / 100;
   }
@@ -317,7 +316,6 @@ export class PagosService {
     // calculate montoCalculadoVes
 
     if (divisa.codigo === 'VES' && tasaAplicadaId) {
-      console.log('tasausd', tasaAplicadaValor);
       montoCalculadoVes = this.round2(
         montoEquivalenteBase * (tasaAplicadaValor ?? 0),
       );

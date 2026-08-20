@@ -60,7 +60,7 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
     setValue,
     watch,
     handleSubmit,
-    formState: { isValid, errors },
+    formState: { isValid },
   } = useForm<OrdenDespacho>({
     resolver: zodResolver(ordenDespachoSchema),
     mode: "onChange",
@@ -75,7 +75,6 @@ export function DespachoCreatePage({ ordenId, isEdit = false }: DespachoCreatePa
       detallesOrdenDespacho: [],
     }
   });
-  console.log(errors, watch())
   useEffect(() => {
     const detallesFormateados = lineas.map(l => ({
         id: l.id || undefined,

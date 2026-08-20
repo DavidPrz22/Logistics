@@ -49,7 +49,6 @@ export function PagosForm({
   const setTasaAplicada = usePagosStore((state) => state.setTasaAplicada);
   const divisa = usePagosStore((state) => state.divisa);
   const isMonedaBase = divisa?.esMonedaBase ?? false;
-      console.log(methods.watch())
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
@@ -107,7 +106,6 @@ export function PagoCampos({
   const { data: cuentasDestino = [] } = useCuentasDestino();
 
   const divisaBase = divisas.find((d) => d.esMonedaBase);
- 
 
   const tipoPago = useWatch({ control, name: "tipoPago" });
   
@@ -212,6 +210,8 @@ export function PagoCampos({
             onValueChange={(val) => {
               const selectedDivisa = divisas.find((d) => d.id === val) ?? null;
               setDivisaPago(selectedDivisa);
+              setTasa?.(null);
+              setValue("tasaAplicadaId", undefined);
             }}
           />
         </Field>

@@ -53,7 +53,6 @@ function PagosList() {
     desde: search.desde || undefined,
     hasta: search.hasta || undefined,
   });
-  console.log(data)
   const setSearch = (patch: Partial<typeof search>) =>
     navigate({ search: (prev: typeof search) => ({ ...prev, page: 1, ...patch }) });
 
