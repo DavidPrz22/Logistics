@@ -54,8 +54,8 @@ function CardexIndexView() {
               {recientes.map((r) => (
                 <Link
                   key={r.sku}
-                  to="/kardex/"
-                  params={{ skuId: r.sku }}
+                  to="/kardex/$skuid"
+                  params={{ skuid: r.sku }}
                   className="group inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-muted"
                 >
                   <Clock className="size-3.5 text-muted-foreground" />

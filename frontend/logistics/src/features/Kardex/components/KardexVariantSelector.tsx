@@ -16,8 +16,8 @@ export function VariantSelector({
         return (
           <Link
             key={v.id}
-            to="/kardex/"
-            params={{ skuId: v.sku }}
+            to="/kardex/$skuid"
+            params={{ skuid: v.sku }}
             replace
             className={cn(
               "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",

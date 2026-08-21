@@ -105,8 +105,8 @@ export function CardexSearch({
     });
     setOpen(false);
     navigate({
-      to: '/kardex/',
-      params: { skuId: item.sku },
+      to: '/kardex/$skuid',
+      params: { skuid: item.sku },
     });
   };
 
