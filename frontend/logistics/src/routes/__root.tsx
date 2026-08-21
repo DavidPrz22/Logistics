@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 
-import { Truck, Package, LayoutDashboard, Warehouse, Receipt, CreditCardIcon } from "lucide-react";
+import { Truck, Package, LayoutDashboard, Warehouse, Receipt, CreditCardIcon, BoxIcon } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -92,6 +92,7 @@ function AppSidebar() {
     { to: "/despachos", label: "Despachos", icon: Truck },
     { to: "/facturacion", label: "Facturación", icon: Receipt },
     { to: "/pagos", label: "Pagos", icon: CreditCardIcon },
+    { to: "/kardex", label: "Kárdex", icon: BoxIcon },
   ];
 
   return (

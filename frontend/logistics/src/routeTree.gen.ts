@@ -13,12 +13,14 @@ import { Route as InventarioRouteRouteImport } from './routes/inventario/route'
 import { Route as DespachosRouteRouteImport } from './routes/despachos/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PagosIndexRouteImport } from './routes/pagos/index'
+import { Route as KardexIndexRouteImport } from './routes/kardex/index'
 import { Route as FacturacionIndexRouteImport } from './routes/facturacion/index'
 import { Route as DespachosIndexRouteImport } from './routes/despachos/index'
 import { Route as InventarioStockRouteImport } from './routes/inventario/stock'
 import { Route as InventarioKardexRouteImport } from './routes/inventario/kardex'
 import { Route as DespachosCrearRouteImport } from './routes/despachos/crear'
 import { Route as PagosPagoIdIndexRouteImport } from './routes/pagos/$pagoId/index'
+import { Route as KardexSkuidIndexRouteImport } from './routes/kardex/$skuid/index'
 import { Route as FacturacionDocumentoIdIndexRouteImport } from './routes/facturacion/$documentoId/index'
 import { Route as DespachosOrdenIdIndexRouteImport } from './routes/despachos/$ordenId/index'
 import { Route as PagosCrearPagoTipoRouteImport } from './routes/pagos/crear/$pagoTipo'
@@ -42,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
 const PagosIndexRoute = PagosIndexRouteImport.update({
   id: '/pagos/',
   path: '/pagos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KardexIndexRoute = KardexIndexRouteImport.update({
+  id: '/kardex/',
+  path: '/kardex/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FacturacionIndexRoute = FacturacionIndexRouteImport.update({
@@ -72,6 +79,11 @@ const DespachosCrearRoute = DespachosCrearRouteImport.update({
 const PagosPagoIdIndexRoute = PagosPagoIdIndexRouteImport.update({
   id: '/pagos/$pagoId/',
   path: '/pagos/$pagoId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KardexSkuidIndexRoute = KardexSkuidIndexRouteImport.update({
+  id: '/kardex/$skuid/',
+  path: '/kardex/$skuid/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FacturacionDocumentoIdIndexRoute =
@@ -105,11 +117,13 @@ export interface FileRoutesByFullPath {
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
+  '/kardex/': typeof KardexIndexRoute
   '/pagos/': typeof PagosIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
   '/facturacion/$documentoId/': typeof FacturacionDocumentoIdIndexRoute
+  '/kardex/$skuid/': typeof KardexSkuidIndexRoute
   '/pagos/$pagoId/': typeof PagosPagoIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -120,11 +134,13 @@ export interface FileRoutesByTo {
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos': typeof DespachosIndexRoute
   '/facturacion': typeof FacturacionIndexRoute
+  '/kardex': typeof KardexIndexRoute
   '/pagos': typeof PagosIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId': typeof DespachosOrdenIdIndexRoute
   '/facturacion/$documentoId': typeof FacturacionDocumentoIdIndexRoute
+  '/kardex/$skuid': typeof KardexSkuidIndexRoute
   '/pagos/$pagoId': typeof PagosPagoIdIndexRoute
 }
 export interface FileRoutesById {
@@ -137,11 +153,13 @@ export interface FileRoutesById {
   '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
+  '/kardex/': typeof KardexIndexRoute
   '/pagos/': typeof PagosIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
   '/facturacion/$documentoId/': typeof FacturacionDocumentoIdIndexRoute
+  '/kardex/$skuid/': typeof KardexSkuidIndexRoute
   '/pagos/$pagoId/': typeof PagosPagoIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -155,11 +173,13 @@ export interface FileRouteTypes {
     | '/inventario/stock'
     | '/despachos/'
     | '/facturacion/'
+    | '/kardex/'
     | '/pagos/'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId/'
     | '/facturacion/$documentoId/'
+    | '/kardex/$skuid/'
     | '/pagos/$pagoId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,11 +190,13 @@ export interface FileRouteTypes {
     | '/inventario/stock'
     | '/despachos'
     | '/facturacion'
+    | '/kardex'
     | '/pagos'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId'
     | '/facturacion/$documentoId'
+    | '/kardex/$skuid'
     | '/pagos/$pagoId'
   id:
     | '__root__'
@@ -186,11 +208,13 @@ export interface FileRouteTypes {
     | '/inventario/stock'
     | '/despachos/'
     | '/facturacion/'
+    | '/kardex/'
     | '/pagos/'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId/'
     | '/facturacion/$documentoId/'
+    | '/kardex/$skuid/'
     | '/pagos/$pagoId/'
   fileRoutesById: FileRoutesById
 }
@@ -199,9 +223,11 @@ export interface RootRouteChildren {
   DespachosRouteRoute: typeof DespachosRouteRouteWithChildren
   InventarioRouteRoute: typeof InventarioRouteRouteWithChildren
   FacturacionIndexRoute: typeof FacturacionIndexRoute
+  KardexIndexRoute: typeof KardexIndexRoute
   PagosIndexRoute: typeof PagosIndexRoute
   PagosCrearPagoTipoRoute: typeof PagosCrearPagoTipoRoute
   FacturacionDocumentoIdIndexRoute: typeof FacturacionDocumentoIdIndexRoute
+  KardexSkuidIndexRoute: typeof KardexSkuidIndexRoute
   PagosPagoIdIndexRoute: typeof PagosPagoIdIndexRoute
 }
 
@@ -233,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/pagos'
       fullPath: '/pagos/'
       preLoaderRoute: typeof PagosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kardex/': {
+      id: '/kardex/'
+      path: '/kardex'
+      fullPath: '/kardex/'
+      preLoaderRoute: typeof KardexIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/facturacion/': {
@@ -275,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/pagos/$pagoId'
       fullPath: '/pagos/$pagoId/'
       preLoaderRoute: typeof PagosPagoIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kardex/$skuid/': {
+      id: '/kardex/$skuid/'
+      path: '/kardex/$skuid'
+      fullPath: '/kardex/$skuid/'
+      preLoaderRoute: typeof KardexSkuidIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/facturacion/$documentoId/': {
@@ -345,9 +385,11 @@ const rootRouteChildren: RootRouteChildren = {
   DespachosRouteRoute: DespachosRouteRouteWithChildren,
   InventarioRouteRoute: InventarioRouteRouteWithChildren,
   FacturacionIndexRoute: FacturacionIndexRoute,
+  KardexIndexRoute: KardexIndexRoute,
   PagosIndexRoute: PagosIndexRoute,
   PagosCrearPagoTipoRoute: PagosCrearPagoTipoRoute,
   FacturacionDocumentoIdIndexRoute: FacturacionDocumentoIdIndexRoute,
+  KardexSkuidIndexRoute: KardexSkuidIndexRoute,
   PagosPagoIdIndexRoute: PagosPagoIdIndexRoute,
 }
 export const routeTree = rootRouteImport
