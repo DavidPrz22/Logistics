@@ -5,6 +5,7 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 
@@ -72,11 +73,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex bg-background text-foreground" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-        <AppSidebar />
+        {!isAuthRoute && <AppSidebar />}
         <main className="flex-1 min-w-0">
           <Outlet />
         </main>

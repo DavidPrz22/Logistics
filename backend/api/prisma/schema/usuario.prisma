@@ -1,8 +1,17 @@
+enum Rol {
+  ADMINISTRADOR
+  GERENTE
+  OPERADOR
+}
+
 model usuario {
   id                    Int                    @id @default(autoincrement())
   nombreUsuario         String                 @unique
-  hashContrasena        String
+  hashContrasena        String                
+  correo                String                 @unique
+  refreshToken          String?
   fechaCreacion         DateTime?              @default(now())
+  Rol                   Rol?
   movimientosInventario movimientoInventario[]
   transaccionesPago     transaccionPago[]
   rechazos              detalleRechazoOrden[]

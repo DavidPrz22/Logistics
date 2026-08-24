@@ -8,6 +8,7 @@ import { PagosModule } from './pagos/pagos.module';
 import { ConfigModule } from '@nestjs/config';
 import { FacturacionModule } from './facturacion/facturacion.module';
 import { KardexModule } from './kardex/kardex.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -17,6 +18,7 @@ import { KardexModule } from './kardex/kardex.module';
     PagosModule,
     FacturacionModule,
     KardexModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

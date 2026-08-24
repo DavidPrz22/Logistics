@@ -1,21 +1,24 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { auth, useAuth } from "@/lib/auth-store";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Warehouse, LogIn, AlertCircle } from "lucide-react";
-import { toast } from "sonner";
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Warehouse, LogIn, AlertCircle } from 'lucide-react';
+import { loginSchema, type LoginInput } from '@/features/Auth/schemas/schemas';
+import { useLoginMutation } from '@/features/Auth/hooks/mutations/mutations';
+import { useAuthStore } from '@/features/Auth/store/zustandstore';
 
-export const Route = createFileRoute("/login/")({
+export const Route = createFileRoute('/login/')({
   head: () => ({
     meta: [
-      { title: "Iniciar sesión — Tráfico ERP" },
-      { name: "description", content: "Accede al panel de tráfico, despachos, facturación e inventario con tu cuenta de operador." },
-      { property: "og:title", content: "Iniciar sesión — Tráfico ERP" },
-      { property: "og:description", content: "Acceso de operadores al sistema de logística." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { title: 'Iniciar sesión — Tráfico ERP' },
+      { name: 'description', content: 'Accede al panel de tráfico, despachos, facturación e inventario con tu cuenta de operador.' },
+      { property: 'og:title', content: 'Iniciar sesión — Tráfico ERP' },
+      { property: 'og:description', content: 'Acceso de operadores al sistema de logística.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
   }),
   component: LoginPage,
@@ -23,29 +26,23 @@ export const Route = createFileRoute("/login/")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { usuario } = useAuth();
-  const [correo, setCorreo] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const usuario = useAuthStore((state) => state.usuario);
+  const loginMutation = useLoginMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+  });
 
   useEffect(() => {
-    auth.hidratar();
-  }, []);
-
-  useEffect(() => {
-    if (usuario) navigate({ to: "/", replace: true });
+    if (usuario) navigate({ to: '/', replace: true });
   }, [usuario, navigate]);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = auth.iniciarSesion(correo, password);
-    if (!res.ok) {
-      setError(res.error ?? "No se pudo iniciar sesión.");
-      return;
-    }
-    setError(null);
-    toast.success("Sesión iniciada");
-    navigate({ to: "/", replace: true });
+  const onSubmit = (data: LoginInput) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -53,18 +50,19 @@ function LoginPage() {
       titulo="Iniciar sesión"
       subtitulo="Ingresa tus credenciales de operador para continuar."
     >
-      <form onSubmit={submit} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="correo">Correo</Label>
           <Input
             id="correo"
             type="email"
             autoComplete="email"
-            required
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
             placeholder="admin@trafico.do"
+            {...register('correo')}
           />
+          {errors.correo && (
+            <p className="text-sm text-destructive">{errors.correo.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Contraseña</Label>
@@ -72,35 +70,36 @@ function LoginPage() {
             id="password"
             type="password"
             autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
+            {...register('password')}
           />
+          {errors.password && (
+            <p className="text-sm text-destructive">{errors.password.message}</p>
+          )}
         </div>
 
-        {error && (
+        {loginMutation.isError && (
           <div className="flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
             <AlertCircle className="mt-0.5 size-4 shrink-0" />
-            <span>{error}</span>
+            <span>{loginMutation.error?.message || 'No se pudo iniciar sesión.'}</span>
           </div>
         )}
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
           <LogIn className="size-4" />
-          Entrar
+          {loginMutation.isPending ? 'Iniciando sesión...' : 'Entrar'}
         </Button>
       </form>
 
       <div className="mt-5 space-y-3 text-sm">
         <p className="text-muted-foreground">
-          ¿No tienes cuenta?{" "}
-          <Link to="/registro" className="font-medium text-primary hover:underline">
+          ¿No tienes cuenta?{' '}
+          <Link to="/register" className="font-medium text-primary hover:underline">
             Crear cuenta
           </Link>
         </p>
         <div className="rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-          Demo: <span className="font-mono">admin@trafico.do</span> /{" "}
+          Demo: <span className="font-mono">admin@trafico.do</span> /{' '}
           <span className="font-mono">admin123</span>
         </div>
       </div>
