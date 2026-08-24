@@ -1,5 +1,5 @@
 import { Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Edit } from "lucide-react";
+import { ArrowLeft, Edit, CircleDollarSignIcon } from "lucide-react";
 import { useOrdenDespachoDetail } from "../../hooks/queries/queries";
 import { useUpdateOrdenEstadoMutation } from "../../hooks/mutations/mutations";
 import { PageHeader } from "@/components/shared/page-header";
@@ -9,7 +9,6 @@ import { PreparacionPanel } from "./PreparacionPanel";
 import { EnRutaPanel } from "./EnRutaPanel";
 import { LiquidadaPanel } from "./LiquidadaPanel";
 import { AnticiposCard } from "./AnticiposCard";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "@tanstack/react-router";
@@ -51,6 +50,7 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
       <PageHeader
         eyebrow={<span className="font-mono">{orden.numeroOrden}</span> as unknown as string}
         title={orden.clienteNombre}
+        type={orden.tipoOrden}
         subtitle={`${isMostrador ? '' : `Chofer: ${orden.choferNombre ?? '—'} · `}Tránsito: ${orden.almacenTransitoNombre} · Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
         actions={
           <div className="flex items-center gap-3">
@@ -61,9 +61,14 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
                 Editar
               </Button>
             )}
-            <Badge variant={isMostrador ? "default" : "secondary"} className="text-xs">
-              {isMostrador ? "Mostrador" : "Ruta"}
-            </Badge>
+            {
+              orden.estado !== "LIQUIDADA" && (
+              <Link className="cursor-pointer flex items-center gap-1 p-1.5 rounded-md text-xs text-white bg-primary" to="/pagos/crear/anticipado" search={{ orden: orden.numeroOrden }} >
+                <CircleDollarSignIcon className="size-5" />
+                Registrar Pago Anticipado
+              </Link>
+            )}
+            
             <EstadoBadge estado={orden.estado} />
             <Link to="/despachos" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> Lista</Link>
           </div>

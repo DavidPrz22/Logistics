@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as InventarioRouteRouteImport } from './routes/inventario/route'
 import { Route as DespachosRouteRouteImport } from './routes/despachos/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as PagosIndexRouteImport } from './routes/pagos/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as KardexIndexRouteImport } from './routes/kardex/index'
 import { Route as FacturacionIndexRouteImport } from './routes/facturacion/index'
 import { Route as DespachosIndexRouteImport } from './routes/despachos/index'
@@ -41,9 +43,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterIndexRoute = RegisterIndexRouteImport.update({
+  id: '/register/',
+  path: '/register/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PagosIndexRoute = PagosIndexRouteImport.update({
   id: '/pagos/',
   path: '/pagos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KardexIndexRoute = KardexIndexRouteImport.update({
@@ -118,7 +130,9 @@ export interface FileRoutesByFullPath {
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
   '/kardex/': typeof KardexIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/pagos/': typeof PagosIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
@@ -135,7 +149,9 @@ export interface FileRoutesByTo {
   '/despachos': typeof DespachosIndexRoute
   '/facturacion': typeof FacturacionIndexRoute
   '/kardex': typeof KardexIndexRoute
+  '/login': typeof LoginIndexRoute
   '/pagos': typeof PagosIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId': typeof DespachosOrdenIdIndexRoute
@@ -154,7 +170,9 @@ export interface FileRoutesById {
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
   '/kardex/': typeof KardexIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/pagos/': typeof PagosIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/despachos/$ordenId/edit': typeof DespachosOrdenIdEditRoute
   '/pagos/crear/$pagoTipo': typeof PagosCrearPagoTipoRoute
   '/despachos/$ordenId/': typeof DespachosOrdenIdIndexRoute
@@ -174,7 +192,9 @@ export interface FileRouteTypes {
     | '/despachos/'
     | '/facturacion/'
     | '/kardex/'
+    | '/login/'
     | '/pagos/'
+    | '/register/'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId/'
@@ -191,7 +211,9 @@ export interface FileRouteTypes {
     | '/despachos'
     | '/facturacion'
     | '/kardex'
+    | '/login'
     | '/pagos'
+    | '/register'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId'
@@ -209,7 +231,9 @@ export interface FileRouteTypes {
     | '/despachos/'
     | '/facturacion/'
     | '/kardex/'
+    | '/login/'
     | '/pagos/'
+    | '/register/'
     | '/despachos/$ordenId/edit'
     | '/pagos/crear/$pagoTipo'
     | '/despachos/$ordenId/'
@@ -224,7 +248,9 @@ export interface RootRouteChildren {
   InventarioRouteRoute: typeof InventarioRouteRouteWithChildren
   FacturacionIndexRoute: typeof FacturacionIndexRoute
   KardexIndexRoute: typeof KardexIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
   PagosIndexRoute: typeof PagosIndexRoute
+  RegisterIndexRoute: typeof RegisterIndexRoute
   PagosCrearPagoTipoRoute: typeof PagosCrearPagoTipoRoute
   FacturacionDocumentoIdIndexRoute: typeof FacturacionDocumentoIdIndexRoute
   KardexSkuidIndexRoute: typeof KardexSkuidIndexRoute
@@ -254,11 +280,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register/'
+      preLoaderRoute: typeof RegisterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pagos/': {
       id: '/pagos/'
       path: '/pagos'
       fullPath: '/pagos/'
       preLoaderRoute: typeof PagosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kardex/': {
@@ -386,7 +426,9 @@ const rootRouteChildren: RootRouteChildren = {
   InventarioRouteRoute: InventarioRouteRouteWithChildren,
   FacturacionIndexRoute: FacturacionIndexRoute,
   KardexIndexRoute: KardexIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
   PagosIndexRoute: PagosIndexRoute,
+  RegisterIndexRoute: RegisterIndexRoute,
   PagosCrearPagoTipoRoute: PagosCrearPagoTipoRoute,
   FacturacionDocumentoIdIndexRoute: FacturacionDocumentoIdIndexRoute,
   KardexSkuidIndexRoute: KardexSkuidIndexRoute,
