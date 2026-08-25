@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FacturacionModule } from './facturacion/facturacion.module';
 import { KardexModule } from './kardex/kardex.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     FacturacionModule,
     KardexModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

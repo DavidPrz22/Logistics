@@ -7,11 +7,11 @@ enum Rol {
 model usuario {
   id                    Int                    @id @default(autoincrement())
   nombreUsuario         String                 @unique
-  hashContrasena        String                
+  hashPassword          String                 
   correo                String                 @unique
   refreshToken          String?
   fechaCreacion         DateTime?              @default(now())
-  Rol                   Rol?
+  rol                   Rol?
   movimientosInventario movimientoInventario[]
   transaccionesPago     transaccionPago[]
   rechazos              detalleRechazoOrden[]

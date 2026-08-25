@@ -1,103 +1,100 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcryptjs';
-import { PrismaService } from '../prisma/prisma.service';
-import { LoginODT, RegisterODT } from './ODTs/auth.odts';
+import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+import { RegisterODT } from './ODTs/auth.odts';
 import { AuthResponse, TokenPayload } from './types/auth.types';
-
+import { Usuario } from 'src/users/types/users.types';
+import { JwtService } from '@nestjs/jwt';
+import refreshJwtConfig from './config/refresh-jwt.config';
+import { ConfigType } from '@nestjs/config';
+import * as argon2 from 'argon2';
+import { HttpStatus } from '@nestjs/common';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly UsersService: UsersService,
+    private readonly jwt: JwtService,
+    @Inject(refreshJwtConfig.KEY)
+    private refreshTokenConfig: ConfigType<typeof refreshJwtConfig>,
   ) {}
 
-  async login(data: LoginODT): Promise<AuthResponse> {
-    const usuario = await this.prisma.usuario.findUnique({
-      where: { correo: data.correo },
-    });
-
-    if (!usuario) {
-      throw new UnauthorizedException('Credenciales inválidas');
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<Usuario | null> {
+    const user = await this.UsersService.findOneByName(username);
+    if (!user) {
+      throw new UnauthorizedException('No user with that name');
     }
+    const isCorrect = await argon2.verify(user.hashPassword, password);
 
-    const passwordValid = await bcrypt.compare(data.password, usuario.hashContrasena);
-
-    if (!passwordValid) {
-      throw new UnauthorizedException('Credenciales inválidas');
+    if (isCorrect) {
+      const { hashPassword, refreshToken, ...usuario } = user;
+      return usuario;
     }
+    return null;
+  }
 
+  generateTokens(user: Usuario) {
     const payload: TokenPayload = {
-      sub: usuario.id,
-      nombreUsuario: usuario.nombreUsuario,
-      correo: usuario.correo,
-      Rol: usuario.Rol,
+      sub: user.id,
+      nombreUsuario: user.nombreUsuario,
+      rol: user.rol,
     };
+    const accessToken = this.jwt.sign(payload);
+    const refreshToken = this.jwt.sign(payload, this.refreshTokenConfig);
+    return { accessToken, refreshToken };
+  }
 
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-
-    await this.prisma.usuario.update({
-      where: { id: usuario.id },
-      data: { refreshToken },
-    });
-
+  async login(user: Usuario): Promise<AuthResponse> {
+    const { accessToken, refreshToken } = this.generateTokens(user);
+    const hashedToken = await argon2.hash(refreshToken);
+    await this.UsersService.updateRefreshToken(user.id, hashedToken);
     return {
-      usuario: {
-        id: usuario.id,
-        nombreUsuario: usuario.nombreUsuario,
-        correo: usuario.correo,
-        Rol: usuario.Rol,
-      },
+      usuario: user,
       accessToken,
       refreshToken,
     };
   }
 
   async register(data: RegisterODT): Promise<AuthResponse> {
-    const existingUser = await this.prisma.usuario.findFirst({
-      where: {
-        OR: [{ correo: data.correo }, { nombreUsuario: data.nombreUsuario }],
-      },
+    const { password, ...userData } = data;
+    const hashedPassword = await argon2.hash(password);
+    const user = await this.UsersService.create({
+      ...userData,
+      hashPassword: hashedPassword,
     });
 
-    if (existingUser) {
-      throw new ConflictException('El correo o nombre de usuario ya existe');
-    }
-
-    const hashContrasena = await bcrypt.hash(data.password, 10);
-
-    const usuario = await this.prisma.usuario.create({
-      data: {
-        nombreUsuario: data.nombreUsuario,
-        correo: data.correo,
-        hashContrasena,
-        Rol: data.Rol,
-      },
-    });
-
-    const payload: TokenPayload = {
-      sub: usuario.id,
-      nombreUsuario: usuario.nombreUsuario,
-      correo: usuario.correo,
-      Rol: usuario.Rol,
-    };
-
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-
-    await this.prisma.usuario.update({
-      where: { id: usuario.id },
-      data: { refreshToken },
-    });
+    const { accessToken, refreshToken } = this.generateTokens(user);
+    const hashedToken = await argon2.hash(refreshToken);
+    await this.UsersService.updateRefreshToken(user.id, hashedToken);
 
     return {
-      usuario: {
-        id: usuario.id,
-        nombreUsuario: usuario.nombreUsuario,
-        correo: usuario.correo,
-        Rol: usuario.Rol,
-      },
+      usuario: user,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async logout(usuario: Usuario) {
+    await this.UsersService.updateRefreshToken(usuario.id, null);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Session terminated successfully',
+    };
+  }
+
+  async refreshToken(user: Usuario) {
+    const payload: TokenPayload = {
+      sub: user.id,
+      nombreUsuario: user.nombreUsuario,
+      rol: user.rol,
+    };
+    const accessToken = this.jwt.sign(payload);
+    const refreshToken = this.jwt.sign(payload, this.refreshTokenConfig);
+    const hashedToken = await argon2.hash(refreshToken);
+    await this.UsersService.updateRefreshToken(user.id, hashedToken);
+    return {
+      user,
       accessToken,
       refreshToken,
     };

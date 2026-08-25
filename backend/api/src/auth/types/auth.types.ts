@@ -1,10 +1,8 @@
+import { Rol } from 'prisma/generated/prisma/enums';
+import { Usuario } from 'src/users/types/users.types';
+
 export interface AuthResponse {
-  usuario: {
-    id: number;
-    nombreUsuario: string;
-    correo: string;
-    Rol: string | null;
-  };
+  usuario: Usuario;
   accessToken: string;
   refreshToken: string;
 }
@@ -12,6 +10,5 @@ export interface AuthResponse {
 export interface TokenPayload {
   sub: number;
   nombreUsuario: string;
-  correo: string;
-  Rol: string | null;
+  rol: Rol | null;
 }
