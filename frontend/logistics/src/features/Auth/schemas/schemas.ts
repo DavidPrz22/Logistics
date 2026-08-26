@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const RolEnum = z.enum(['ADMINISTRADOR', 'GERENTE', 'OPERADOR']);
 
 export const loginSchema = z.object({
-  correo: z.string().email('Correo electrónico inválido'),
+  userName: z.string().min(1, 'El nombre de usuario es requerido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
 });
 
@@ -15,7 +15,7 @@ export const registerSchema = z
     correo: z.string().email('Correo electrónico inválido'),
     password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
     confirmarPassword: z.string(),
-    Rol: RolEnum,
+    rol: RolEnum,
   })
   .refine((data) => data.password === data.confirmarPassword, {
     message: 'Las contraseñas no coinciden',
@@ -28,7 +28,7 @@ export const usuarioSchema = z.object({
   id: z.number(),
   nombreUsuario: z.string(),
   correo: z.string(),
-  Rol: z.string().nullable(),
+  rol: z.string().nullable(),
 });
 
 export type Usuario = z.infer<typeof usuarioSchema>;
@@ -36,7 +36,6 @@ export type Usuario = z.infer<typeof usuarioSchema>;
 export const authResponseSchema = z.object({
   usuario: usuarioSchema,
   accessToken: z.string(),
-  refreshToken: z.string(),
 });
 
 export type AuthResponse = z.infer<typeof authResponseSchema>;

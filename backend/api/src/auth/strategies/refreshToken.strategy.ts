@@ -11,7 +11,7 @@ import { TokenPayload } from '../types/auth.types';
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
-  'refresh-jwt',
+  'jwt-refresh',
 ) {
   constructor(
     private readonly config: ConfigService,
@@ -19,18 +19,17 @@ export class RefreshTokenStrategy extends PassportStrategy(
   ) {
     const refreshTokenSecret = config.getOrThrow<string>('REFRESH_JWT_SECRET');
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => req.cookies?.refresh_token || null,
+      ]),
       secretOrKey: refreshTokenSecret,
       passReqToCallback: true,
     });
   }
 
   async validate(req: Request, payload: TokenPayload): Promise<Usuario | null> {
-    const refreshTokenAuth = req
-      .get('Authorization')
-      ?.replace('Bearer', '')
-      .trim();
-    if (!refreshTokenAuth) {
+    const refreshToken = req.cookies?.refresh_token;
+    if (!refreshToken) {
       throw new UnauthorizedException('Unauthorized: Refresh token missing');
     }
 
@@ -45,14 +44,11 @@ export class RefreshTokenStrategy extends PassportStrategy(
       );
     }
 
-    const hashCompare = await argon2.verify(
-      user.refreshToken,
-      refreshTokenAuth,
-    );
+    const hashCompare = await argon2.verify(user.refreshToken, refreshToken);
     if (!hashCompare) {
       throw new UnauthorizedException('Unauthorized: Invalid token');
     }
-    const { refreshToken, hashPassword, ...userData } = user;
+    const { refreshToken: _, hashPassword, ...userData } = user;
     return userData;
   }
 }

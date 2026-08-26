@@ -45,7 +45,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async login(user: Usuario): Promise<AuthResponse> {
+  async login(user: Usuario): Promise<AuthResponse & { refreshToken: string }> {
     const { accessToken, refreshToken } = this.generateTokens(user);
     const hashedToken = await argon2.hash(refreshToken);
     await this.UsersService.updateRefreshToken(user.id, hashedToken);
@@ -56,7 +56,9 @@ export class AuthService {
     };
   }
 
-  async register(data: RegisterODT): Promise<AuthResponse> {
+  async register(
+    data: RegisterODT,
+  ): Promise<AuthResponse & { refreshToken: string }> {
     const { password, ...userData } = data;
     const hashedPassword = await argon2.hash(password);
     const user = await this.UsersService.create({
@@ -83,7 +85,9 @@ export class AuthService {
     };
   }
 
-  async refreshToken(user: Usuario) {
+  async refreshToken(
+    user: Usuario,
+  ): Promise<AuthResponse & { refreshToken: string }> {
     const payload: TokenPayload = {
       sub: user.id,
       nombreUsuario: user.nombreUsuario,
@@ -94,7 +98,7 @@ export class AuthService {
     const hashedToken = await argon2.hash(refreshToken);
     await this.UsersService.updateRefreshToken(user.id, hashedToken);
     return {
-      user,
+      usuario: user,
       accessToken,
       refreshToken,
     };

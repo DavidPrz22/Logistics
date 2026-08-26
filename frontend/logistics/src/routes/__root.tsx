@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+﻿import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -7,10 +7,12 @@ import {
   Scripts,
   useLocation,
 } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
-import { Truck, Package, LayoutDashboard, Warehouse, Receipt, CreditCardIcon, BoxIcon } from "lucide-react";
+import { Truck, Warehouse, Receipt, CreditCardIcon, BoxIcon, LayoutDashboard, Package } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
+import { UserMenu } from "@/features/Auth/components/UserMenu";
+import { useAuthStore } from "@/features/Auth/store/zustandstore";
 
 function NotFoundComponent() {
   return (
@@ -39,7 +41,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Trafico ERP — Órdenes, Despachos e Inventario" },
+      { title: "Trafico ERP – Órdenes, Despachos e Inventario" },
       { name: "description", content: "Sistema ERP para gestión de órdenes de despacho, liquidación de retornos y control de inventario por lote." },
       { property: "og:title", content: "Trafico ERP" },
       { property: "og:description", content: "Órdenes, despachos e inventario en tiempo real." },
@@ -75,6 +77,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -107,7 +114,7 @@ function AppSidebar() {
           </div>
           <div>
             <div className="font-semibold tracking-tight">Tráfico ERP</div>
-            <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">Logística · v1</div>
+            <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">Logística • v1</div>
           </div>
         </div>
       </div>
@@ -124,9 +131,8 @@ function AppSidebar() {
           </Link>
         ))}
       </nav>
-      <div className="p-4 border-t border-sidebar-border">
-        <div className="text-xs text-sidebar-foreground/60">Operador</div>
-        <div className="text-sm font-medium">admin</div>
+      <div className="fixed bottom-0 w-60 p-4 border-t border-sidebar-border">
+        <UserMenu />
       </div>
     </aside>
   );

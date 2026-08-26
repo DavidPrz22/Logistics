@@ -4,7 +4,6 @@ import { Usuario } from 'src/users/types/users.types';
 export interface AuthResponse {
   usuario: Usuario;
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface TokenPayload {

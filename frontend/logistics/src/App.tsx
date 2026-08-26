@@ -1,6 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { getRouter } from './router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import './App.css'
 
@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <TanStackRouterDevtools router={router} />
+      {/* <TanStackRouterDevtools router={router} /> */}
     </>
   )
 }

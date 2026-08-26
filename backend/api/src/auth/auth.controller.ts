@@ -5,7 +5,10 @@ import {
   UsePipes,
   ValidationPipe,
   UseGuards,
+  Inject,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterODT } from './ODTs/auth.odts';
 import { LocalAuthGuard } from './guards/local-auth.guards/local-auth.guards.guard';
@@ -13,26 +16,56 @@ import { JwtAuthGuard } from './guards/jwt-auth-guards/jwt-auth-guards.guard';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-guards/refresh-jwt-guards.guard';
 import { CurrentUser } from './decorators/user.decorator';
 import { Usuario } from 'src/users/types/users.types';
+import cookieConfig from './config/cookie.config';
+import { ConfigType } from '@nestjs/config';
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @Inject(cookieConfig.KEY)
+    private readonly cookieConfigService: ConfigType<typeof cookieConfig>,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@CurrentUser() user: Usuario) {
-    return this.authService.login(user);
+  async login(
+    @CurrentUser() user: Usuario,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { refreshToken, ...response } =
+      await this.authService.login(user);
+    res.cookie(
+      'refresh_token',
+      refreshToken,
+      this.cookieConfigService.refreshCookie,
+    );
+    return response;
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  logout(@CurrentUser() user: Usuario) {
+  async logout(
+    @CurrentUser() user: Usuario,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    res.clearCookie('refresh_token', { path: '/api/auth' });
     return this.authService.logout(user);
   }
 
   @Post('register')
   @UsePipes(new ValidationPipe({ transform: true }))
-  register(@Body() data: RegisterODT) {
-    return this.authService.register(data);
+  async register(
+    @Body() data: RegisterODT,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { refreshToken, ...response } =
+      await this.authService.register(data);
+    res.cookie(
+      'refresh_token',
+      refreshToken,
+      this.cookieConfigService.refreshCookie,
+    );
+    return response;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -43,7 +76,17 @@ export class AuthController {
 
   @UseGuards(RefreshJwtAuthGuard)
   @Post('/refresh-token')
-  refreshToken(@CurrentUser() user: Usuario) {
-    return this.authService.refreshToken(user);
+  async refreshToken(
+    @CurrentUser() user: Usuario,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { refreshToken, ...response } =
+      await this.authService.refreshToken(user);
+    res.cookie(
+      'refresh_token',
+      refreshToken,
+      this.cookieConfigService.refreshCookie,
+    );
+    return response;
   }
 }

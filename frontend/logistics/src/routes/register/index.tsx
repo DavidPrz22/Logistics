@@ -42,13 +42,14 @@ function RegistroPage() {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      Rol: 'OPERADOR',
+      rol: 'OPERADOR',
     },
   });
-
+  console.log(watch());
   useEffect(() => {
     if (usuario) navigate({ to: '/', replace: true });
   }, [usuario, navigate]);
@@ -87,7 +88,7 @@ function RegistroPage() {
         <div className="space-y-2">
           <Label>Rol</Label>
           <Controller
-            name="Rol"
+            name="rol"
             control={control}
             render={({ field }) => (
               <Combobox
@@ -98,8 +99,8 @@ function RegistroPage() {
               />
             )}
           />
-          {errors.Rol && (
-            <p className="text-sm text-destructive">{errors.Rol.message}</p>
+          {errors.rol && (
+            <p className="text-sm text-destructive">{errors.rol.message}</p>
           )}
         </div>
         <div className="grid gap-4 sm:grid-cols-2">

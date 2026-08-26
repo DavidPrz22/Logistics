@@ -10,6 +10,7 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
 import refreshJwtConfig from './config/refresh-jwt.config';
+import cookieConfig from './config/cookie.config';
 import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshJwtConfig),
+    ConfigModule.forFeature(cookieConfig),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, RefreshTokenStrategy],

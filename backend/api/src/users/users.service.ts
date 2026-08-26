@@ -62,7 +62,7 @@ export class UsersService {
         nombreUsuario: updateUserDto.nombreUsuario,
         correo: updateUserDto.correo,
         hashPassword: updateUserDto.hashPassword,
-        Rol: updateUserDto.rol,
+        rol: updateUserDto.rol,
       },
       where: {
         id: id,

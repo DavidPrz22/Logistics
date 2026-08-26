@@ -42,6 +42,7 @@ function LoginPage() {
   }, [usuario, navigate]);
 
   const onSubmit = (data: LoginInput) => {
+    console.log(data)
     loginMutation.mutate(data);
   };
 
@@ -52,16 +53,16 @@ function LoginPage() {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="correo">Correo</Label>
+          <Label htmlFor="userName">Usuario</Label>
           <Input
-            id="correo"
-            type="email"
-            autoComplete="email"
-            placeholder="admin@trafico.do"
-            {...register('correo')}
+            id="userName"
+            type="text"
+            autoComplete="username"
+            placeholder="admin"
+            {...register('userName')}
           />
-          {errors.correo && (
-            <p className="text-sm text-destructive">{errors.correo.message}</p>
+          {errors.userName && (
+            <p className="text-sm text-destructive">{errors.userName.message}</p>
           )}
         </div>
         <div className="space-y-2">
@@ -98,10 +99,6 @@ function LoginPage() {
             Crear cuenta
           </Link>
         </p>
-        <div className="rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-          Demo: <span className="font-mono">admin@trafico.do</span> /{' '}
-          <span className="font-mono">admin123</span>
-        </div>
       </div>
     </AuthShell>
   );
@@ -120,7 +117,7 @@ export function AuthShell({
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 flex items-center gap-3">
-          <div className="grid size-11 place-items-center rounded-md bg-sidebar text-sidebar-primary-foreground">
+          <div className="grid size-12 place-items-center rounded-md border-3 text-sidebar-primary-foreground">
             <Warehouse className="size-6" />
           </div>
           <div>

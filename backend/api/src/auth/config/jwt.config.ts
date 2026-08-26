@@ -4,6 +4,6 @@ import { JwtModuleOptions } from '@nestjs/jwt';
 export default registerAs('jwt', (): JwtModuleOptions => ({
   secret: process.env.JWT_SECRET,
   signOptions: {
-    expiresIn: process.env.JWT_EXPIRATION_TIME,
+    expiresIn: (process.env.JWT_EXPIRATION_TIME || '1d') as any,
   },
 }));
