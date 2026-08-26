@@ -276,6 +276,7 @@ export class PagosService {
 
   async createTransaccionPago(
     data: CrearTransaccionPagoODT,
+    usuarioId: number,
   ): Promise<TransaccionPagoResponse> {
     const {
       documentoId,
@@ -322,9 +323,7 @@ export class PagosService {
     // calculate montoCalculadoVes
 
     if (divisa.codigo === 'VES' && tasaAplicadaId) {
-      this.logger.log(`montoCalculadoVes: ${montoOrigen}`);
       montoCalculadoVes = montoOrigen;
-      this.logger.log(`montoCalculadoVes: ${montoCalculadoVes}`);
     } else if (divisa.codigo === 'EUR') {
       const tasaEurVes = await this.prisma.tasaCambio.findFirst({
         where: {
@@ -372,8 +371,6 @@ export class PagosService {
         );
       }
     }
-
-    const usuarioId = 1;
 
     const transaccion = await this.prisma.transaccionPago.create({
       data: {

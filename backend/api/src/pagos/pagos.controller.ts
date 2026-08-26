@@ -8,6 +8,7 @@ import {
   UsePipes,
   ValidationPipe,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import {
@@ -17,6 +18,9 @@ import {
   CrearTransaccionPagoODT,
   AnularTransaccionODT,
 } from './ODTs/pagos.odts';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guards/jwt-auth-guards.guard';
+import { Usuario } from 'src/users/types/users.types';
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
 @Controller('pagos')
 export class PagosController {
@@ -40,10 +44,14 @@ export class PagosController {
     return this.pagosService.findFacturasPendientes(query?.q);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('transaccion')
   @UsePipes(new ValidationPipe({ transform: true }))
-  createTransaccion(@Body() data: CrearTransaccionPagoODT) {
-    return this.pagosService.createTransaccionPago(data);
+  createTransaccion(
+    @CurrentUser() user: Usuario,
+    @Body() data: CrearTransaccionPagoODT,
+  ) {
+    return this.pagosService.createTransaccionPago(data, user.id);
   }
 
   @Get('transaccion/:id')

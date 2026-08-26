@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { DespachoService } from './despacho.service';
 import {
@@ -16,7 +17,9 @@ import {
   UpdateOrdenODT,
   LiquidacionDespachoODT,
 } from './ODTs/despacho.odts';
-
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { Usuario } from 'src/users/types/users.types';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guards/jwt-auth-guards.guard';
 @Controller('despacho')
 export class DespachoController {
   constructor(private readonly despachoService: DespachoService) {}
@@ -61,16 +64,22 @@ export class DespachoController {
     return this.despachoService.findOneOrdenDespacho(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('orden-despacho/:id')
-  async updateOrdenDespachoById(@Param('id', ParseIntPipe) id: number) {
-    return this.despachoService.updateOrdenEstado(id);
+  async updateOrdenDespachoById(
+    @CurrentUser() user: Usuario,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.despachoService.updateOrdenEstado(id, user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('orden-despacho/:id/liquidar')
   async updateOrdenDespachoLiquidar(
+    @CurrentUser() user: Usuario,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: LiquidacionDespachoODT,
   ) {
-    return this.despachoService.updateOrdenDespachoLiquidar(id, data);
+    return this.despachoService.updateOrdenDespachoLiquidar(id, data, user.id);
   }
 }

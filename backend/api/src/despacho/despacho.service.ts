@@ -554,7 +554,10 @@ export class DespachoService {
     };
   }
 
-  async updateOrdenEstado(id: number): Promise<{ message: string }> {
+  async updateOrdenEstado(
+    id: number,
+    userId: number,
+  ): Promise<{ message: string }> {
     const orden = await this.prisma.ordenDespacho.findUnique({
       where: { id },
       include: {
@@ -586,7 +589,7 @@ export class DespachoService {
             detalleOrdenId: detalle.id,
             referencia: orden.numeroOrden,
             almacenId: orden.almacenTransitoId,
-            usuarioId: 1,
+            usuarioId: userId,
           })),
         });
 
@@ -611,7 +614,11 @@ export class DespachoService {
     throw new Error(`Transición de estado no soportada: ${orden.estado}`);
   }
 
-  async updateOrdenDespachoLiquidar(id: number, data: LiquidacionDespachoODT) {
+  async updateOrdenDespachoLiquidar(
+    id: number,
+    data: LiquidacionDespachoODT,
+    userId: number,
+  ) {
     return this.prisma.$transaction(async (tx) => {
       const orden = await tx.ordenDespacho.findUnique({
         where: { id },
@@ -651,7 +658,7 @@ export class DespachoService {
               cantidadRechazada: rechazo.cantidadRechazada,
               motivoRechazoId: rechazo.motivoRechazoId,
               almacenReingresoId: rechazo.almacenReingresoId,
-              usuarioId: 1,
+              usuarioId: userId,
               observaciones: rechazo.observaciones,
             },
           });
@@ -665,7 +672,7 @@ export class DespachoService {
                 detalleRechazoId: nuevoRechazo.id,
                 referencia: orden.numeroOrden,
                 almacenId: rechazo.almacenReingresoId,
-                usuarioId: 1,
+                usuarioId: userId,
               },
             });
             await tx.lote.update({

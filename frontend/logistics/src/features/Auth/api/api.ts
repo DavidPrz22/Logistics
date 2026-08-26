@@ -19,7 +19,6 @@ export const register = async (data: Omit<RegisterInput, 'confirmarPassword'>): 
 
 export const refreshAccessToken = async (): Promise<{ user: User; accessToken: string }> => {
   const response = await apiClient.post<AuthResponse>('/auth/refresh-token');
-  console.log(response.data);
   return {
     user: response.data.usuario,
     accessToken: response.data.accessToken,
