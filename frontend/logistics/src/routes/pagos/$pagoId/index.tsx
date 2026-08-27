@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useAuthStore } from "@/features/Auth/store/zustandstore";
+import { hasPermission } from "@/features/Auth/lib/permissions";
 
 import { PageHeader } from "@/components/shared/page-header";
 import { BackToPagosLink } from "@/features/Pagos/components/PagoPageActions";
@@ -16,12 +18,19 @@ import { PagoDetalles } from "@/features/Pagos/components/PagoDetalles";
 import { PagoAuditoria } from "@/features/Pagos/components/PagoAuditoria";
 
 export const Route = createFileRoute("/pagos/$pagoId/")({
+  beforeLoad: () => {
+    const user = useAuthStore.getState().user;
+    if (!hasPermission(user, "payments:view")) {
+      throw redirect({ to: "/" });
+    }
+  },
+
   head: () => ({
     meta: [
-      { title: "Detalle de transacción de pago — Tráfico ERP" },
-      { name: "description", content: "Detalle de la transacción: monto origen, tasa aplicada, equivalente en moneda base, cuenta destino y auditoría." },
-      { property: "og:title", content: "Detalle de transacción de pago" },
-      { property: "og:description", content: "Monto, divisa, tasa aplicada, cuenta destino y auditoría de la transacción." },
+      { title: "Detalle de transacciÃ³n de pago â€” TrÃ¡fico ERP" },
+      { name: "description", content: "Detalle de la transacciÃ³n: monto origen, tasa aplicada, equivalente en moneda base, cuenta destino y auditorÃ­a." },
+      { property: "og:title", content: "Detalle de transacciÃ³n de pago" },
+      { property: "og:description", content: "Monto, divisa, tasa aplicada, cuenta destino y auditorÃ­a de la transacciÃ³n." },
     ],
   }),
   component: PagoDetalle,
@@ -50,9 +59,9 @@ function PagoDetalle() {
   return (
     <div className="p-8 space-y-6 max-w-4xl mx-auto">
       <PageHeader
-        eyebrow={`Transacción #${transaccion.id}`}
+        eyebrow={`TransacciÃ³n #${transaccion.id}`}
         title={`${money(transaccion.montoEquivalenteBase)} USD`}
-        subtitle={`${tipoLabel} · ${operacionLabel} · ${fechaCorta(transaccion.fecha)}`}
+        subtitle={`${tipoLabel} Â· ${operacionLabel} Â· ${fechaCorta(transaccion.fecha)}`}
         actions={<BackToPagosLink />}
       />
 
@@ -73,7 +82,7 @@ function PagoDetalle() {
         />
         <PagoStat
           label="Tasa aplicada"
-          value={transaccion.tasaAplicadaValor ? transaccion.tasaAplicadaValor.toFixed(4) : "—"}
+          value={transaccion.tasaAplicadaValor ? transaccion.tasaAplicadaValor.toFixed(4) : "â€”"}
         />
         <PagoStat
           label="Equivalente en USD"
@@ -95,3 +104,5 @@ function PagoDetalle() {
     </div>
   );
 }
+
+

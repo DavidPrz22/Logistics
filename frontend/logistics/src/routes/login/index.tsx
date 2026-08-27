@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Warehouse, LogIn, AlertCircle } from 'lucide-react';
 import { loginSchema, type LoginInput } from '@/features/Auth/schemas/schemas';
 import { useLoginMutation } from '@/features/Auth/hooks/mutations/mutations';
+import { GoogleButton } from '@/features/Auth/components/GoggleButton';
 import { useAuthStore } from '@/features/Auth/store/zustandstore';
 
 export const Route = createFileRoute('/login/')({
@@ -91,6 +92,8 @@ function LoginPage() {
           {loginMutation.isPending ? 'Iniciando sesión...' : 'Entrar'}
         </Button>
       </form>
+
+      <GoogleButton />
 
       <div className="mt-5 space-y-3 text-sm">
         <p className="text-muted-foreground">

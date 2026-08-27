@@ -12,6 +12,7 @@ import { registerSchema, type RegisterInput, RolEnum } from '@/features/Auth/sch
 import { useRegisterMutation } from '@/features/Auth/hooks/mutations/mutations';
 import { useAuthStore } from '@/features/Auth/store/zustandstore';
 import { Controller } from 'react-hook-form';
+import { GoogleButton } from '@/features/Auth/components/GoggleButton';
 
 const ROLES = RolEnum.options.map((value) => ({
   value,
@@ -142,7 +143,7 @@ function RegistroPage() {
           {registerMutation.isPending ? 'Creando cuenta...' : 'Crear cuenta'}
         </Button>
       </form>
-
+        <GoogleButton />
       <p className="mt-5 text-sm text-muted-foreground">
         ¿Ya tienes cuenta?{' '}
         <Link to="/login" className="font-medium text-primary hover:underline">

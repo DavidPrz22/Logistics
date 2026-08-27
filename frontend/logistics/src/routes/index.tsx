@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Truck } from "lucide-react";
 import { ModalTasasCambio } from "@/features/Dashboard/components/ModalTasasCambio";
 import { GenerarTasasButton } from "@/features/Dashboard/components/GenerarTasasButton";
 import { DashboardMain } from "@/features/Dashboard/components/DashboardMain";
+import { HasPermission } from "@/features/Auth/components/HasPermission";
 
 export const Route = createFileRoute("/")({ component: Panel });
 
@@ -16,8 +17,12 @@ function Panel() {
           <h1 className="text-3xl font-bold tracking-tight mt-1">Operación de hoy</h1>
         </div>
         <div className="flex items-center gap-2">
-          <ModalTasasCambio />
-          <GenerarTasasButton />
+          <HasPermission permission="rates:view">
+            <ModalTasasCambio />
+          </HasPermission>
+          <HasPermission permission="rates:generate">
+            <GenerarTasasButton />
+          </HasPermission>
           <Link to="/despachos/crear" className="inline-flex items-center gap-2 rounded-md bg-accent text-accent-foreground px-4 py-2 text-sm font-semibold shadow-sm hover:brightness-95">
             <Truck className="size-4" /> Nueva orden
           </Link>
@@ -28,3 +33,4 @@ function Panel() {
     </div>
   );
 }
+

@@ -13,6 +13,7 @@ import { Truck, Warehouse, Receipt, CreditCardIcon, BoxIcon, LayoutDashboard, Pa
 import { Toaster } from "@/components/ui/sonner";
 import { UserMenu } from "@/features/Auth/components/UserMenu";
 import { useAuthStore } from "@/features/Auth/store/zustandstore";
+import { useHasPermission } from "@/features/Auth/hooks/useHasPermission";
 
 function NotFoundComponent() {
   return (
@@ -41,7 +42,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Trafico ERP – Órdenes, Despachos e Inventario" },
+      { title: "Trafico ERP - Órdenes, Despachos e Inventario" },
       { name: "description", content: "Sistema ERP para gestión de órdenes de despacho, liquidación de retornos y control de inventario por lote." },
       { property: "og:title", content: "Trafico ERP" },
       { property: "og:description", content: "Órdenes, despachos e inventario en tiempo real." },
@@ -97,11 +98,13 @@ function RootComponent() {
 }
 
 function AppSidebar() {
+  const hasPaymentsView = useHasPermission("payments:view");
+
   const items = [
     { to: "/", label: "Panel", icon: LayoutDashboard, exact: true },
     { to: "/despachos", label: "Despachos", icon: Truck },
     { to: "/facturacion", label: "Facturación", icon: Receipt },
-    { to: "/pagos", label: "Pagos", icon: CreditCardIcon },
+    ...(hasPaymentsView ? [{ to: "/pagos", label: "Pagos", icon: CreditCardIcon }] : []),
     { to: "/kardex", label: "Kárdex", icon: BoxIcon },
   ];
 
@@ -114,7 +117,7 @@ function AppSidebar() {
           </div>
           <div>
             <div className="font-semibold tracking-tight">Tráfico ERP</div>
-            <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">Logística • v1</div>
+            <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">Logística   v1</div>
           </div>
         </div>
       </div>

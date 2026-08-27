@@ -1,4 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { useAuthStore } from "@/features/Auth/store/zustandstore";
+import { hasPermission } from "@/features/Auth/lib/permissions";
 import { PageHeader } from "@/components/shared/page-header";
 import { PagosForm } from "@/features/Pagos/components/PagosForm";
 import { SeleccionResumen } from "@/features/Pagos/components/SeleccionResumen";
@@ -17,6 +19,12 @@ const crearPagoSchema = z.object({
 type TcrearPago = z.infer<typeof crearPagoSchema>;
 
 export const Route = createFileRoute("/pagos/crear/$pagoTipo")({
+  beforeLoad: () => {
+    const user = useAuthStore.getState().user;
+    if (!hasPermission(user, "payments:view")) {
+      throw redirect({ to: "/" });
+    }
+  },
   validateSearch: (search) => crearPagoSchema.parse(search),
   component: CrearPago,
 });
@@ -62,13 +70,13 @@ function CrearPago() {
 
   const pageTitle = isAnticipo ? "Registrar pago anticipado" : "Registrar cobro de factura";
   const pageSubtitle = isAnticipo
-    ? "Abono recibido antes de la emisión de la factura. Se cruzará automáticamente al liquidar la ruta."
-    : "Pago aplicado a una factura pendiente. El saldo restante se actualizará automáticamente.";
+    ? "Abono recibido antes de la emisiÃ³n de la factura. Se cruzarÃ¡ automÃ¡ticamente al liquidar la ruta."
+    : "Pago aplicado a una factura pendiente. El saldo restante se actualizarÃ¡ automÃ¡ticamente.";
 
   return (
     <div className="p-8 space-y-6 max-w-4xl mx-auto">
       <PageHeader
-        eyebrow="Módulo de pagos"
+        eyebrow="MÃ³dulo de pagos"
         title={pageTitle}
         subtitle={pageSubtitle}
         actions={<BackToPagosLink />}
@@ -98,3 +106,4 @@ function CrearPago() {
     </div>
   );
 }
+

@@ -1,6 +1,7 @@
-import { Edit2, Save, Loader2, X } from 'lucide-react'
+﻿import { Edit2, Save, Loader2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DialogFooter, DialogClose } from '@/components/ui/dialog'
+import { HasPermission } from '@/features/Auth/components/HasPermission';
 interface TasasFooterProps {
   isEditing: boolean
   isLoadingTasas: boolean
@@ -29,8 +30,7 @@ export const TasasFooter = ({
             </Button>
           }/>
       {!isEditing ? (
-        <>
-
+        <HasPermission permission="rates:modify">
           <Button
             type="button"
             onClick={onEditClick}
@@ -40,7 +40,7 @@ export const TasasFooter = ({
             <Edit2 size={16} />
             Modificar
           </Button>
-        </>
+        </HasPermission>
       ) : (
         <>
             <Button
@@ -69,3 +69,4 @@ export const TasasFooter = ({
     </DialogFooter>
   )
 }
+

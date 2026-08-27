@@ -116,7 +116,7 @@ export function UserMenu() {
           ) : (
             <dl className="space-y-3 text-sm">
               <Fila icon={Mail} label="Correo" valor={usuario.correo} mono />
-              <Fila icon={Warehouse} label="Rol" valor={usuario.rol ? (ROL_LABEL[usuario.rol] ?? usuario.Rol) : "Operador"} />
+              <Fila icon={Warehouse} label="Rol" valor={usuario.rol ? (ROL_LABEL[usuario.rol] ?? usuario.rol) : "Operador"} />
             </dl>
           )}
 
@@ -166,4 +166,5 @@ function Fila({
     </div>
   );
 }
+
 

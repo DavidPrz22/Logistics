@@ -1,4 +1,5 @@
-import { Link, notFound } from "@tanstack/react-router";
+﻿import { Link, notFound } from "@tanstack/react-router";
+import { HasPermission } from "@/features/Auth/components/HasPermission";
 import { ArrowLeft, Edit, CircleDollarSignIcon } from "lucide-react";
 import { useOrdenDespachoDetail } from "../../hooks/queries/queries";
 import { useUpdateOrdenEstadoMutation } from "../../hooks/mutations/mutations";
@@ -51,15 +52,17 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
         eyebrow={<span className="font-mono">{orden.numeroOrden}</span> as unknown as string}
         title={orden.clienteNombre}
         type={orden.tipoOrden}
-        subtitle={`${isMostrador ? '' : `Chofer: ${orden.choferNombre ?? '—'} · `}Tránsito: ${orden.almacenTransitoNombre} · Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
+        subtitle={`${isMostrador ? '' : `Chofer: ${orden.choferNombre ?? 'â€”'} Â· `}TrÃ¡nsito: ${orden.almacenTransitoNombre} Â· Salida: ${new Date(orden.fechaSalida).toLocaleString()}`}
         actions={
           <div className="flex items-center gap-3">
             {
               orden.estado === "PREPARACION" && (
-              <Button className="cursor-pointer" variant="outline" onClick={() => handleUpdateEntireForm()}>
-                <Edit className="size-4" />
-                Editar
-              </Button>
+              <HasPermission permission="despacho:edit">
+                <Button className="cursor-pointer" variant="outline" onClick={() => handleUpdateEntireForm()}>
+                  <Edit className="size-4" />
+                  Editar
+                </Button>
+              </HasPermission>
             )}
             {
               orden.estado !== "LIQUIDADA" && (
@@ -89,7 +92,7 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
             <div>
               <div className="text-xs uppercase text-muted-foreground">Tasa de cambio aplicada</div>
               <div className="text-sm font-medium mt-1">
-                {orden.tasaCambioInfo.origen} → {orden.tasaCambioInfo.destino}: {orden.tasaCambioInfo.tasa.toFixed(2)}
+                {orden.tasaCambioInfo.origen} â†’ {orden.tasaCambioInfo.destino}: {orden.tasaCambioInfo.tasa.toFixed(2)}
               </div>
               {orden.tasaCambioInfo.fecha && (
                 <div className="text-xs text-muted-foreground mt-0.5">
@@ -116,3 +119,4 @@ export function DespachoDetailsPage({ ordenId }: DespachoDetailsPageProps) {
   );
 
 }
+

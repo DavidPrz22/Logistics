@@ -6,6 +6,21 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  findByEmail(email: string) {
+    return this.prisma.usuario.findFirst({
+      where: {
+        correo: email,
+      },
+      select: {
+        id: true,
+        nombreUsuario: true,
+        correo: true,
+        fechaCreacion: true,
+        rol: true,
+      },
+    });
+  }
+
   findOneByName(userName: string) {
     return this.prisma.usuario.findUnique({
       where: {

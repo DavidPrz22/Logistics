@@ -9,13 +9,18 @@ import {
   Query,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CoreService } from './core.service';
 import {
   UpdateTasasCambioODT,
   FindTasasCambioByFechaODT,
 } from './ODTs/core.odts';
-
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guards/jwt-auth-guards.guard';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Rol } from 'prisma/generated/prisma/enums';
+@UseGuards(JwtAuthGuard)
 @Controller('core')
 export class CoreController {
   constructor(private readonly coreService: CoreService) {}
@@ -104,6 +109,8 @@ export class CoreController {
     return this.coreService.updateTasasCambio();
   }
 
+  @Roles(Rol.ADMINISTRADOR, Rol.GERENTE)
+  @UseGuards(RolesGuard)
   @Patch('registro-tasas/:id/tasas-cambio')
   updateTasasCambioByRegistroId(
     @Param('id', ParseIntPipe) id: number,

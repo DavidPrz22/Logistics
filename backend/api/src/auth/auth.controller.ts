@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Body,
   UsePipes,
@@ -17,13 +18,18 @@ import { RefreshJwtAuthGuard } from './guards/refresh-jwt-guards/refresh-jwt-gua
 import { CurrentUser } from './decorators/user.decorator';
 import { Usuario } from 'src/users/types/users.types';
 import cookieConfig from './config/cookie.config';
+import frontendConfig from './config/frontend.config';
 import { ConfigType } from '@nestjs/config';
+import { GoogleOauthGuard } from './guards/google-oauth-guard/google-oauth-guard.guard';
+
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     @Inject(cookieConfig.KEY)
     private readonly cookieConfigService: ConfigType<typeof cookieConfig>,
+    @Inject(frontendConfig.KEY)
+    private readonly frontendConfigService: ConfigType<typeof frontendConfig>,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -32,8 +38,7 @@ export class AuthController {
     @CurrentUser() user: Usuario,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { refreshToken, ...response } =
-      await this.authService.login(user);
+    const { refreshToken, ...response } = await this.authService.login(user);
     res.cookie(
       'refresh_token',
       refreshToken,
@@ -58,8 +63,7 @@ export class AuthController {
     @Body() data: RegisterODT,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { refreshToken, ...response } =
-      await this.authService.register(data);
+    const { refreshToken, ...response } = await this.authService.register(data);
     res.cookie(
       'refresh_token',
       refreshToken,
@@ -88,5 +92,71 @@ export class AuthController {
       this.cookieConfigService.refreshCookie,
     );
     return response;
+  }
+
+  @UseGuards(GoogleOauthGuard)
+  @Get('google/login')
+  async googleLogin() {}
+
+  @UseGuards(GoogleOauthGuard)
+  @Get('google/callback')
+  async googleCallback(@CurrentUser() user: Usuario, @Res() res: Response) {
+    const { refreshToken, accessToken, usuario } =
+      await this.authService.login(user);
+
+    res.cookie(
+      'refresh_token',
+      refreshToken,
+      this.cookieConfigService.refreshCookie,
+    );
+
+    const frontendUrl = this.frontendConfigService.url;
+    console.log('=== GOOGLE CALLBACK ===');
+    console.log('FRONTEND_URL configurada:', frontendUrl);
+    console.log('Token generado:', accessToken.substring(0, 20) + '...');
+
+    const html = `
+      <html>
+        <body>
+          <h1>Autenticación exitosa</h1>
+          <p>Puedes cerrar esta ventana.</p>
+          <script>
+            console.log('=== GOOGLE CALLBACK (Frontend) ===');
+            console.log('window.opener:', window.opener);
+            console.log('Enviando a:', '${frontendUrl}');
+            
+            if (window.opener) {
+              console.log('Enviando postMessage...');
+              try {
+                window.opener.postMessage(
+                  {
+                    type: 'GOOGLE_AUTH_SUCCESS',
+                    payload: {
+                      accessToken: '${accessToken}',
+                      usuario: ${JSON.stringify(usuario)}
+                    }
+                  },
+                  '${frontendUrl}'
+                );
+                console.log('✅ postMessage enviado exitosamente');
+              } catch (error) {
+                console.error('❌ Error al enviar postMessage:', error);
+              }
+              
+              setTimeout(() => {
+                console.log('Cerrando ventana...');
+                window.close();
+              }, 3000);
+            } else {
+              console.error('❌ window.opener es null');
+              document.body.innerHTML += '<p style="color: red;">Error: window.opener es null</p>';
+            }
+          </script>
+        </body>
+      </html>
+    `;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
   }
 }

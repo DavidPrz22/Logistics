@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { login, register, logout } from '../../api/api';
+import { login, register, logout, openGooglePopup } from '../../api/api';
 import { useAuthStore } from '../../store/zustandstore';
 import type { LoginInput, RegisterInput } from '../../schemas/schemas';
 import { toast } from 'sonner';
+import type { User } from '../../types/types';
 
 export const useLoginMutation = () => {
   const navigate = useNavigate();
@@ -55,6 +56,25 @@ export const useRegisterMutation = () => {
     onError: (error: Error) => {
       console.error('Error al registrar:', error);
       toast.error(error.message || 'Error al crear la cuenta');
+    },
+  });
+};
+
+
+export const useGoogleLoginMutation = () => {
+  const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  return useMutation({
+    mutationFn: (authPromise: Promise<{ accessToken: string; usuario: User }>) => authPromise,
+    onSuccess: (response) => {
+      setAuth(response.usuario, response.accessToken);
+      toast.success('Sesión iniciada con Google');
+      navigate({ to: '/', replace: true });
+    },
+    onError: (error: Error) => {
+      console.error('Error al iniciar sesión con Google:', error);
+      toast.error(error.message || 'Error al iniciar sesión con Google');
     },
   });
 };

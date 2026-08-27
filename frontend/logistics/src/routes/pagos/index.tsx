@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useAuthStore } from "@/features/Auth/store/zustandstore";
+import { hasPermission } from "@/features/Auth/lib/permissions";
 import { z } from "zod";
 import { PageHeader } from "@/components/shared/page-header";
 import { PagoEstadoBadge } from "@/components/shared/factura-badges";
@@ -25,12 +27,18 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute("/pagos/")({
+  beforeLoad: () => {
+    const user = useAuthStore.getState().user;
+    if (!hasPermission(user, "payments:view")) {
+      throw redirect({ to: "/" });
+    }
+  },
   validateSearch: (search) => searchSchema.parse(search),
   head: () => ({
     meta: [
-      { title: "Pagos — Historial de transacciones | Tráfico ERP" },
+      { title: "Pagos â€” Historial de transacciones | TrÃ¡fico ERP" },
       { name: "description", content: "Historial de transacciones de pago: anticipos, cobros de factura y saldos a favor con filtros por estado, tipo y rango de fechas." },
-      { property: "og:title", content: "Pagos — Historial de transacciones" },
+      { property: "og:title", content: "Pagos â€” Historial de transacciones" },
       { property: "og:description", content: "Registra anticipos y cobros de factura, filtra por estado, tipo y fechas." },
     ],
   }),
@@ -68,7 +76,7 @@ function PagosList() {
   return (
     <div className="p-8 space-y-6 max-w-375 mx-auto">
       <PageHeader
-        eyebrow="Módulo de pagos"
+        eyebrow="MÃ³dulo de pagos"
         title="Transacciones de pago"
         subtitle="Anticipos, cobros de factura y saldos a favor registrados en el sistema."
         actions={
@@ -96,7 +104,7 @@ function PagosList() {
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Buscar</label>
           <div className="relative mt-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input value={search.q} onChange={(e) => setSearch({ q: e.target.value })} placeholder="Cliente, referencia o ID…" className="pl-9" />
+            <Input value={search.q} onChange={(e) => setSearch({ q: e.target.value })} placeholder="Cliente, referencia o IDâ€¦" className="pl-9" />
           </div>
         </div>
         <div>
@@ -143,11 +151,11 @@ function PagosList() {
         </div>
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Desde</label>
-          <div className="mt-1"><DatePicker value={search.desde} onChange={(v) => setSearch({ desde: v })} placeholder="Sin límite" /></div>
+          <div className="mt-1"><DatePicker value={search.desde} onChange={(v) => setSearch({ desde: v })} placeholder="Sin lÃ­mite" /></div>
         </div>
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground">Hasta</label>
-          <div className="mt-1"><DatePicker value={search.hasta} onChange={(v) => setSearch({ hasta: v })} placeholder="Sin límite" /></div>
+          <div className="mt-1"><DatePicker value={search.hasta} onChange={(v) => setSearch({ hasta: v })} placeholder="Sin lÃ­mite" /></div>
         </div>
         {hasFilters && (
           <Button variant="ghost" size="sm" className="justify-self-start md:col-span-5" onClick={() => navigate({ search: { q: "", estado: "", tipo: "", desde: "", hasta: "", page: 1 } })}>
@@ -164,7 +172,7 @@ function PagosList() {
               <TableHead>Fecha</TableHead>
               <TableHead>Cliente / Origen</TableHead>
               <TableHead>Tipo</TableHead>
-              <TableHead>Método</TableHead>
+              <TableHead>MÃ©todo</TableHead>
               <TableHead>Referencia</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="text-right">Monto origen</TableHead>
@@ -193,7 +201,7 @@ function PagosList() {
                 <TableCell className="text-sm">{p.cliente}</TableCell>
                 <TableCell className="text-xs">{p.tipo.replace(/_/g, " ")}</TableCell>
                 <TableCell className="text-sm">{p.metodo}</TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground">{p.referencia ?? "—"}</TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">{p.referencia ?? "â€”"}</TableCell>
                 <TableCell><PagoEstadoBadge estado={p.estado} /></TableCell>
                 <TableCell className="text-right font-mono tabular-nums">{money(p.montoOrigen)} {p.divisaSimbolo}</TableCell>
               </TableRow>
@@ -204,12 +212,12 @@ function PagosList() {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-sm text-muted-foreground">
-          {total} transacción(es) · total aprobado{" "}
+          {total} transacciÃ³n(es) Â· total aprobado{" "}
           <span className="font-mono font-semibold text-foreground tabular-nums">{money(totalBase)}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground tabular-nums">
-            {total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} de {total}
+            {total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1}â€“{Math.min(page * PAGE_SIZE, total)} de {total}
           </span>
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => navigate({ search: (p: typeof search) => ({ ...p, page: p.page - 1 }) })}>
             <ChevronLeft className="size-4" /> Anterior
@@ -223,3 +231,5 @@ function PagosList() {
     </div>
   );
 }
+
+
