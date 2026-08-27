@@ -4,3 +4,5 @@ reusableMds/
 opencode.json
 skills-lock.json
 db.sql
+# Google OAuth credentials
+client_secret_*.json
