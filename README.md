@@ -77,6 +77,10 @@ The system provides role-based access control (Administrator, Manager, Operator)
 
 ## Software Architecture
 
+<p align="center">
+  <img src="./diagrams/System Architecture Diagram.svg" alt="System Architecture Diagram" width="800"/>
+</p>
+
 ### Monorepo Structure
 
 ```
@@ -114,6 +118,10 @@ src/<module>/
 
 **API design:** Global prefix `/api`, CORS enabled for frontend origins, cookie-based credential transport, JSON request/response format.
 
+<p align="center">
+  <img src="./diagrams/Module Dependency Diagram.svg" alt="Module Dependency Diagram" width="700"/>
+</p>
+
 ### Frontend Architecture
 
 The SPA uses a **feature-sliced** architecture with TanStack Router file-based routing:
@@ -140,7 +148,15 @@ src/
 
 **Data flow:** `Route → Feature component → Query/Mutation hook → API function → apiClient → Backend controller → Service → Prisma → SQLite`
 
+<p align="center">
+  <img src="./diagrams/Frontend Feature Architecture Diagram.svg" alt="Frontend Feature Architecture Diagram" width="700"/>
+</p>
+
 ### Database Design
+
+<p align="center">
+  <img src="./diagrams/Database Entity Relationship Diagram.svg" alt="Database Entity Relationship Diagram" width="800"/>
+</p>
 
 SQLite via Prisma with 9 schema files defining:
 
@@ -154,6 +170,10 @@ SQLite via Prisma with 9 schema files defining:
 ## Business Logic
 
 ### Dispatch Order Lifecycle
+
+<p align="center">
+  <img src="./diagrams/Dispatch Order Lifecycle Flowchart.svg" alt="Dispatch Order Lifecycle Flowchart" width="700"/>
+</p>
 
 ```
 PREPARACION → EN_RUTA → LIQUIDADA
@@ -185,6 +205,10 @@ documentoDeuda (PENDIENTE) → transaccionPago[] → (PAGADO_PARCIAL | PAGADO_TO
 - Destination accounts: physical cash register, bank, digital wallet
 - Payment types: advance (`ANTICIPO`), invoice collection (`COBRO_FACTURA`), credit balance (`SALDO_A_FAVOR`)
 
+<p align="center">
+  <img src="./diagrams/Payment Flow Sequence Diagram.svg" alt="Payment Flow Sequence Diagram" width="700"/>
+</p>
+
 ### Inventory Management
 
 - **Batch-level tracking** (`lote`) with expiration dates and unique SKU per variant
@@ -193,6 +217,10 @@ documentoDeuda (PENDIENTE) → transaccionPago[] → (PAGADO_PARCIAL | PAGADO_TO
 - **Kardex audit trail** — every movement recorded with user, timestamp, reference, and warehouse
 
 ### Authentication & Authorization
+
+<p align="center">
+  <img src="./diagrams/Authentication Flow Diagram.svg" alt="Authentication Flow Diagram" width="700"/>
+</p>
 
 - JWT access tokens (configurable expiration) + refresh tokens (HTTP-only cookies)
 - Google OAuth 2.0 social login
