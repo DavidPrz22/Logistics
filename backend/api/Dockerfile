@@ -36,6 +36,7 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml prisma.config.ts ./
 COPY db_data ./db_data
+COPY scripts ./scripts
 COPY docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh \
