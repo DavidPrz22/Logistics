@@ -63,7 +63,6 @@ pnpm prisma studio       # Open database GUI
 
 - **Routing**: TanStack Router with file-based routing in `src/routes/`
 - **Route tree**: Auto-generated at `src/routeTree.gen.ts` (do not edit manually)
-- **State**: Zustand store at `src/lib/erp-store.ts` with seed data
 - **API client**: Axios instance at `src/api/client.ts` pointing to `http://localhost:8000/api/`
 - **Components**: shadcn/ui at `src/components/ui/`, shared components at `src/components/shared/`
 - **Features**: Domain logic grouped in `src/features/` (Dashboard, Despacho, Movimientos, Stock)
@@ -205,7 +204,6 @@ Cross-feature resources live in `src/`:
 - `types/zodType.ts` → Shared Zod schemas for common entities
 - `components/ui/` → shadcn/ui primitives (button, dialog, table, etc.)
 - `components/shared/` → Reusable business components (combobox, date-picker, badges)
-- `lib/erp-store.ts` → Global Zustand store with seed data
 
 ### Route Conventions
 

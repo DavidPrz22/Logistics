@@ -1,7 +1,7 @@
-import { GoogleOauthGuardGuard } from './google-oauth-guard.guard';
+import { GoogleOauthGuard } from './google-oauth-guard.guard';
 
-describe('GoogleOauthGuardGuard', () => {
+describe('GoogleOauthGuard', () => {
   it('should be defined', () => {
-    expect(new GoogleOauthGuardGuard()).toBeDefined();
+    expect(new GoogleOauthGuard()).toBeDefined();
   });
 });

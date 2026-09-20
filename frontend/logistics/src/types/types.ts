@@ -13,6 +13,14 @@ export interface Producto { id: number; nombre: string; }
 export interface Variante { id: number; producto_id: number; sku: string; nombre: string; precio_base: number; }
 export interface Lote { id: number; variante_id: number; numero_lote: string; fecha_vencimiento: string; stock_actual: number; almacen_id: number; }
 
+export interface DetalleOrden {
+  id: number;
+  orden_id: number;
+  lote_id: number;
+  cantidad_enviada: number;
+  precio_unitario: number;
+}
+
 export interface DetalleRechazo {
   id: number;
   detalle_orden_id: number;

@@ -43,7 +43,6 @@ export function DatePicker({
           mode="single"
           selected={date}
           onSelect={(d) => onChange(d ? format(d, "yyyy-MM-dd") : "")}
-          initialFocus
           locale={es}
           className={cn("p-3 pointer-events-auto")}
         />

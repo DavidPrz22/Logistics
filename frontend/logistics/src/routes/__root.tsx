@@ -6,6 +6,7 @@ import {
   HeadContent,
   Scripts,
   useLocation,
+  useNavigate,
 } from "@tanstack/react-router";
 import { type ReactNode, useEffect } from "react";
 
@@ -14,6 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { UserMenu } from "@/features/Auth/components/UserMenu";
 import { useAuthStore } from "@/features/Auth/store/zustandstore";
 import { useHasPermission } from "@/features/Auth/hooks/useHasPermission";
+import { toast } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,12 +79,77 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const googleAuthData = params.get('google_auth');
+
+    if (googleAuthData) {
+      try {
+        const { accessToken, usuario } = JSON.parse(decodeURIComponent(googleAuthData));
+        const payload = { accessToken, usuario };
+        const isPopupWindow = Boolean(window.opener || window.name === 'Google Login');
+
+        // 1. Notify via BroadcastChannel
+        if (typeof window.BroadcastChannel !== 'undefined') {
+          try {
+            const channel = new BroadcastChannel('google_oauth_channel');
+            channel.postMessage({ type: 'GOOGLE_AUTH_SUCCESS', payload });
+            channel.close();
+          } catch (err) {
+            console.error('Error sending through BroadcastChannel:', err);
+          }
+        }
+
+        // 2. Notify via postMessage if window.opener is available
+        if (window.opener) {
+          try {
+            window.opener.postMessage(
+              { type: 'GOOGLE_AUTH_SUCCESS', payload },
+              '*'
+            );
+          } catch (err) {
+            console.error('Error sending through window.opener:', err);
+          }
+        }
+
+        // 3. Notify via localStorage (triggers storage event in other same-origin windows)
+        try {
+          localStorage.setItem(
+            'google_oauth_success',
+            JSON.stringify({ ...payload, timestamp: Date.now() })
+          );
+        } catch (err) {
+          console.error('Error writing to localStorage:', err);
+        }
+
+        // If this window was opened as a popup, close it
+        if (isPopupWindow) {
+          setTimeout(() => {
+            window.close();
+          }, 150);
+        } else {
+          // If navigated directly in the main window
+          setAuth(usuario, accessToken);
+          toast.success('Sesión iniciada con Google');
+          window.history.replaceState({}, '', '/');
+          navigate({ to: '/', replace: true });
+        }
+      } catch (error) {
+        console.error('Error processing Google auth data:', error);
+        toast.error('Error al procesar la autenticación de Google');
+        window.history.replaceState({}, '', '/');
+      }
+    }
+  }, [setAuth, navigate]);
 
   return (
     <QueryClientProvider client={queryClient}>

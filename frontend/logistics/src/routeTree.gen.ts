@@ -18,7 +18,6 @@ import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as KardexIndexRouteImport } from './routes/kardex/index'
 import { Route as FacturacionIndexRouteImport } from './routes/facturacion/index'
 import { Route as DespachosIndexRouteImport } from './routes/despachos/index'
-import { Route as InventarioStockRouteImport } from './routes/inventario/stock'
 import { Route as InventarioKardexRouteImport } from './routes/inventario/kardex'
 import { Route as DespachosCrearRouteImport } from './routes/despachos/crear'
 import { Route as PagosPagoIdIndexRouteImport } from './routes/pagos/$pagoId/index'
@@ -73,11 +72,6 @@ const DespachosIndexRoute = DespachosIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DespachosRouteRoute,
 } as any)
-const InventarioStockRoute = InventarioStockRouteImport.update({
-  id: '/stock',
-  path: '/stock',
-  getParentRoute: () => InventarioRouteRoute,
-} as any)
 const InventarioKardexRoute = InventarioKardexRouteImport.update({
   id: '/kardex',
   path: '/kardex',
@@ -126,7 +120,6 @@ export interface FileRoutesByFullPath {
   '/inventario': typeof InventarioRouteRouteWithChildren
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
-  '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
   '/kardex/': typeof KardexIndexRoute
@@ -145,7 +138,6 @@ export interface FileRoutesByTo {
   '/inventario': typeof InventarioRouteRouteWithChildren
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
-  '/inventario/stock': typeof InventarioStockRoute
   '/despachos': typeof DespachosIndexRoute
   '/facturacion': typeof FacturacionIndexRoute
   '/kardex': typeof KardexIndexRoute
@@ -166,7 +158,6 @@ export interface FileRoutesById {
   '/inventario': typeof InventarioRouteRouteWithChildren
   '/despachos/crear': typeof DespachosCrearRoute
   '/inventario/kardex': typeof InventarioKardexRoute
-  '/inventario/stock': typeof InventarioStockRoute
   '/despachos/': typeof DespachosIndexRoute
   '/facturacion/': typeof FacturacionIndexRoute
   '/kardex/': typeof KardexIndexRoute
@@ -188,7 +179,6 @@ export interface FileRouteTypes {
     | '/inventario'
     | '/despachos/crear'
     | '/inventario/kardex'
-    | '/inventario/stock'
     | '/despachos/'
     | '/facturacion/'
     | '/kardex/'
@@ -207,7 +197,6 @@ export interface FileRouteTypes {
     | '/inventario'
     | '/despachos/crear'
     | '/inventario/kardex'
-    | '/inventario/stock'
     | '/despachos'
     | '/facturacion'
     | '/kardex'
@@ -227,7 +216,6 @@ export interface FileRouteTypes {
     | '/inventario'
     | '/despachos/crear'
     | '/inventario/kardex'
-    | '/inventario/stock'
     | '/despachos/'
     | '/facturacion/'
     | '/kardex/'
@@ -322,13 +310,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DespachosIndexRouteImport
       parentRoute: typeof DespachosRouteRoute
     }
-    '/inventario/stock': {
-      id: '/inventario/stock'
-      path: '/stock'
-      fullPath: '/inventario/stock'
-      preLoaderRoute: typeof InventarioStockRouteImport
-      parentRoute: typeof InventarioRouteRoute
-    }
     '/inventario/kardex': {
       id: '/inventario/kardex'
       path: '/kardex'
@@ -408,12 +389,10 @@ const DespachosRouteRouteWithChildren = DespachosRouteRoute._addFileChildren(
 
 interface InventarioRouteRouteChildren {
   InventarioKardexRoute: typeof InventarioKardexRoute
-  InventarioStockRoute: typeof InventarioStockRoute
 }
 
 const InventarioRouteRouteChildren: InventarioRouteRouteChildren = {
   InventarioKardexRoute: InventarioKardexRoute,
-  InventarioStockRoute: InventarioStockRoute,
 }
 
 const InventarioRouteRouteWithChildren = InventarioRouteRoute._addFileChildren(
