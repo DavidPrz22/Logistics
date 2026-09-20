@@ -131,7 +131,7 @@ model transaccionPago {
   tasaAplicadaValor    Decimal?       // Snapshot numérico de la tasa usada en el pago
   montoEquivalenteBase Decimal
   montoCalculadoVes    Decimal?       // Equivalente en VES al momento del pago
-  numeroReferencia     String?        @db.Citext
+  numeroReferencia     String?
   estado               EstadoTransaccionPago? @default(APROBADO)
   tipoOperacion        TipoOperacionPago? @default(INGRESO)
   fechaPago            DateTime?      @default(now()) 

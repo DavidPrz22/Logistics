@@ -14,7 +14,7 @@ enum TipoDeOrden {
 
 model ordenDespacho {
   id                     Int            @id @default(autoincrement())
-  numeroOrden            String         @unique @db.Citext
+  numeroOrden            String         @unique
   clienteId              Int            
   choferId               Int?           
   almacenTransitoId      Int            

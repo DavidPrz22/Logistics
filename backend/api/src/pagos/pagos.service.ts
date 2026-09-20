@@ -115,6 +115,7 @@ export class PagosService {
         {
           numeroReferencia: {
             contains: q,
+            mode: 'insensitive',
           },
         },
         {
@@ -122,6 +123,7 @@ export class PagosService {
             cliente: {
               nombre: {
                 contains: q,
+                mode: 'insensitive',
               },
             },
           },
@@ -199,6 +201,7 @@ export class PagosService {
     if (q && q.trim() !== '') {
       where.numeroOrden = {
         contains: q.trim(),
+        mode: 'insensitive',
       };
     }
 
@@ -248,6 +251,7 @@ export class PagosService {
           orden: {
             numeroOrden: {
               contains: qTrimmed,
+              mode: 'insensitive',
             },
           },
         },

@@ -1,6 +1,6 @@
 model producto {
   id          Int                @id @default(autoincrement())
-  nombre      String             @db.Citext
+  nombre      String
   descripcion String?
   variantes   varianteProducto[]
 }
@@ -8,8 +8,8 @@ model producto {
 model varianteProducto {
   id         Int      @id @default(autoincrement())
   productoId Int      
-  sku        String   @unique @db.Citext
-  nombre     String   @db.Citext
+  sku        String   @unique
+  nombre     String
   precioBase Decimal
   producto   producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
   lotes      lote[]

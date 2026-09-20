@@ -160,6 +160,7 @@ export class KardexService {
           {
             nombre: {
               contains: trimmed,
+              mode: 'insensitive',
             },
           },
           {
@@ -169,11 +170,13 @@ export class KardexService {
                   {
                     sku: {
                       contains: trimmed,
+                      mode: 'insensitive',
                     },
                   },
                   {
                     nombre: {
                       contains: trimmed,
+                      mode: 'insensitive',
                     },
                   },
                 ],
