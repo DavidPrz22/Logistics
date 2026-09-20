@@ -34,10 +34,10 @@ export class DespachoService {
         ? [
             {
               OR: [
-                { variante: { sku: { contains: query, mode: 'insensitive' } } },
-                { variante: { nombre: { contains: query, mode: 'insensitive' } } },
-                { variante: { producto: { nombre: { contains: query, mode: 'insensitive' } } } },
-                { numeroLote: { contains: query, mode: 'insensitive' } },
+                { variante: { sku: { contains: query, mode: 'insensitive' as const } } },
+                { variante: { nombre: { contains: query, mode: 'insensitive' as const } } },
+                { variante: { producto: { nombre: { contains: query, mode: 'insensitive' as const } } } },
+                { numeroLote: { contains: query, mode: 'insensitive' as const } },
               ],
             },
           ]

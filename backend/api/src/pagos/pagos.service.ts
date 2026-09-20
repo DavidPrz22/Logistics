@@ -115,7 +115,7 @@ export class PagosService {
         {
           numeroReferencia: {
             contains: q,
-            mode: 'insensitive',
+            mode: 'insensitive' as const,
           },
         },
         {
@@ -123,7 +123,7 @@ export class PagosService {
             cliente: {
               nombre: {
                 contains: q,
-                mode: 'insensitive',
+                mode: 'insensitive' as const,
               },
             },
           },
@@ -251,7 +251,7 @@ export class PagosService {
           orden: {
             numeroOrden: {
               contains: qTrimmed,
-              mode: 'insensitive',
+              mode: 'insensitive' as const,
             },
           },
         },

@@ -42,7 +42,7 @@ export class FacturacionService {
           cliente: {
             nombre: {
               contains: q,
-              mode: 'insensitive',
+              mode: 'insensitive' as const,
             },
           },
         },
@@ -50,7 +50,7 @@ export class FacturacionService {
           orden: {
             numeroOrden: {
               contains: q,
-              mode: 'insensitive',
+              mode: 'insensitive' as const,
             },
           },
         },

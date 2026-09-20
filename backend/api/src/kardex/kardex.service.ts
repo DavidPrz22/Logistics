@@ -160,7 +160,7 @@ export class KardexService {
           {
             nombre: {
               contains: trimmed,
-              mode: 'insensitive',
+              mode: 'insensitive' as const,
             },
           },
           {
@@ -170,13 +170,13 @@ export class KardexService {
                   {
                     sku: {
                       contains: trimmed,
-                      mode: 'insensitive',
+                      mode: 'insensitive' as const,
                     },
                   },
                   {
                     nombre: {
                       contains: trimmed,
-                      mode: 'insensitive',
+                      mode: 'insensitive' as const,
                     },
                   },
                 ],
