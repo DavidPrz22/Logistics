@@ -111,9 +111,6 @@ export class AuthController {
     );
 
     const frontendUrl = this.frontendConfigService.url;
-    console.log('=== GOOGLE CALLBACK ===');
-    console.log('FRONTEND_URL configurada:', frontendUrl);
-    console.log('Token generado:', accessToken.substring(0, 20) + '...');
 
     const html = `
       <html>
@@ -121,12 +118,7 @@ export class AuthController {
           <h1>Autenticación exitosa</h1>
           <p>Puedes cerrar esta ventana.</p>
           <script>
-            console.log('=== GOOGLE CALLBACK (Frontend) ===');
-            console.log('window.opener:', window.opener);
-            console.log('Enviando a:', '${frontendUrl}');
-            
             if (window.opener) {
-              console.log('Enviando postMessage...');
               try {
                 window.opener.postMessage(
                   {
@@ -138,18 +130,15 @@ export class AuthController {
                   },
                   '${frontendUrl}'
                 );
-                console.log('✅ postMessage enviado exitosamente');
               } catch (error) {
-                console.error('❌ Error al enviar postMessage:', error);
+                console.error('Error al enviar postMessage:', error);
               }
               
               setTimeout(() => {
-                console.log('Cerrando ventana...');
                 window.close();
               }, 3000);
             } else {
-              console.error('❌ window.opener es null');
-              document.body.innerHTML += '<p style="color: red;">Error: window.opener es null</p>';
+              document.body.innerHTML += '<p style="color: red;">Error: no se pudo comunicar con la ventana principal</p>';
             }
           </script>
         </body>
