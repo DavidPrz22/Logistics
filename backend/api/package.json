@@ -19,7 +19,17 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed:usuario": "npx tsx db_data/seed-usuario.ts"
+    "seed:usuario": "npx tsx db_data/seed-usuario.ts",
+    "seed:almacen": "npx tsx db_data/seed-almacen.ts",
+    "seed:chofer": "npx tsx db_data/seed-chofer.ts",
+    "seed:cliente": "npx tsx db_data/seed-cliente.ts",
+    "seed:motivoRechazo": "npx tsx db_data/seed-motivoRechazo.ts",
+    "seed:metodoPago": "npx tsx db_data/seed-metodoPago.ts",
+    "seed:divisa": "npx tsx db_data/seed-divisa.ts",
+    "seed:cuentaDestino": "npx tsx db_data/seed-cuentaDestino.ts",
+    "seed:producto": "npx tsx db_data/seed-producto.ts",
+    "seed:lote": "npx tsx db_data/seed-lote.ts",
+    "seed": "pnpm seed:usuario && pnpm seed:almacen && pnpm seed:chofer && pnpm seed:cliente && pnpm seed:motivoRechazo && pnpm seed:metodoPago && pnpm seed:divisa && pnpm seed:cuentaDestino && pnpm seed:producto && pnpm seed:lote"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
