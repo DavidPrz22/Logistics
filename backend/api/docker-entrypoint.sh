@@ -7,7 +7,7 @@ RETRY_INTERVAL="${DB_WAIT_INTERVAL:-2}"
 wait_for_database() {
   i=1
   while [ "$i" -le "$MAX_RETRIES" ]; do
-    if prisma migrate deploy; then
+    if prisma db push --accept-data-loss; then
       echo "Database is up and migrations applied."
       return 0
     fi
