@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Warehouse, LogIn, AlertCircle } from 'lucide-react';
+import { Warehouse, LogIn, AlertCircle, UserCircle } from 'lucide-react';
 import { loginSchema, type LoginInput } from '@/features/Auth/schemas/schemas';
 import { useLoginMutation } from '@/features/Auth/hooks/mutations/mutations';
 import { GoogleButton } from '@/features/Auth/components/GoggleButton';
@@ -33,6 +33,7 @@ function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -94,6 +95,29 @@ function LoginPage() {
       </form>
 
       <GoogleButton />
+
+      <div className="mt-4 rounded-md border border-dashed border-border/60 bg-muted/20 p-3">
+        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+          <UserCircle className="size-4" />
+          Usuario de prueba
+        </div>
+        <div className="mt-1.5 text-xs text-muted-foreground">
+          <span className="font-mono">demo</span> / <span className="font-mono">demo123</span>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="mt-2 w-full"
+          onClick={() => {
+            setValue('userName', 'demo');
+            setValue('password', 'demo123');
+            handleSubmit(onSubmit)();
+          }}
+        >
+          Usar demo
+        </Button>
+      </div>
 
       <div className="mt-5 space-y-3 text-sm">
         <p className="text-muted-foreground">
