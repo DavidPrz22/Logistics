@@ -4,18 +4,7 @@ set -eu
 MAX_RETRIES="${DB_WAIT_RETRIES:-30}"
 RETRY_INTERVAL="${DB_WAIT_INTERVAL:-2}"
 
-ensure_sqlite_dir() {
-  case "${DATABASE_URL:-}" in
-    file:*)
-      db_path=${DATABASE_URL#file:}
-      mkdir -p "$(dirname "$db_path")"
-      ;;
-  esac
-}
-
 wait_for_database() {
-  ensure_sqlite_dir
-
   i=1
   while [ "$i" -le "$MAX_RETRIES" ]; do
     if prisma migrate deploy; then

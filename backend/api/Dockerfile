@@ -20,7 +20,7 @@ FROM deps AS build
 COPY prisma ./prisma
 COPY prisma.config.ts tsconfig.json tsconfig.build.json nest-cli.json ./
 COPY src ./src
-ENV DATABASE_URL="file:./prisma/dev.db"
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/logistics"
 RUN pnpm exec prisma generate
 RUN pnpm run build
 
@@ -39,8 +39,7 @@ COPY db_data ./db_data
 COPY docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh \
-  && mkdir -p /data \
-  && chown -R node:node /app /data
+  && chown -R node:node /app
 
 USER node
 
