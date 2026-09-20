@@ -6,6 +6,7 @@ import { CardexSearch } from "@/features/Kardex/components/KardexSearch";
 export const Route = createFileRoute("/inventario/kardex")({ component: Kardex });
 
 function Kardex() {
+  // MAIN FILE OF THE ROUTE
   return (
     <div className="p-8 max-w-350 mx-auto space-y-6">
       <PageHeader
