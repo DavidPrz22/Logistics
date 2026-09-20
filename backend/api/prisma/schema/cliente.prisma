@@ -1,6 +1,6 @@
 model cliente {
   id              Int             @id @default(autoincrement())
-  nombre          String
+  nombre          String          @db.Citext
   telefono        String?
   direccion       String?
   ordenesDespacho ordenDespacho[]

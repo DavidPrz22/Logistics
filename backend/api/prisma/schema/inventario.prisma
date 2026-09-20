@@ -1,7 +1,7 @@
 model lote {
   id               Int                    @id @default(autoincrement())
   varianteId       Int                    
-  numeroLote       String
+  numeroLote       String                 @db.Citext
   fechaVencimiento DateTime
   stockActual      Int                    
   fechaIngreso     DateTime?              @default(now()) 

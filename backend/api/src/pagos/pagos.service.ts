@@ -99,7 +99,7 @@ export class PagosService {
       }
       if (query?.hasta) {
         const hastaDate = new Date(query.hasta);
-        hastaDate.setHours(23, 59, 59, 999);
+        hastaDate.setUTCHours(23, 59, 59, 999);
         where.fechaPago.lte = hastaDate;
       }
     }
