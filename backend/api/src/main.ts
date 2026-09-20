@@ -10,8 +10,14 @@ async function bootstrap() {
   app.use(cookieParser());
   app.setGlobalPrefix('api');
 
+  const defaultOrigins = 'http://localhost:5173,http://localhost:5174';
+  const corsOrigin = process.env.FRONTEND_URL
+    ? `${defaultOrigins},${process.env.FRONTEND_URL}`
+    : defaultOrigins;
+  const allowedOrigins = corsOrigin.split(',').map((origin) => origin.trim());
+
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
