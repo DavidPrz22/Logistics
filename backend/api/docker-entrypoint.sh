@@ -37,4 +37,4 @@ if [ "${SKIP_SEED:-false}" != "true" ]; then
   echo "Seeding complete."
 fi
 
-exec node dist/main.js
+exec node dist/src/main.js
